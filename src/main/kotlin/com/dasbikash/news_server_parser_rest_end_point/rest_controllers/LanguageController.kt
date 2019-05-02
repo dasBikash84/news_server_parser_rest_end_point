@@ -1,6 +1,7 @@
 package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Language
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Languages
 import com.dasbikash.news_server_parser_rest_end_point.services.LanguageService
 import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtills
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,8 +16,8 @@ class LanguageController @Autowired
 constructor(private val languageService: LanguageService) {
 
     @GetMapping(value = arrayOf("","/"))
-    fun getAllLanguages():ResponseEntity<List<Language>>{
-        return RestControllerUtills.listEntityToResponseEntity(languageService.getAllLanguages())
+    fun getAllLanguages():ResponseEntity<Languages>{
+        return RestControllerUtills.entityToResponseEntity(Languages(languageService.getAllLanguages()))
     }
 
 }

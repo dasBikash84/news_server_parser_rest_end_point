@@ -10,7 +10,7 @@ interface PageRepository : JpaRepository<Page, String>{
         @JvmStatic val TOP_LEVEL_PAGE_PARENT_ID = "PAGE_ID_0"
     }
 
-    //Find active top level pages for a newspaper
+    //Find active top level articles for a newspaper
     fun findPagesByNewspaperAndParentPageIdAndActive(newspaper: Newspaper,
                                                      parentPageId: String= TOP_LEVEL_PAGE_PARENT_ID,
                                                      active:Boolean=true):List<Page>

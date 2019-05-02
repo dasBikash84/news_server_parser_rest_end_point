@@ -1,6 +1,7 @@
 package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Articles
 import com.dasbikash.news_server_parser_rest_end_point.services.ArticleService
 import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtills
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +21,7 @@ constructor(val articleService: ArticleService) {
     var maxPageSize: Int = 100
 
     @GetMapping("/oldest")
-    fun getOldestArticles(@RequestParam("article_count") articleCount:Int?):ResponseEntity<List<Article>>{
+    fun getOldestArticles(@RequestParam("article_count") articleCount:Int?):ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
         articleCount?.let {
@@ -29,11 +30,11 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.listEntityToResponseEntity(articleService.getOldestArticles(pageSize))
+        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getOldestArticles(pageSize)))
     }
 
-    @GetMapping("/latest")
-    fun getLatestArticles(@RequestParam("article_count") articleCount:Int?):ResponseEntity<List<Article>>{
+    @GetMapping(value = arrayOf("/latest",""))
+    fun getLatestArticles(@RequestParam("article_count") articleCount:Int?):ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
         articleCount?.let {
@@ -42,13 +43,13 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.listEntityToResponseEntity(articleService.getLatestArticles(pageSize))
+        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getLatestArticles(pageSize)))
     }
 
     @GetMapping("/after/{articleId}")
     fun getArticlesAfterGivenId(@PathVariable("articleId") articleId:String,
                                 @RequestParam("article_count") articleCount:Int?)
-            :ResponseEntity<List<Article>>{
+            :ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
         articleCount?.let {
@@ -57,13 +58,13 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.listEntityToResponseEntity(articleService.getArticlesAfterGivenId(articleId,pageSize))
+        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getArticlesAfterGivenId(articleId,pageSize)))
     }
 
     @GetMapping("/before/{articleId}")
     fun getArticlesBeforeGivenId(@PathVariable("articleId") articleId:String,
                                 @RequestParam("article_count") articleCount:Int?)
-            :ResponseEntity<List<Article>>{
+            :ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
         articleCount?.let {
@@ -72,7 +73,7 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.listEntityToResponseEntity(articleService.getArticlesBeforeGivenId(articleId,pageSize))
+        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getArticlesBeforeGivenId(articleId,pageSize)))
     }
 
 

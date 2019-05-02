@@ -1,5 +1,6 @@
 package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
 
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Countries
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Country
 import com.dasbikash.news_server_parser_rest_end_point.services.CountryService
 import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtills
@@ -15,8 +16,8 @@ class CountryController @Autowired
 constructor(private val countryService: CountryService) {
 
     @GetMapping(value = arrayOf("","/"))
-    fun getAllCountries():ResponseEntity<List<Country>>{
-        return RestControllerUtills.listEntityToResponseEntity(countryService.getAllCountries())
+    fun getAllCountries():ResponseEntity<Countries>{
+        return RestControllerUtills.entityToResponseEntity(Countries(countryService.getAllCountries()))
     }
 
 }
