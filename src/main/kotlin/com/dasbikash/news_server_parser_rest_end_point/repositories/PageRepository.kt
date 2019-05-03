@@ -11,9 +11,8 @@ interface PageRepository : JpaRepository<Page, String>{
     }
 
     //Find active top level articles for a newspaper
-    fun findPagesByNewspaperAndParentPageIdAndActive(newspaper: Newspaper,
-                                                     parentPageId: String= TOP_LEVEL_PAGE_PARENT_ID,
-                                                     active:Boolean=true):List<Page>
+    fun findPagesByNewspaperAndActive(newspaper: Newspaper,
+                                      active:Boolean=true):List<Page>
 
     fun findPagesByParentPageIdAndActiveOrderByIdAsc(parentPageId: String, active: Boolean=true):List<Page>
 

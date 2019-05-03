@@ -34,4 +34,28 @@ class ArticleService
         }
         return articleRepository.getArticlesBeforeGivenId(currentArticle.serial!!,pageSize)
     }
+
+    fun getLatestArticlesForPage(pageId: String, pageSize: Int): List<Article> {
+        return articleRepository.findLatestByPageId(pageId,pageSize)
+    }
+
+    fun getOldestArticlesForPage(pageId: String, pageSize: Int): List<Article> {
+        return articleRepository.findOldestByPageId(pageId,pageSize)
+    }
+
+    fun getArticlesAfterGivenIdForPage(articleId: String, pageId: String, pageSize: Int): List<Article> {
+        val currentArticle = articleRepository.findByArticleId(articleId)
+        if (currentArticle == null){
+            throw DataNotFoundException()
+        }
+        return articleRepository.getArticlesAfterGivenIdForPage(currentArticle.serial!!,pageId,pageSize)
+    }
+
+    fun getArticlesBeforeGivenIdForPage(articleId: String, pageId: String, pageSize: Int): List<Article> {
+        val currentArticle = articleRepository.findByArticleId(articleId)
+        if (currentArticle == null){
+            throw DataNotFoundException()
+        }
+        return articleRepository.getArticlesBeforeGivenIdForPage(currentArticle.serial!!,pageId,pageSize)
+    }
 }

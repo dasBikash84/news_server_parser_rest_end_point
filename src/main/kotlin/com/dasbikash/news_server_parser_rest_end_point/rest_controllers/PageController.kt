@@ -21,4 +21,11 @@ class PageController (@Autowired val pageService: PageService){
                 Pages(pageService.getAllActivePages())
         )
     }
+
+    @GetMapping("/newspaper_id/{newspaperId}")
+    fun getAllActivePagesByNewspaperId(@PathVariable("newspaperId") newspaperId:String):ResponseEntity<Pages>{
+        return RestControllerUtills.entityToResponseEntity(
+                Pages(pageService.getAllActivePagesByNewspaperId(newspaperId))
+        )
+    }
 }
