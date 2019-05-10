@@ -2,7 +2,6 @@ package com.dasbikash.news_server_parser_rest_end_point.repositories
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 import com.dasbikash.news_server_parser_rest_end_point.model.database.DatabaseTableNames
-import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

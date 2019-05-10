@@ -14,7 +14,7 @@ interface PageRepository : JpaRepository<Page, String>{
     fun findPagesByNewspaperAndActive(newspaper: Newspaper,
                                       active:Boolean=true):List<Page>
 
-    fun findPagesByParentPageIdAndActiveOrderByIdAsc(parentPageId: String, active: Boolean=true):List<Page>
-
     fun findAllByActive(active: Boolean = true): List<Page>
+
+    fun findPagesByNewspaperAndParentPageIdAndLinkFormatNotNullAndActive(newspaper: Newspaper,parentPageId: String,active: Boolean=true):List<Page>
 }

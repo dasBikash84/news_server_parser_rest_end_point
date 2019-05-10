@@ -1,6 +1,5 @@
 package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
 
-import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Articles
 import com.dasbikash.news_server_parser_rest_end_point.services.ArticleService
 import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtills
