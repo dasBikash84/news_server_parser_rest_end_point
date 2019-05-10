@@ -21,3 +21,7 @@ class GeneralLogs(
 class ErrorLogs(
         val errorLogs:List<ErrorLog>
 ): NsParserRestDbEntity
+
+class PageParsingHistories(
+        val pageParsingHistories:List<PageParsingHistory>
+): NsParserRestDbEntity

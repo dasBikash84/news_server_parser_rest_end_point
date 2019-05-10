@@ -23,4 +23,5 @@ object DatabaseTableNames {
     const val AUTH_TOKEN_TABLE_NAME = "tokens"
     const val GENERAL_LOG_TABLE_NAME = "general_log"
     const val ERROR_LOG_TABLE_NAME = "exception_log"
+    const val PAGE_PARSING_HISTORY_TABLE_NAME = "page_parsing_history"
 }
