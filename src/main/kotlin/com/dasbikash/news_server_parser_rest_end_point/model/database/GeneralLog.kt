@@ -13,13 +13,16 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
-object DatabaseTableNames {
-    const val COUNTRY_TABLE_NAME = "countries"
-    const val LANGUAGE_TABLE_NAME = "languages"
-    const val NEWSPAPER_TABLE_NAME = "newspapers"
-    const val PAGE_TABLE_NAME = "pages"
-    const val ARTICLE_TABLE_NAME = "articles"
-    const val PAGE_GROUP_TABLE_NAME = "page_groups"
-    const val AUTH_TOKEN_TABLE_NAME = "tokens"
-    const val GENERAL_LOG_TABLE_NAME = "general_log"
+import java.util.*
+import javax.persistence.*
+
+@Entity
+@Table(name = DatabaseTableNames.GENERAL_LOG_TABLE_NAME)
+class GeneralLog():NsParserRestDbEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null
+    @Column(columnDefinition = "text")
+    var logMessage: String? = null
+    var created: Date?=null
 }

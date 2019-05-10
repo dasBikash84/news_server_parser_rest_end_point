@@ -1,8 +1,8 @@
 package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
 
-import com.dasbikash.news_server_parser_rest_end_point.model.database.Pages
+import com.dasbikash.news_server_parser_rest_end_point.model.Pages
 import com.dasbikash.news_server_parser_rest_end_point.services.PageService
-import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtills
+import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,18 +12,19 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("pages")
-class PageController (@Autowired val pageService: PageService){
+class PageController (@Autowired val pageService: PageService,
+                      private val restControllerUtils: RestControllerUtils){
 
     @GetMapping(value = arrayOf("","/"))
     fun getAllActivePages():ResponseEntity<Pages>{
-        return RestControllerUtills.entityToResponseEntity(
+        return restControllerUtils.entityToResponseEntity(
                 Pages(pageService.getAllActivePages())
         )
     }
 
     @GetMapping("/newspaper_id/{newspaperId}")
     fun getAllActivePagesByNewspaperId(@PathVariable("newspaperId") newspaperId:String):ResponseEntity<Pages>{
-        return RestControllerUtills.entityToResponseEntity(
+        return restControllerUtils.entityToResponseEntity(
                 Pages(pageService.getAllActivePagesByNewspaperId(newspaperId))
         )
     }

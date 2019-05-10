@@ -1,8 +1,8 @@
 package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
 
-import com.dasbikash.news_server_parser_rest_end_point.model.database.Articles
+import com.dasbikash.news_server_parser_rest_end_point.model.Articles
 import com.dasbikash.news_server_parser_rest_end_point.services.ArticleService
-import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtills
+import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("articles")
 class ArticleController @Autowired
-constructor(val articleService: ArticleService) {
+constructor(val articleService: ArticleService,
+            private val restControllerUtils: RestControllerUtils) {
 
     @Value("\${article.default_page_size}")
     var defaultPageSize: Int = 50
@@ -29,7 +30,7 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getLatestArticles(pageSize)))
+        return restControllerUtils.entityToResponseEntity(Articles(articleService.getLatestArticles(pageSize)))
     }
 
     @GetMapping("/oldest")
@@ -42,7 +43,7 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getOldestArticles(pageSize)))
+        return restControllerUtils.entityToResponseEntity(Articles(articleService.getOldestArticles(pageSize)))
     }
 
     @GetMapping("/after/article_id/{articleId}")
@@ -57,7 +58,7 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getArticlesAfterGivenId(articleId,pageSize)))
+        return restControllerUtils.entityToResponseEntity(Articles(articleService.getArticlesAfterGivenId(articleId, pageSize)))
     }
 
     @GetMapping("/before/article_id/{articleId}")
@@ -72,7 +73,7 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getArticlesBeforeGivenId(articleId,pageSize)))
+        return restControllerUtils.entityToResponseEntity(Articles(articleService.getArticlesBeforeGivenId(articleId, pageSize)))
     }
 
 
@@ -88,7 +89,7 @@ constructor(val articleService: ArticleService) {
                 it>0 -> pageSize = it
             }
         }
-        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getLatestArticlesForPage(pageId,pageSize)))
+        return restControllerUtils.entityToResponseEntity(Articles(articleService.getLatestArticlesForPage(pageId, pageSize)))
     }
 
     @GetMapping("/page_id/{pageId}/oldest")
@@ -102,7 +103,7 @@ constructor(val articleService: ArticleService) {
                 it > 0 -> pageSize = it
             }
         }
-        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getOldestArticlesForPage(pageId, pageSize)))
+        return restControllerUtils.entityToResponseEntity(Articles(articleService.getOldestArticlesForPage(pageId, pageSize)))
     }
 
     @GetMapping("/page_id/{pageId}/after/article_id/{articleId}")
@@ -118,7 +119,7 @@ constructor(val articleService: ArticleService) {
                 it > 0 -> pageSize = it
             }
         }
-        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getArticlesAfterGivenIdForPage(articleId,pageId, pageSize)))
+        return restControllerUtils.entityToResponseEntity(Articles(articleService.getArticlesAfterGivenIdForPage(articleId, pageId, pageSize)))
     }
 
     @GetMapping("/page_id/{pageId}/before/article_id/{articleId}")
@@ -134,7 +135,7 @@ constructor(val articleService: ArticleService) {
                 it > 0 -> pageSize = it
             }
         }
-        return RestControllerUtills.entityToResponseEntity(Articles(articleService.getArticlesBeforeGivenIdForPage(articleId,pageId, pageSize)))
+        return restControllerUtils.entityToResponseEntity(Articles(articleService.getArticlesBeforeGivenIdForPage(articleId, pageId, pageSize)))
     }
 
 
