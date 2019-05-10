@@ -17,3 +17,7 @@ class PageGroups(val pageGroups:List<PageGroup>): NsParserRestDbEntity
 class GeneralLogs(
         val generalLogs:List<GeneralLog>
 ): NsParserRestDbEntity
+
+class ErrorLogs(
+        val errorLogs:List<ErrorLog>
+): NsParserRestDbEntity

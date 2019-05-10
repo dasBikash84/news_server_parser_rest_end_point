@@ -26,7 +26,7 @@ object EmailUtils {
     }
 
     fun <T> emailAuthTokenToAdmin(authToken: AuthToken, requetingClass:Class<T>){
-        sendEmail("New Token for ${requetingClass.simpleName} of Parser Rest","Token:\t${authToken.token}\nExpires on:\t${authToken.expiresOn}")
+        sendEmail("New Token for ${requetingClass.simpleName} of Parser Rest Service","Token:\t${authToken.token}\nExpires on:\t${authToken.expiresOn}")
     }
 
     fun sendEmail(subject:String,body:String):Boolean{

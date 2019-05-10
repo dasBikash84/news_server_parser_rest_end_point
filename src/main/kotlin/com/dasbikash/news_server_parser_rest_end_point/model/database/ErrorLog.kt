@@ -13,14 +13,23 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
-object DatabaseTableNames {
-    const val COUNTRY_TABLE_NAME = "countries"
-    const val LANGUAGE_TABLE_NAME = "languages"
-    const val NEWSPAPER_TABLE_NAME = "newspapers"
-    const val PAGE_TABLE_NAME = "pages"
-    const val ARTICLE_TABLE_NAME = "articles"
-    const val PAGE_GROUP_TABLE_NAME = "page_groups"
-    const val AUTH_TOKEN_TABLE_NAME = "tokens"
-    const val GENERAL_LOG_TABLE_NAME = "general_log"
-    const val ERROR_LOG_TABLE_NAME = "exception_log"
+import java.util.*
+import javax.persistence.*
+
+@Entity
+@Table(name = DatabaseTableNames.ERROR_LOG_TABLE_NAME)
+class ErrorLog(): NsParserRestDbEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int?=null
+    var exceptionClassFullName: String? = null
+    @Enumerated(value = EnumType.STRING)
+    var exceptionClassSimpleName: ExceptionClassNames? = null
+    @Column(columnDefinition = "text")
+    var exceptionCause: String? = null
+    @Column(columnDefinition = "text")
+    var exceptionMessage: String? = null
+    @Column(columnDefinition = "text")
+    var stackTrace: String? = null
+    var created: Date? = null
 }
