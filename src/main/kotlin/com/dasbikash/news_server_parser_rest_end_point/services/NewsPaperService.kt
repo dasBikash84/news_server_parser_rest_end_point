@@ -23,7 +23,7 @@ constructor(val newspaperRepository: NewspaperRepository,
     }
 
     fun requestNewspaperStatusChange(newsPaperStatusChangeRequest: NewsPaperStatusChangeRequest?)
-            : NewsPaperStatusChangeRequest {
+            : Newspaper {
         if (newsPaperStatusChangeRequest == null ||
                 newsPaperStatusChangeRequest.authToken==null ||
                 newsPaperStatusChangeRequest.targetNewspaperId == null ||
@@ -57,6 +57,6 @@ constructor(val newspaperRepository: NewspaperRepository,
         }
         generalLogRepository.save(logMessage)
 
-        return newsPaperStatusChangeRequest
+        return targetNewsPaper
     }
 }

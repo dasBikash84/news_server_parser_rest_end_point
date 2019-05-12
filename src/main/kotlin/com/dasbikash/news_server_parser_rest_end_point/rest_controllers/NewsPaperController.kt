@@ -3,6 +3,7 @@ package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
 import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperStatusChangeRequest
 import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperStatusChangeRequestFormat
 import com.dasbikash.news_server_parser_rest_end_point.model.Newspapers
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Newspaper
 import com.dasbikash.news_server_parser_rest_end_point.services.NewsPaperService
 import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,7 +28,7 @@ constructor(private val newsPaperService: NewsPaperService,
 
     @PostMapping("request_newspaper_status_change")
     fun requestNewspaperStatusChange(@RequestBody newsPaperStatusChangeRequest: NewsPaperStatusChangeRequest?)
-            : ResponseEntity<NewsPaperStatusChangeRequest> {
+            : ResponseEntity<Newspaper> {
         return restControllerUtils.entityToResponseEntity(
                 newsPaperService.requestNewspaperStatusChange(newsPaperStatusChangeRequest))
     }

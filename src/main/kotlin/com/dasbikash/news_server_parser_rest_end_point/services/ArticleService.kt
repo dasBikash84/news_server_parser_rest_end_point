@@ -36,14 +36,26 @@ class ArticleService
     }
 
     fun getLatestArticlesForPage(pageId: String, pageSize: Int): List<Article> {
+        val pageOptional = pageRepository.findById(pageId)
+        if (!pageOptional.isPresent){
+            throw DataNotFoundException()
+        }
         return articleRepository.findLatestByPageId(pageId,pageSize)
     }
 
     fun getOldestArticlesForPage(pageId: String, pageSize: Int): List<Article> {
+        val pageOptional = pageRepository.findById(pageId)
+        if (!pageOptional.isPresent){
+            throw DataNotFoundException()
+        }
         return articleRepository.findOldestByPageId(pageId,pageSize)
     }
 
     fun getArticlesAfterGivenIdForPage(articleId: String, pageId: String, pageSize: Int): List<Article> {
+        val pageOptional = pageRepository.findById(pageId)
+        if (!pageOptional.isPresent){
+            throw DataNotFoundException()
+        }
         val currentArticle = articleRepository.findByArticleId(articleId)
         if (currentArticle == null){
             throw DataNotFoundException()
@@ -52,6 +64,10 @@ class ArticleService
     }
 
     fun getArticlesBeforeGivenIdForPage(articleId: String, pageId: String, pageSize: Int): List<Article> {
+        val pageOptional = pageRepository.findById(pageId)
+        if (!pageOptional.isPresent){
+            throw DataNotFoundException()
+        }
         val currentArticle = articleRepository.findByArticleId(articleId)
         if (currentArticle == null){
             throw DataNotFoundException()

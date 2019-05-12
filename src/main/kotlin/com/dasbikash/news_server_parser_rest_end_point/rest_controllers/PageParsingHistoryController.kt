@@ -34,7 +34,7 @@ constructor(val pageParsingHistoryService: PageParsingHistoryService,
         return restControllerUtils.entityToResponseEntity(PageParsingHistories(pageParsingHistoryService.getLatestPageParsingHistories(pageSize)))
     }
 
-    @GetMapping("/before/error-log-id/{log-id}")
+    @GetMapping("/before/page-parsing-log-id/{log-id}")
     fun getPageParsingHistoriesBeforeGivenId(@RequestParam("page-size") pageSizeRequest:Int?,
                                         @PathVariable("log-id") lastErrorLogId:Int)
             : ResponseEntity<PageParsingHistories> {
