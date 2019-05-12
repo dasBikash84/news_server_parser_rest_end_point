@@ -33,7 +33,7 @@
     * Path: http://localhost:8098/newspapers/request_newspaper_status_change.
     * RequestBody : [`NewsPaperStatusChangeRequest`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/NewsPaperStatusChangeRequest.kt)
     * Response: Modified [`Newspaper`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Newspaper.kt) 
-      in case of success [`HttpStatus.BAD_REQUEST`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpStatus.html#BAD_REQUEST) for invalid `NewsPaperStatusChangeRequest`.
+      in case of success or [`HttpStatus.BAD_REQUEST`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpStatus.html#BAD_REQUEST) for invalid `NewsPaperStatusChangeRequest`.
    
    
 ### For [`Page`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Page.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/PageController.kt):
