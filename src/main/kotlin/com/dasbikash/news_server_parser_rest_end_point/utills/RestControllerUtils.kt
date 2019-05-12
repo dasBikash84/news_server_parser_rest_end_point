@@ -4,6 +4,7 @@ import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundEx
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.IllegalRequestBodyException
 import com.dasbikash.news_server_parser_rest_end_point.model.LogEntryDeleteRequest
 import com.dasbikash.news_server_parser_rest_end_point.model.LogEntryDeleteRequestFormat
+import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperStatusChangeRequestFormat
 import com.dasbikash.news_server_parser_rest_end_point.model.database.NsParserRestDbEntity
 import com.dasbikash.news_server_parser_rest_end_point.services.AuthTokenService
 import com.dasbikash.news_server_parser_rest_end_point.services.DeletableLogService
@@ -28,11 +29,19 @@ constructor(val authTokenService: AuthTokenService){
         return ResponseEntity.ok(entity)
     }
 
-
-    fun <T> generateLogDeleteToken(type: Class<T>): ResponseEntity<LogEntryDeleteRequestFormat> {
+    private fun <T> generateAndEmailNewAuthtoken(type: Class<T>){
         val newToken = authTokenService.getNewAuthToken()
         EmailUtils.emailAuthTokenToAdmin(newToken, type)
+    }
+
+    fun <T> generateLogDeleteToken(type: Class<T>): ResponseEntity<LogEntryDeleteRequestFormat> {
+        generateAndEmailNewAuthtoken(type)
         return entityToResponseEntity(LogEntryDeleteRequestFormat())
+    }
+
+    fun <T> generateNewspaperStatusChangeToken(type: Class<T>): ResponseEntity<NewsPaperStatusChangeRequestFormat> {
+        generateAndEmailNewAuthtoken(type)
+        return entityToResponseEntity(NewsPaperStatusChangeRequestFormat())
     }
 
     fun validateLogEntryDeleteRequest(logEntryDeleteRequest: LogEntryDeleteRequest?) {

@@ -13,16 +13,17 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
+import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = DatabaseTableNames.GENERAL_LOG_TABLE_NAME)
-class GeneralLog():NsParserRestDbEntity {
+class GeneralLog(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null
+    var id: Int? = null,
     @Column(columnDefinition = "text")
-    var logMessage: String? = null
+    var logMessage: String? = null,
     var created: Date?=null
-}
+) :NsParserRestDbEntity
