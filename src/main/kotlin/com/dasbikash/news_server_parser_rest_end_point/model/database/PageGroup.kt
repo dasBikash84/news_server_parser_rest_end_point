@@ -36,6 +36,6 @@ data class PageGroup(
     @Transient
     private var pageIdList: List<String>?=null
     fun getPageIdList():List<String>{
-        return pageList?.asSequence()?.map { it.id }?.toList() ?: emptyList()
+        return pageList?.asSequence()?.filter { it.active }?.map { it.id }?.toList() ?: emptyList()
     }
 }
