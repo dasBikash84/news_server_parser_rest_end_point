@@ -34,7 +34,7 @@ constructor(val errorLogService: ErrorLogService,
         return restControllerUtils.entityToResponseEntity(ErrorLogs(errorLogService.getLatestErrorLogs(pageSize)))
     }
 
-    @GetMapping("/before/error-log-id/{log-id}")
+    @GetMapping("/before/{log-id}")
     fun getErrorLogsBeforeGivenId(@RequestParam("page-size") pageSizeRequest:Int?,
                                         @PathVariable("log-id") lastErrorLogId:Int)
             : ResponseEntity<ErrorLogs> {
@@ -47,6 +47,21 @@ constructor(val errorLogService: ErrorLogService,
         }
         return restControllerUtils.entityToResponseEntity(ErrorLogs(
                         errorLogService.getErrorLogsBeforeGivenId(lastErrorLogId,pageSize)))
+    }
+
+    @GetMapping("/after/{log-id}")
+    fun getErrorLogsAfterGivenId(@RequestParam("page-size") pageSizeRequest:Int?,
+                                        @PathVariable("log-id") lastErrorLogId:Int)
+            : ResponseEntity<ErrorLogs> {
+        var pageSize = defaultPageSize
+        pageSizeRequest?.let {
+            when{
+                it>=maxPageSize -> pageSize = maxPageSize
+                it>0            -> pageSize = it
+            }
+        }
+        return restControllerUtils.entityToResponseEntity(ErrorLogs(
+                        errorLogService.getLogsAfterGivenId(lastErrorLogId,pageSize)))
     }
 
     @DeleteMapping("request_log_delete_token_generation")

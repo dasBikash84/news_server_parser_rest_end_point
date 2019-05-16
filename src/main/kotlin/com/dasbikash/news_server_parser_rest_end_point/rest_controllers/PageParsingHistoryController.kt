@@ -34,7 +34,7 @@ constructor(val pageParsingHistoryService: PageParsingHistoryService,
         return restControllerUtils.entityToResponseEntity(PageParsingHistories(pageParsingHistoryService.getLatestPageParsingHistories(pageSize)))
     }
 
-    @GetMapping("/before/page-parsing-log-id/{log-id}")
+    @GetMapping("/before/{log-id}")
     fun getPageParsingHistoriesBeforeGivenId(@RequestParam("page-size") pageSizeRequest:Int?,
                                         @PathVariable("log-id") lastErrorLogId:Int)
             : ResponseEntity<PageParsingHistories> {
@@ -47,6 +47,21 @@ constructor(val pageParsingHistoryService: PageParsingHistoryService,
         }
         return restControllerUtils.entityToResponseEntity(PageParsingHistories(
                         pageParsingHistoryService.getPageParsingHistoriesBeforeGivenId(lastErrorLogId,pageSize)))
+    }
+
+    @GetMapping("/after/{log-id}")
+    fun getPageParsingHistoriesAfterGivenId(@RequestParam("page-size") pageSizeRequest:Int?,
+                                        @PathVariable("log-id") lastErrorLogId:Int)
+            : ResponseEntity<PageParsingHistories> {
+        var pageSize = defaultPageSize
+        pageSizeRequest?.let {
+            when{
+                it>=maxPageSize -> pageSize = maxPageSize
+                it>0            -> pageSize = it
+            }
+        }
+        return restControllerUtils.entityToResponseEntity(PageParsingHistories(
+                        pageParsingHistoryService.getLogsAfterGivenId(lastErrorLogId,pageSize)))
     }
 
     @DeleteMapping("request_log_delete_token_generation")

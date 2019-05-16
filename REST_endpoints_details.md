@@ -123,7 +123,14 @@
 <a name="log_before_given_id"></a>    
 * For *General Log* entries Before Given Id:
   * Type: `GET`
-  * Path: http://localhost:8098/general-logs/before/general-log-id/{log-id}
+  * Path: http://localhost:8098/general-logs/before/{log-id}
+  * Path Variable: *log-id* (id of last *General Log* entry)
+  * Path Param: page-size(result-count) | optional | Default 10 | Max 50
+  * Response: A list of latest *General Log* entries if any or `HttpStatus.NOT_FOUND` for invalid *log-id*.    
+  
+* For *General Log* entries After Given Id:
+  * Type: `GET`
+  * Path: http://localhost:8098/general-logs/after/{log-id}
   * Path Variable: *log-id* (id of last *General Log* entry)
   * Path Param: page-size(result-count) | optional | Default 10 | Max 50
   * Response: A list of latest *General Log* entries if any or `HttpStatus.NOT_FOUND` for invalid *log-id*.
@@ -150,7 +157,12 @@
      
 * For *Error Log* entries Before Given Id:
     * Type: `GET`
-    * Path: http://localhost:8098/error-logs/before/error-log-id/{log-id}?page-size={page-size}
+    * Path: http://localhost:8098/error-logs/before/{log-id}?page-size={page-size}
+    * Path Param, Query Param & Response: Format same as [`General Log`](#log_before_given_id) but for `Error Log`. 
+     
+* For *Error Log* entries After Given Id:
+    * Type: `GET`
+    * Path: http://localhost:8098/error-logs/after/{log-id}?page-size={page-size}
     * Path Param, Query Param & Response: Format same as [`General Log`](#log_before_given_id) but for `Error Log`.  
     
 * For *Error Log* entries deletion token generation request:
@@ -171,7 +183,12 @@
      
 * For *Page Parsing History* entries Before Given Id:
     * Type: `GET`
-    * Path: http://localhost:8098/page-parsing-histories/before/page-parsing-log-id/{log-id}?page-size={page-size}
+    * Path: http://localhost:8098/page-parsing-histories/before/{log-id}?page-size={page-size}
+    * Path Param, Query Param & Response: Format same as [`General Log`](#log_before_given_id) but for `Page Parsing History`.
+     
+* For *Page Parsing History* entries After Given Id:
+    * Type: `GET`
+    * Path: http://localhost:8098/page-parsing-histories/after/{log-id}?page-size={page-size}
     * Path Param, Query Param & Response: Format same as [`General Log`](#log_before_given_id) but for `Page Parsing History`.  
     
 * For *Page Parsing History* entries deletion token generation request:
