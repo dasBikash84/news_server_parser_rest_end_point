@@ -84,7 +84,7 @@ constructor(open var articleService: ArticleService,
 
 
     @GetMapping("/page_id/{pageId}/latest")
-    open fun getLatestArticlesForPageEndPoint(@PathVariable("pageId") pageId:String,
+    open fun getLatestArticlesForPage(@PathVariable("pageId") pageId:String,
                                               @RequestParam("article_count") articleCount:Int?,
                                               @Autowired request: HttpServletRequest)
             :ResponseEntity<Articles>{
@@ -133,7 +133,7 @@ constructor(open var articleService: ArticleService,
     }
 
     @GetMapping("/page_id/{pageId}/before/article_id/{articleId}")
-    open fun getArticlesBeforeGivenIdForPageEndPoint(@PathVariable("articleId") articleId:String,
+    open fun getArticlesBeforeGivenIdForPage(@PathVariable("articleId") articleId:String,
                                                     @PathVariable("pageId") pageId: String,
                                                     @RequestParam("article_count") articleCount: Int?,
                                                      @Autowired request: HttpServletRequest)
