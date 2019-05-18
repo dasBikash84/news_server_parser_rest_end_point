@@ -7,21 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("articles")
-class ArticleController @Autowired
-constructor(val articleService: ArticleService,
-            private val restControllerUtils: RestControllerUtils) {
+open class ArticleController
+constructor(open var articleService: ArticleService,
+            open var restControllerUtils: RestControllerUtils) {
 
     @Value("\${article.default_page_size}")
-    var defaultPageSize: Int = 50
+    open var defaultPageSize: Int = 50
 
     @Value("\${article.max_page_size}")
-    var maxPageSize: Int = 100
+    open var maxPageSize: Int = 100
 
     @GetMapping(value = arrayOf("/latest",""))
-    fun getLatestArticles(@RequestParam("article_count") articleCount:Int?):ResponseEntity<Articles>{
+    open fun getLatestArticlesEndPoint(@RequestParam("article_count") articleCount:Int?,
+                                       @Autowired request: HttpServletRequest):ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
         articleCount?.let {
@@ -34,7 +36,8 @@ constructor(val articleService: ArticleService,
     }
 
     @GetMapping("/oldest")
-    fun getOldestArticles(@RequestParam("article_count") articleCount:Int?):ResponseEntity<Articles>{
+    open fun getOldestArticlesEndPoint(@RequestParam("article_count") articleCount:Int?,
+                                       @Autowired request: HttpServletRequest):ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
         articleCount?.let {
@@ -47,8 +50,9 @@ constructor(val articleService: ArticleService,
     }
 
     @GetMapping("/after/article_id/{articleId}")
-    fun getArticlesAfterGivenId(@PathVariable("articleId") articleId:String,
-                                @RequestParam("article_count") articleCount:Int?)
+    open fun getArticlesAfterGivenIdEndPoint(@PathVariable("articleId") articleId:String,
+                                            @RequestParam("article_count") articleCount:Int?,
+                                             @Autowired request: HttpServletRequest)
             :ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
@@ -62,8 +66,9 @@ constructor(val articleService: ArticleService,
     }
 
     @GetMapping("/before/article_id/{articleId}")
-    fun getArticlesBeforeGivenId(@PathVariable("articleId") articleId:String,
-                                @RequestParam("article_count") articleCount:Int?)
+    open fun getArticlesBeforeGivenIdEndPoint(@PathVariable("articleId") articleId:String,
+                                            @RequestParam("article_count") articleCount:Int?,
+                                              @Autowired request: HttpServletRequest)
             :ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
@@ -79,7 +84,9 @@ constructor(val articleService: ArticleService,
 
 
     @GetMapping("/page_id/{pageId}/latest")
-    fun getLatestArticlesForPage(@PathVariable("pageId") pageId:String, @RequestParam("article_count") articleCount:Int?)
+    open fun getLatestArticlesForPageEndPoint(@PathVariable("pageId") pageId:String,
+                                              @RequestParam("article_count") articleCount:Int?,
+                                              @Autowired request: HttpServletRequest)
             :ResponseEntity<Articles>{
 
         var pageSize = defaultPageSize
@@ -93,7 +100,9 @@ constructor(val articleService: ArticleService,
     }
 
     @GetMapping("/page_id/{pageId}/oldest")
-    fun getOldestArticlesForPage(@PathVariable("pageId") pageId: String, @RequestParam("article_count") articleCount: Int?)
+    open fun getOldestArticlesForPageEndPoint(@PathVariable("pageId") pageId: String,
+                                              @RequestParam("article_count") articleCount: Int?,
+                                              @Autowired request: HttpServletRequest)
             : ResponseEntity<Articles> {
 
         var pageSize = defaultPageSize
@@ -107,9 +116,10 @@ constructor(val articleService: ArticleService,
     }
 
     @GetMapping("/page_id/{pageId}/after/article_id/{articleId}")
-    fun getArticlesAfterGivenIdForPage(@PathVariable("articleId") articleId:String,
-                                       @PathVariable("pageId") pageId: String,
-                                       @RequestParam("article_count") articleCount: Int?)
+    open fun getArticlesAfterGivenIdForPageEndPoint(@PathVariable("articleId") articleId:String,
+                                                    @PathVariable("pageId") pageId: String,
+                                                    @RequestParam("article_count") articleCount: Int?,
+                                                    @Autowired request: HttpServletRequest)
             : ResponseEntity<Articles> {
 
         var pageSize = defaultPageSize
@@ -123,9 +133,10 @@ constructor(val articleService: ArticleService,
     }
 
     @GetMapping("/page_id/{pageId}/before/article_id/{articleId}")
-    fun getArticlesBeforeGivenIdForPage(@PathVariable("articleId") articleId:String,
-                                       @PathVariable("pageId") pageId: String,
-                                       @RequestParam("article_count") articleCount: Int?)
+    open fun getArticlesBeforeGivenIdForPageEndPoint(@PathVariable("articleId") articleId:String,
+                                                    @PathVariable("pageId") pageId: String,
+                                                    @RequestParam("article_count") articleCount: Int?,
+                                                     @Autowired request: HttpServletRequest)
             : ResponseEntity<Articles> {
 
         var pageSize = defaultPageSize

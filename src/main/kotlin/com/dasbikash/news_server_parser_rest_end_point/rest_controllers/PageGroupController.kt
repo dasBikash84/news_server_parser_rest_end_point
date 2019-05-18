@@ -8,15 +8,16 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("page-groups")
-class PageGroupController @Autowired
-constructor(private val pageGroupService: PageGroupService,
-            private val restControllerUtils: RestControllerUtils) {
+open class PageGroupController
+constructor(open var pageGroupService: PageGroupService,
+            open var restControllerUtils: RestControllerUtils) {
 
     @GetMapping(value = arrayOf("","/"))
-    fun getAllCountries():ResponseEntity<PageGroups>{
+    open fun getAllCountriesEndPoint(@Autowired request: HttpServletRequest):ResponseEntity<PageGroups>{
         return restControllerUtils.entityToResponseEntity(PageGroups(pageGroupService.getAllPageGroups()))
     }
 

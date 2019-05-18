@@ -9,25 +9,27 @@ import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("newspapers")
-class NewsPaperController @Autowired
-constructor(private val newsPaperService: NewsPaperService,
-            private val restControllerUtils: RestControllerUtils) {
+open class NewsPaperController
+constructor(open var newsPaperService: NewsPaperService,
+            open var restControllerUtils: RestControllerUtils) {
 
     @GetMapping(value = arrayOf("","/"))
-    fun getAllActiveNewsPapers():ResponseEntity<Newspapers>{
+    open fun getAllActiveNewsPapersEndPoint(@Autowired request: HttpServletRequest):ResponseEntity<Newspapers>{
         return restControllerUtils.entityToResponseEntity(Newspapers(newsPaperService.getAllActiveNewsPapers()))
     }
 
     @GetMapping("request_newspaper_status_change_token_generation")
-    fun generateNewspaperStatusChangeToken(): ResponseEntity<NewsPaperStatusChangeRequestFormat> {
+    open fun generateNewspaperStatusChangeTokenEndPoint(@Autowired request: HttpServletRequest): ResponseEntity<NewsPaperStatusChangeRequestFormat> {
         return restControllerUtils.generateNewspaperStatusChangeToken(this::class.java)
     }
 
     @PostMapping("request_newspaper_status_change")
-    fun requestNewspaperStatusChange(@RequestBody newsPaperStatusChangeRequest: NewsPaperStatusChangeRequest?)
+    open fun requestNewspaperStatusChangeEndPoint(@RequestBody newsPaperStatusChangeRequest: NewsPaperStatusChangeRequest?,
+                                                  @Autowired request: HttpServletRequest)
             : ResponseEntity<Newspaper> {
         return restControllerUtils.entityToResponseEntity(
                 newsPaperService.requestNewspaperStatusChange(newsPaperStatusChangeRequest))

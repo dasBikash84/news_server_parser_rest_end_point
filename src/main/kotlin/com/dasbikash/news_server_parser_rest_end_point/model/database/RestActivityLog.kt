@@ -27,4 +27,9 @@ class RestActivityLog(
                     exceptionClassName = exceptionClassFullName,returnedEntiryCount = returnedEntiryCount)
         }
     }
+
+    override fun toString(): String {
+        return "RestActivityLog(requestURL='$requestURL', requestMethod='$requestMethod', remoteHost='$remoteHost', timeTakenMs=$timeTakenMs, returnedEntiryCount=$returnedEntiryCount, exceptionClassName=$exceptionClassName)"
+    }
+
 }

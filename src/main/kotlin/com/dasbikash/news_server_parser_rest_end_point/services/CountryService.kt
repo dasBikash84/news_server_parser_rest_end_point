@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class CountryService @Autowired
-constructor(val countryRepository: CountryRepository){
+open class CountryService
+constructor(open var countryRepository: CountryRepository){
 
     fun getAllCountries():List<Country>{
         return countryRepository.findAll()

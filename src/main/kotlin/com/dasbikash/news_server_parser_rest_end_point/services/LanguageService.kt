@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class LanguageService(@Autowired val languageRepository: LanguageRepository) {
+open class LanguageService(open var languageRepository: LanguageRepository) {
 
     fun getAllLanguages(): List<Language> {
         return languageRepository.findAll()

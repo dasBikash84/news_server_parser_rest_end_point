@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class ArticleService
-@Autowired constructor(val pageRepository: PageRepository, val articleRepository: ArticleRepository) {
+open class ArticleService
+ constructor(open var pageRepository: PageRepository,
+             open var articleRepository: ArticleRepository) {
 
     fun getOldestArticles(pageSize: Int): List<Article> {
         return articleRepository.findOldest(pageSize)

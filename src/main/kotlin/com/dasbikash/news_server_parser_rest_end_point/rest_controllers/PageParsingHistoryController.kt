@@ -9,21 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("page-parsing-histories")
-class PageParsingHistoryController @Autowired
-constructor(val pageParsingHistoryService: PageParsingHistoryService,
-            val restControllerUtils: RestControllerUtils) {
+open class PageParsingHistoryController
+constructor(open var pageParsingHistoryService: PageParsingHistoryService,
+            open var restControllerUtils: RestControllerUtils) {
 
     @Value("\${log.default_page_size}")
-    var defaultPageSize: Int = 10
+    open var defaultPageSize: Int = 10
 
     @Value("\${log.max_page_size}")
-    var maxPageSize: Int = 50
+    open var maxPageSize: Int = 50
 
     @GetMapping("")
-    fun getLatestPageParsingHistories(@RequestParam("page-size") pageSizeRequest:Int?): ResponseEntity<PageParsingHistories> {
+    open fun getLatestPageParsingHistoriesEndPoint(@RequestParam("page-size") pageSizeRequest:Int?,
+                                                   @Autowired request: HttpServletRequest)
+            : ResponseEntity<PageParsingHistories> {
         var pageSize = defaultPageSize
         pageSizeRequest?.let {
             when{
@@ -35,8 +38,9 @@ constructor(val pageParsingHistoryService: PageParsingHistoryService,
     }
 
     @GetMapping("/before/{log-id}")
-    fun getPageParsingHistoriesBeforeGivenId(@RequestParam("page-size") pageSizeRequest:Int?,
-                                        @PathVariable("log-id") lastErrorLogId:Int)
+    open fun getPageParsingHistoriesBeforeGivenIdEndPoint(@RequestParam("page-size") pageSizeRequest:Int?,
+                                                            @PathVariable("log-id") lastErrorLogId:Int,
+                                                          @Autowired request: HttpServletRequest)
             : ResponseEntity<PageParsingHistories> {
         var pageSize = defaultPageSize
         pageSizeRequest?.let {
@@ -50,8 +54,9 @@ constructor(val pageParsingHistoryService: PageParsingHistoryService,
     }
 
     @GetMapping("/after/{log-id}")
-    fun getPageParsingHistoriesAfterGivenId(@RequestParam("page-size") pageSizeRequest:Int?,
-                                        @PathVariable("log-id") lastErrorLogId:Int)
+    open fun getPageParsingHistoriesAfterGivenIdEndPoint(@RequestParam("page-size") pageSizeRequest:Int?,
+                                                            @PathVariable("log-id") lastErrorLogId:Int,
+                                                         @Autowired request: HttpServletRequest)
             : ResponseEntity<PageParsingHistories> {
         var pageSize = defaultPageSize
         pageSizeRequest?.let {
@@ -65,12 +70,15 @@ constructor(val pageParsingHistoryService: PageParsingHistoryService,
     }
 
     @DeleteMapping("request_log_delete_token_generation")
-    fun generateLogDeletionToken(): ResponseEntity<LogEntryDeleteRequestFormat> {
+    open fun generateLogDeletionTokenEndPoint(@Autowired request: HttpServletRequest)
+            : ResponseEntity<LogEntryDeleteRequestFormat> {
         return restControllerUtils.generateLogDeleteToken(this::class.java)
     }
 
     @DeleteMapping("")
-    fun deleteErrorLogs(@RequestBody logEntryDeleteRequest: LogEntryDeleteRequest?): ResponseEntity<PageParsingHistories> {
+    open fun deleteErrorLogsEndPoint(@RequestBody logEntryDeleteRequest: LogEntryDeleteRequest?,
+                                     @Autowired request: HttpServletRequest)
+            : ResponseEntity<PageParsingHistories> {
         return restControllerUtils.entityToResponseEntity(PageParsingHistories(
                 restControllerUtils.deleteLogEntries(pageParsingHistoryService,logEntryDeleteRequest)))
     }

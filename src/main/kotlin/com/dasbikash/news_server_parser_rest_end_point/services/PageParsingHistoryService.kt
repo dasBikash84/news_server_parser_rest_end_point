@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class PageParsingHistoryService @Autowired constructor(val pageParsingHistoryRepository: PageParsingHistoryRepository)
+open class PageParsingHistoryService constructor(open var pageParsingHistoryRepository: PageParsingHistoryRepository)
     :DeletableLogService<PageParsingHistory>{
 
     fun getLatestPageParsingHistories(pageSize: Int): List<PageParsingHistory> {

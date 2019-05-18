@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class NewsPaperService @Autowired
-constructor(val newspaperRepository: NewspaperRepository,
-            val authTokenService: AuthTokenService,
-            val generalLogRepository: GeneralLogRepository){
+open class NewsPaperService
+constructor(open var newspaperRepository: NewspaperRepository,
+            open var authTokenService: AuthTokenService,
+            open var generalLogRepository: GeneralLogRepository){
 
     fun getAllActiveNewsPapers():List<Newspaper>{
         return newspaperRepository.findAllByActive()

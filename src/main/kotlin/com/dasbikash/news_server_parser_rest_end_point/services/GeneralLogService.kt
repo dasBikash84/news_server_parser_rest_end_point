@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class GeneralLogService @Autowired constructor(val generalLogRepository: GeneralLogRepository):DeletableLogService<GeneralLog>{
+open class GeneralLogService
+constructor(open var generalLogRepository: GeneralLogRepository):DeletableLogService<GeneralLog>{
     fun getLatestGeneralLogs(pageSize: Int): List<GeneralLog> {
         return generalLogRepository.getLatestGeneralLogs(pageSize)
     }

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class PageGroupService @Autowired
-constructor(val pageGroupRepository: PageGroupRepository){
+open class PageGroupService
+constructor(open var pageGroupRepository: PageGroupRepository){
 
     fun getAllPageGroups():List<PageGroup>{
         val pageGroups = pageGroupRepository.findAll()

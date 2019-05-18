@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
-class RestControllerUtils @Autowired
-constructor(val authTokenService: AuthTokenService){
+open class RestControllerUtils
+constructor(open var authTokenService: AuthTokenService){
     fun <T : NsParserRestDbEntity> listEntityToResponseEntity(entiryList: List<T>): ResponseEntity<List<T>> {
         if (entiryList.isEmpty()) {
             throw DataNotFoundException()

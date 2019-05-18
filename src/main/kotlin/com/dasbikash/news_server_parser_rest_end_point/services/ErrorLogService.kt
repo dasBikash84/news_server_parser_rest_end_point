@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class ErrorLogService @Autowired constructor(val errorLogRepository: ErrorLogRepository)
+open class ErrorLogService
+constructor(open var errorLogRepository: ErrorLogRepository)
     :DeletableLogService<ErrorLog>{
     fun getLatestErrorLogs(pageSize: Int): List<ErrorLog> {
         return errorLogRepository.getLatestErrorLogs(pageSize)

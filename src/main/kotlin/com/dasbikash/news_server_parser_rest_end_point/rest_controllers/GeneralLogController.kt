@@ -9,21 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("general-logs")
-class GeneralLogController @Autowired
-constructor(val generalLogService: GeneralLogService,
-            val restControllerUtils: RestControllerUtils) {
+open class GeneralLogController
+constructor(open var generalLogService: GeneralLogService,
+            open var restControllerUtils: RestControllerUtils) {
 
     @Value("\${log.default_page_size}")
-    var defaultPageSize: Int = 10
+    open var defaultPageSize: Int = 10
 
     @Value("\${log.max_page_size}")
-    var maxPageSize: Int = 50
+    open var maxPageSize: Int = 50
 
     @GetMapping("")
-    fun getLatestGeneralLogs(@RequestParam("page-size") pageSizeRequest: Int?): ResponseEntity<GeneralLogs> {
+    open fun getLatestGeneralLogsEndPoint(@RequestParam("page-size") pageSizeRequest: Int?,
+                                  @Autowired request: HttpServletRequest): ResponseEntity<GeneralLogs> {
         var pageSize = defaultPageSize
         pageSizeRequest?.let {
             when {
@@ -35,8 +37,9 @@ constructor(val generalLogService: GeneralLogService,
     }
 
     @GetMapping("/before/{log-id}")
-    fun getGeneralLogsBeforeGivenId(@RequestParam("page-size") pageSizeRequest: Int?,
-                                    @PathVariable("log-id") lastGeneralLogId: Int)
+    open fun getGeneralLogsBeforeGivenIdEndPoint(@RequestParam("page-size") pageSizeRequest: Int?,
+                                            @PathVariable("log-id") lastGeneralLogId: Int,
+                                         @Autowired request: HttpServletRequest)
             : ResponseEntity<GeneralLogs> {
         var pageSize = defaultPageSize
         pageSizeRequest?.let {
@@ -50,8 +53,9 @@ constructor(val generalLogService: GeneralLogService,
     }
 
     @GetMapping("/after/{log-id}")
-    fun getGeneralLogsAfterGivenId(@RequestParam("page-size") pageSizeRequest: Int?,
-                                    @PathVariable("log-id") lastGeneralLogId: Int)
+    open fun getGeneralLogsAfterGivenIdEndPoint(@RequestParam("page-size") pageSizeRequest: Int?,
+                                        @PathVariable("log-id") lastGeneralLogId: Int,
+                                        @Autowired request: HttpServletRequest)
             : ResponseEntity<GeneralLogs> {
         var pageSize = defaultPageSize
         pageSizeRequest?.let {
@@ -65,12 +69,13 @@ constructor(val generalLogService: GeneralLogService,
     }
 
     @DeleteMapping("request_log_delete_token_generation")
-    fun generateLogDeletionToken(): ResponseEntity<LogEntryDeleteRequestFormat> {
+    open fun generateLogDeletionTokenEndPoint(@Autowired request: HttpServletRequest): ResponseEntity<LogEntryDeleteRequestFormat> {
         return restControllerUtils.generateLogDeleteToken(this::class.java)
     }
 
     @DeleteMapping("")
-    fun deleteGeneralLogs(@RequestBody logEntryDeleteRequest: LogEntryDeleteRequest?): ResponseEntity<GeneralLogs> {
+    open fun deleteGeneralLogsEndPoint(@RequestBody logEntryDeleteRequest: LogEntryDeleteRequest?,
+                               @Autowired request: HttpServletRequest): ResponseEntity<GeneralLogs> {
         return restControllerUtils.entityToResponseEntity(GeneralLogs(
                 restControllerUtils.deleteLogEntries(generalLogService,logEntryDeleteRequest)))
     }
