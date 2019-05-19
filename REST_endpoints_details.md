@@ -146,7 +146,7 @@
 * For *General Log* entries deletion:
   * Type: `DELETE`
   * Path: http://localhost:8099/general-logs
-  * RequestBody : [`LogEntryDeleteRequest`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/NewsPaperStatusChangeRequest.kt)
+  * RequestBody : [`LogEntryDeleteRequest`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/LogEntryDeleteRequest.kt)
   * Response: List of deleted *General Log* entries or `HttpStatus.BAD_REQUEST` for invalid `LogEntryDeleteRequest`.
   
 #### For [`Error Log`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/ErrorLog.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/ErrorLogController.kt):
