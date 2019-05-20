@@ -1,17 +1,11 @@
 package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
 
-import com.dasbikash.news_server_parser_rest_end_point.model.Articles
 import com.dasbikash.news_server_parser_rest_end_point.services.ArticleService
 import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-import javax.servlet.http.HttpServletRequest
 
-@RestController
-@RequestMapping("articles",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
+//@RestController
+//@RequestMapping("articles",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
 open class ArticleController
 constructor(open var articleService: ArticleService,
             open var restControllerUtils: RestControllerUtils) {
@@ -22,7 +16,7 @@ constructor(open var articleService: ArticleService,
     @Value("\${article.max_page_size}")
     open var maxPageSize: Int = 100
 
-    @GetMapping(value = arrayOf("/latest",""),produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
+    /*@GetMapping(value = arrayOf("/latest",""),produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
     open fun getLatestArticlesEndPoint(@RequestParam("article_count") articleCount:Int?,
                                        @Autowired request: HttpServletRequest):ResponseEntity<Articles>{
 
@@ -148,7 +142,7 @@ constructor(open var articleService: ArticleService,
             }
         }
         return restControllerUtils.entityToResponseEntity(Articles(articleService.getArticlesBeforeGivenIdForPage(articleId, pageId, pageSize)))
-    }
+    }*/
 
 
 }

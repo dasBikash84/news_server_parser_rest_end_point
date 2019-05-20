@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.ResponseEntity
 import javax.servlet.http.HttpServletRequest
 
-@Configuration
-@Aspect
+//@Configuration
+//@Aspect
 open class AroundAspects(open var restActivityLogRepository: RestActivityLogRepository) {
 
 //    open var logger = LoggerFactory.getLogger(this.javaClass)
