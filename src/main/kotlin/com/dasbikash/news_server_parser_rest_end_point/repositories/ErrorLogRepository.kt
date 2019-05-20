@@ -19,7 +19,7 @@ interface ErrorLogRepository : JpaRepository<ErrorLog, Int>,DeletableLogReposito
             nativeQuery = true)
     override fun getOldestLogs(pageSize: Int): List<ErrorLog>
 
-    @Query(value = "SELECT * FROM ${DatabaseTableNames.ERROR_LOG_TABLE_NAME} WHERE id >= :lastErrorLogId order by id ASC limit :pageSize",
+    @Query(value = "SELECT * FROM ${DatabaseTableNames.ERROR_LOG_TABLE_NAME} WHERE id >= :lastLogId order by id ASC limit :pageSize",
             nativeQuery = true)
-    override fun getLogsAfterGivenId(lastErrorLogId: Int, pageSize: Int): List<ErrorLog>
+    override fun getLogsAfterGivenId(lastLogId: Int, pageSize: Int): List<ErrorLog>
 }

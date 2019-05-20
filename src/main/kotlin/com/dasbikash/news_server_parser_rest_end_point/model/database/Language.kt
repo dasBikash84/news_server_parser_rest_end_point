@@ -15,16 +15,26 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
+import javax.xml.bind.annotation.XmlRootElement
+import javax.xml.bind.annotation.XmlTransient
 
 @Entity
 @Table(name = DatabaseTableNames.LANGUAGE_TABLE_NAME)
+@XmlRootElement
 data class Language(
         @Id var id: String = "",
         var name: String? = null,
         @OneToMany(targetEntity = Newspaper::class, mappedBy = "language", fetch = FetchType.LAZY)
-        @JsonIgnore
-        var newsPapers: List<Newspaper>? = null
+        private var newsPapers: List<Newspaper>? = null
 ): NsParserRestDbEntity {
+    @JsonIgnore
+    @XmlTransient
+    fun getNewsPapers():List<Newspaper>?{
+        return newsPapers
+    }
+    fun setNewsPapers(newsPapers: List<Newspaper>?){
+        this.newsPapers=newsPapers
+    }
     override fun toString(): String {
         return "Language(id='$id', name=$name)"
     }

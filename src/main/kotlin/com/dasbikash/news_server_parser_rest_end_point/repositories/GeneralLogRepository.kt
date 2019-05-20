@@ -18,7 +18,7 @@ interface GeneralLogRepository : JpaRepository<GeneralLog, Int>,DeletableLogRepo
             nativeQuery = true)
     override fun getOldestLogs(pageSize: Int): List<GeneralLog>
 
-    @Query(value = "SELECT * FROM ${DatabaseTableNames.GENERAL_LOG_TABLE_NAME} WHERE id >= :lastGeneralLogId order by id ASC limit :pageSize",
+    @Query(value = "SELECT * FROM ${DatabaseTableNames.GENERAL_LOG_TABLE_NAME} WHERE id >= :lastLogId order by id ASC limit :pageSize",
             nativeQuery = true)
-    override fun getLogsAfterGivenId(lastGeneralLogId: Int, pageSize: Int): List<GeneralLog>
+    override fun getLogsAfterGivenId(lastLogId: Int, pageSize: Int): List<GeneralLog>
 }

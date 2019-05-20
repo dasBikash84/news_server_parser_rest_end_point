@@ -3,7 +3,6 @@ package com.dasbikash.news_server_parser_rest_end_point.services
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundException
 import com.dasbikash.news_server_parser_rest_end_point.model.database.ErrorLog
 import com.dasbikash.news_server_parser_rest_end_point.repositories.ErrorLogRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,14 +25,14 @@ constructor(open var errorLogRepository: ErrorLogRepository)
         return errorLogRepository.getOldestLogs(pageSize)
     }
 
-    override fun getLogsAfterGivenId(lastErrorLogId: Int, pageSize: Int): List<ErrorLog> {
-        val lastErrorLog = errorLogRepository.findById(lastErrorLogId)
+    override fun getLogsAfterGivenId(lastLogId: Int, pageSize: Int): List<ErrorLog> {
+        val lastErrorLog = errorLogRepository.findById(lastLogId)
         if (!lastErrorLog.isPresent){
             throw DataNotFoundException()
         }
         return errorLogRepository.getLogsAfterGivenId(lastErrorLog.get().id!!,pageSize)
     }
-    override fun delete(errorLog: ErrorLog){
-        errorLogRepository.delete(errorLog)
+    override fun delete(logEntry: ErrorLog){
+        errorLogRepository.delete(logEntry)
     }
 }

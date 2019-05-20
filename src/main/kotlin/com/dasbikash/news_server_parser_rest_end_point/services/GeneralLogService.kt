@@ -3,7 +3,6 @@ package com.dasbikash.news_server_parser_rest_end_point.services
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundException
 import com.dasbikash.news_server_parser_rest_end_point.model.database.GeneralLog
 import com.dasbikash.news_server_parser_rest_end_point.repositories.GeneralLogRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,14 +23,14 @@ constructor(open var generalLogRepository: GeneralLogRepository):DeletableLogSer
         return generalLogRepository.getOldestLogs(pageSize)
     }
 
-    override fun getLogsAfterGivenId(lastGeneralLogId: Int, pageSize: Int): List<GeneralLog> {
-        val lastGeneralLog = generalLogRepository.findById(lastGeneralLogId)
+    override fun getLogsAfterGivenId(lastLogId: Int, pageSize: Int): List<GeneralLog> {
+        val lastGeneralLog = generalLogRepository.findById(lastLogId)
         if (!lastGeneralLog.isPresent){
             throw DataNotFoundException()
         }
         return generalLogRepository.getLogsAfterGivenId(lastGeneralLog.get().id!!,pageSize)
     }
-    override fun delete(generalLog: GeneralLog){
-        generalLogRepository.delete(generalLog)
+    override fun delete(logEntry: GeneralLog){
+        generalLogRepository.delete(logEntry)
     }
 }

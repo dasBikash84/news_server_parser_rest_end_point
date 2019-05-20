@@ -4,7 +4,6 @@ import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundEx
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 import com.dasbikash.news_server_parser_rest_end_point.repositories.ArticleRepository
 import com.dasbikash.news_server_parser_rest_end_point.repositories.PageRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
@@ -25,7 +24,7 @@ open class ArticleService
         if (currentArticle == null){
             throw DataNotFoundException()
         }
-        return articleRepository.getArticlesAfterGivenId(currentArticle.serial!!,pageSize)
+        return articleRepository.getArticlesAfterGivenId(currentArticle.getSerial()!!,pageSize)
     }
 
     fun getArticlesBeforeGivenId(articleId: String, pageSize: Int): List<Article> {
@@ -33,7 +32,7 @@ open class ArticleService
         if (currentArticle == null){
             throw DataNotFoundException()
         }
-        return articleRepository.getArticlesBeforeGivenId(currentArticle.serial!!,pageSize)
+        return articleRepository.getArticlesBeforeGivenId(currentArticle.getSerial()!!,pageSize)
     }
 
     fun getLatestArticlesForPage(pageId: String, pageSize: Int): List<Article> {
@@ -61,7 +60,7 @@ open class ArticleService
         if (currentArticle == null){
             throw DataNotFoundException()
         }
-        return articleRepository.getArticlesAfterGivenIdForPage(currentArticle.serial!!,pageId,pageSize)
+        return articleRepository.getArticlesAfterGivenIdForPage(currentArticle.getSerial()!!,pageId,pageSize)
     }
 
     fun getArticlesBeforeGivenIdForPage(articleId: String, pageId: String, pageSize: Int): List<Article> {
@@ -73,6 +72,6 @@ open class ArticleService
         if (currentArticle == null){
             throw DataNotFoundException()
         }
-        return articleRepository.getArticlesBeforeGivenIdForPage(currentArticle.serial!!,pageId,pageSize)
+        return articleRepository.getArticlesBeforeGivenIdForPage(currentArticle.getSerial()!!,pageId,pageSize)
     }
 }

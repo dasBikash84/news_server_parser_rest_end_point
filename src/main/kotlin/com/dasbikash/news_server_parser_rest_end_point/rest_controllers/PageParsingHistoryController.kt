@@ -7,12 +7,13 @@ import com.dasbikash.news_server_parser_rest_end_point.services.PageParsingHisto
 import com.dasbikash.news_server_parser_rest_end_point.utills.RestControllerUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-@RequestMapping("page-parsing-histories")
+@RequestMapping("page-parsing-histories",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
 open class PageParsingHistoryController
 constructor(open var pageParsingHistoryService: PageParsingHistoryService,
             open var restControllerUtils: RestControllerUtils) {
@@ -23,7 +24,7 @@ constructor(open var pageParsingHistoryService: PageParsingHistoryService,
     @Value("\${log.max_page_size}")
     open var maxPageSize: Int = 50
 
-    @GetMapping("")
+    @GetMapping("",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
     open fun getLatestPageParsingHistoriesEndPoint(@RequestParam("page-size") pageSizeRequest:Int?,
                                                    @Autowired request: HttpServletRequest)
             : ResponseEntity<PageParsingHistories> {
@@ -37,7 +38,7 @@ constructor(open var pageParsingHistoryService: PageParsingHistoryService,
         return restControllerUtils.entityToResponseEntity(PageParsingHistories(pageParsingHistoryService.getLatestPageParsingHistories(pageSize)))
     }
 
-    @GetMapping("/before/{log-id}")
+    @GetMapping("/before/{log-id}",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
     open fun getPageParsingHistoriesBeforeGivenIdEndPoint(@RequestParam("page-size") pageSizeRequest:Int?,
                                                             @PathVariable("log-id") lastErrorLogId:Int,
                                                           @Autowired request: HttpServletRequest)
@@ -53,7 +54,7 @@ constructor(open var pageParsingHistoryService: PageParsingHistoryService,
                         pageParsingHistoryService.getPageParsingHistoriesBeforeGivenId(lastErrorLogId,pageSize)))
     }
 
-    @GetMapping("/after/{log-id}")
+    @GetMapping("/after/{log-id}",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
     open fun getPageParsingHistoriesAfterGivenIdEndPoint(@RequestParam("page-size") pageSizeRequest:Int?,
                                                             @PathVariable("log-id") lastErrorLogId:Int,
                                                          @Autowired request: HttpServletRequest)
@@ -69,13 +70,13 @@ constructor(open var pageParsingHistoryService: PageParsingHistoryService,
                         pageParsingHistoryService.getLogsAfterGivenId(lastErrorLogId,pageSize)))
     }
 
-    @DeleteMapping("request_log_delete_token_generation")
+    @DeleteMapping("request_log_delete_token_generation",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
     open fun generateLogDeletionTokenEndPoint(@Autowired request: HttpServletRequest)
             : ResponseEntity<LogEntryDeleteRequestFormat> {
         return restControllerUtils.generateLogDeleteToken(this::class.java)
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE))
     open fun deleteErrorLogsEndPoint(@RequestBody logEntryDeleteRequest: LogEntryDeleteRequest?,
                                      @Autowired request: HttpServletRequest)
             : ResponseEntity<PageParsingHistories> {

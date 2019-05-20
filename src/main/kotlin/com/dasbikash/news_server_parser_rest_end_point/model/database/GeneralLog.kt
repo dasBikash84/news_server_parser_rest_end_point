@@ -13,12 +13,13 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
-import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
 import javax.persistence.*
+import javax.xml.bind.annotation.XmlRootElement
 
 @Entity
 @Table(name = DatabaseTableNames.GENERAL_LOG_TABLE_NAME)
+@XmlRootElement
 class GeneralLog(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

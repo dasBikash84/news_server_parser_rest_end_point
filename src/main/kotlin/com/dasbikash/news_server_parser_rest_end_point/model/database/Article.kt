@@ -18,30 +18,31 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import javax.persistence.*
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
+import javax.xml.bind.annotation.XmlTransient
 import kotlin.collections.ArrayList
 
 
 @Entity
 @Table(name = DatabaseTableNames.ARTICLE_TABLE_NAME)
+@XmlRootElement
 data class Article(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @JsonIgnore
-        var serial:Int?=null,
+        private var serial:Int?=null,
+
         @Column(name = "id")
         @JsonProperty(value = "id")
         var articleId: String? = null,
 
         @ManyToOne(targetEntity = Page::class, fetch = FetchType.EAGER)
         @JoinColumn(name = "pageId")
-        @JsonIgnore
-        var page: Page? = null,
+        private var page: Page? = null,
 
         var title: String? = null,
-        @JsonIgnore
-        var modificationTS: Date? = null,
-        @JsonIgnore
-        var publicationTS: Date? = null,
+        private var modificationTS: Date? = null,
+        private var publicationTS: Date? = null,
 
         @Column(columnDefinition = "text")
         var articleText: String? = null,
@@ -54,24 +55,57 @@ data class Article(
         @Column(columnDefinition = "text")
         var previewImageLink: String? = null
 ) : NsParserRestDbEntity {
-    @Transient
-    private var pageId: String? = null
 
-
-    override fun toString(): String {
-        return "Article(id='$articleId', page=${page?.name}, title=$title, modificationTS=$modificationTS, publicationTS=$publicationTS, " +
-                "articleText=${articleText ?: ""}, imageLinkList=$imageLinkList, previewImageLink=$previewImageLink)"
+    @JsonIgnore
+    @XmlTransient
+    fun getPublicationTS():Date?{
+        return publicationTS
+    }
+    fun setPublicationTS(publicationTS: Date?){
+        this.publicationTS = publicationTS
     }
 
-    @JsonProperty(value = "pageId")
+    @JsonIgnore
+    @XmlTransient
+    fun getModificationTS():Date?{
+        return modificationTS
+    }
+    fun setModificationTS(modificationTS: Date?){
+        this.modificationTS = modificationTS
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    fun getSerial():Int?{
+        return serial
+    }
+    fun setSerial(serial: Int?){
+        this.serial=serial
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    fun getPage():Page?{
+        return page
+    }
+    fun setPage(page: Page?){
+        this.page=page
+    }
+
+    @JsonProperty
+    @XmlElement
+    @Transient
     fun getPageId(): String? {
         return page?.id
     }
-    @JsonProperty(value = "publicationTime")
+
+    @JsonProperty
+    @XmlElement
+    @Transient
     fun getPublicationTime(): Date {
         var publicationTime = Calendar.getInstance()
-        this.page?.newspaper?.country?.let {
-            val timezone: TimeZone = TimeZone.getTimeZone(this.page?.newspaper?.country?.timeZone)
+        this.page?.getNewspaper()?.getCountry()?.let {
+            val timezone: TimeZone = TimeZone.getTimeZone(this.page?.getNewspaper()?.getCountry()?.timeZone)
             publicationTime = Calendar.getInstance(timezone)
         }
         if (publicationTS != null) {
@@ -80,5 +114,10 @@ data class Article(
             publicationTime.time = this.modificationTS
         }
         return publicationTime.time
+    }
+
+    override fun toString(): String {
+        return "Article(id='$articleId', page=${page?.name}, title=$title, modificationTS=$modificationTS, publicationTS=$publicationTS, " +
+                "articleText=${articleText ?: ""}, imageLinkList=$imageLinkList, previewImageLink=$previewImageLink)"
     }
 }

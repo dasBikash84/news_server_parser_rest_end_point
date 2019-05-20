@@ -1,9 +1,9 @@
 package com.dasbikash.news_server_parser_rest_end_point.utills
 
 
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.EmailSendingException
 import com.dasbikash.news_server_parser_rest_end_point.model.EmailAuth
 import com.dasbikash.news_server_parser_rest_end_point.model.EmailTargets
-import com.dasbikash.news_server_parser_rest_end_point.exceptions.EmailSendingException
 import com.dasbikash.news_server_parser_rest_end_point.model.database.AuthToken
 import com.google.gson.Gson
 import java.io.InputStreamReader

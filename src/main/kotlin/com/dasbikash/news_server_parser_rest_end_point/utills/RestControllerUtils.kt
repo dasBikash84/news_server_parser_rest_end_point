@@ -8,7 +8,6 @@ import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperStatusChan
 import com.dasbikash.news_server_parser_rest_end_point.model.database.NsParserRestDbEntity
 import com.dasbikash.news_server_parser_rest_end_point.services.AuthTokenService
 import com.dasbikash.news_server_parser_rest_end_point.services.DeletableLogService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 

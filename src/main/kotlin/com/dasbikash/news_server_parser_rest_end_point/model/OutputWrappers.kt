@@ -1,71 +1,85 @@
 package com.dasbikash.news_server_parser_rest_end_point.model
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.*
+import com.fasterxml.jackson.annotation.JsonProperty
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
 
-class Languages(val languages: List<Language>) : NsParserRestDbEntity, OutputWrapper {
+@XmlRootElement
+class Languages(var languages: List<Language>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
-        return languages.size
+        return languages?.size ?: 0
     }
 }
-
-class Countries(val countries: List<Country>) : NsParserRestDbEntity, OutputWrapper {
+@XmlRootElement
+class Countries(var countries: List<Country>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
-        return countries.size
+        return countries?.size ?: 0
     }
 }
-
-class Newspapers(val newspapers: List<Newspaper>) : NsParserRestDbEntity, OutputWrapper {
+@XmlRootElement
+class Newspapers(var newspapers: List<Newspaper>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
-        return newspapers.size
+        return newspapers?.size ?: 0
     }
 }
-
-class Pages(val pages: List<Page>) : NsParserRestDbEntity, OutputWrapper {
+@XmlRootElement
+class Pages(var pages: List<Page>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
-        return pages.size
+        return pages?.size ?: 0
     }
 }
-
-class Articles(articles: List<Article>) : NsParserRestDbEntity, OutputWrapper {
-    val articles: List<Article>
+@XmlRootElement
+class Articles(articles: List<Article>?=null) : NsParserRestDbEntity, OutputWrapper {
+    private var articles: List<Article>?=null
 
     init {
-        articles.asSequence().forEach { it.articleText = it.articleText?.trim() }
+        articles?.asSequence()?.forEach { it.articleText = it.articleText?.trim() }
         this.articles = articles
     }
 
+    fun setArticles(articles: List<Article>?){
+        articles?.asSequence()?.forEach { it.articleText = it.articleText?.trim() }
+        this.articles = articles
+    }
+    @JsonProperty
+    @XmlElement
+    fun getArticles():List<Article>?{
+        return articles
+    }
+
     override fun getOutPutCount(): Int {
-        return articles.size
+        return articles?.size ?: 0
     }
 }
-
-class PageGroups(val pageGroups: List<PageGroup>) : NsParserRestDbEntity, OutputWrapper {
+@XmlRootElement
+class PageGroups(var pageGroups: List<PageGroup>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
-        return pageGroups.size
+        return pageGroups?.size ?: 0
     }
 }
-
+@XmlRootElement
 class GeneralLogs(
-        val generalLogs: List<GeneralLog>
+        var generalLogs: List<GeneralLog>?=null
 ) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
-        return generalLogs.size
+        return generalLogs?.size ?: 0
     }
 }
-
+@XmlRootElement
 class ErrorLogs(
-        val errorLogs: List<ErrorLog>
+        var errorLogs: List<ErrorLog>?=null
 ) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
-        return errorLogs.size
+        return errorLogs?.size ?: 0
     }
 }
-
+@XmlRootElement
 class PageParsingHistories(
-        val pageParsingHistories: List<PageParsingHistory>
+        var pageParsingHistories: List<PageParsingHistory>?=null
 ) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
-        return pageParsingHistories.size
+        return pageParsingHistories?.size ?: 0
     }
 }
 

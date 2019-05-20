@@ -3,7 +3,6 @@ package com.dasbikash.news_server_parser_rest_end_point.services
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundException
 import com.dasbikash.news_server_parser_rest_end_point.model.database.PageParsingHistory
 import com.dasbikash.news_server_parser_rest_end_point.repositories.PageParsingHistoryRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,14 +25,14 @@ open class PageParsingHistoryService constructor(open var pageParsingHistoryRepo
         return pageParsingHistoryRepository.getOldestLogs(pageSize)
     }
 
-    override fun getLogsAfterGivenId(lastPageParsingHistoryId: Int, pageSize: Int): List<PageParsingHistory> {
-        val lastPageParsingHistoryEntry = pageParsingHistoryRepository.findById(lastPageParsingHistoryId)
+    override fun getLogsAfterGivenId(lastLogId: Int, pageSize: Int): List<PageParsingHistory> {
+        val lastPageParsingHistoryEntry = pageParsingHistoryRepository.findById(lastLogId)
         if (!lastPageParsingHistoryEntry.isPresent){
             throw DataNotFoundException()
         }
         return pageParsingHistoryRepository.getLogsAfterGivenId(lastPageParsingHistoryEntry.get().id!!,pageSize)
     }
-    override fun delete(errorLog: PageParsingHistory){
-        pageParsingHistoryRepository.delete(errorLog)
+    override fun delete(logEntry: PageParsingHistory){
+        pageParsingHistoryRepository.delete(logEntry)
     }
 }

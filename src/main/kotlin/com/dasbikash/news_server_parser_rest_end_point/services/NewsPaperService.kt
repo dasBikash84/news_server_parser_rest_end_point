@@ -7,8 +7,6 @@ import com.dasbikash.news_server_parser_rest_end_point.model.database.GeneralLog
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Newspaper
 import com.dasbikash.news_server_parser_rest_end_point.repositories.GeneralLogRepository
 import com.dasbikash.news_server_parser_rest_end_point.repositories.NewspaperRepository
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -41,8 +39,8 @@ constructor(open var newspaperRepository: NewspaperRepository,
         }
         val targetNewsPaper = targetNewsPaperOptional.get()
         when(newsPaperStatusChangeRequest.targetStatus){
-            OffOnStatus.ON -> targetNewsPaper.active = true
-            OffOnStatus.OFF -> targetNewsPaper.active = false
+            OffOnStatus.ON -> targetNewsPaper.setActive(true)
+            OffOnStatus.OFF -> targetNewsPaper.setActive(false)
         }
         newspaperRepository.save(targetNewsPaper)
 

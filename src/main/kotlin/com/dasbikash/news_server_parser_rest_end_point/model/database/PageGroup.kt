@@ -14,7 +14,10 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.*
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlTransient
 
 @Entity
 @Table(name = DatabaseTableNames.PAGE_GROUP_TABLE_NAME)
@@ -31,11 +34,22 @@ data class PageGroup(
             joinColumns = arrayOf(JoinColumn(name = "pageGroupId")),
             inverseJoinColumns = arrayOf(JoinColumn(name = "pageId"))
     )
+    private var pageList: List<Page>?=null
+
     @JsonIgnore
-    var pageList: List<Page>?=null
+    @XmlTransient
+    fun getPageList(): List<Page>? {
+        return this.pageList
+    }
+    fun setPageList(pageList: List<Page>?) {
+        this.pageList = pageList
+    }
+
     @Transient
     private var pageIdList: List<String>?=null
+    @JsonProperty
+    @XmlElement
     fun getPageIdList():List<String>{
-        return pageList?.asSequence()?.filter { it.active }?.map { it.id }?.toList() ?: emptyList()
+        return pageList?.asSequence()?.filter { it.getActive() }?.map { it.id }?.toList() ?: emptyList()
     }
 }

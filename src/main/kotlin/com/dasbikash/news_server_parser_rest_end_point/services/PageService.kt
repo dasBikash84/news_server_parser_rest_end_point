@@ -4,7 +4,6 @@ import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundEx
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.repositories.NewspaperRepository
 import com.dasbikash.news_server_parser_rest_end_point.repositories.PageRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,6 +12,12 @@ constructor(open var pageRepository: PageRepository,
             open var newspaperRepository: NewspaperRepository) {
 
     fun getAllActivePages(): List<Page> {
+        val pages =  pageRepository.findAllByActive()
+        pages.asSequence().forEach {
+            if (it.isTopLevelPage()){
+                it.hasChild = pageRepository.findPagesByParentPageIdAndLinkFormatNotNullAndActive(parentPageId = it.id).isNotEmpty()
+            }
+        }
         return pageRepository.findAllByActive()
     }
 
@@ -25,7 +30,7 @@ constructor(open var pageRepository: PageRepository,
         val pages = pageRepository.findPagesByNewspaperAndActive(newspaper)
         pages.asSequence().forEach {
             if (it.isTopLevelPage()){
-                it.hasChild = pageRepository.findPagesByNewspaperAndParentPageIdAndLinkFormatNotNullAndActive(newspaper,parentPageId = it.id).isNotEmpty()
+                it.hasChild = pageRepository.findPagesByParentPageIdAndLinkFormatNotNullAndActive(parentPageId = it.id).isNotEmpty()
             }
         }
         return pageRepository.findPagesByNewspaperAndActive(newspaperOptional.get())

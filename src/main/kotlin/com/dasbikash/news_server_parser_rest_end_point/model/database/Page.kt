@@ -16,31 +16,31 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.*
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
+import javax.xml.bind.annotation.XmlTransient
 
 @Entity
 @Table(name = DatabaseTableNames.PAGE_TABLE_NAME)
+@XmlRootElement
 data class Page(
         @Id
         var id: String="",
 
         @ManyToOne(targetEntity = Newspaper::class,fetch = FetchType.EAGER)
         @JoinColumn(name="newsPaperId")
-        @JsonIgnore
-        var newspaper: Newspaper?=null,
+        private var newspaper: Newspaper?=null,
 
         var parentPageId: String?=null,
         var name: String?=null,
 
         @Column(name="linkFormat", columnDefinition="text")
-        @JsonIgnore
-        var linkFormat:String? = null,
+        private var linkFormat:String? = null,
 
-        @JsonIgnore
-        var active: Boolean = true,
+        private var active: Boolean = true,
 
         @OneToMany(fetch = FetchType.LAZY,mappedBy = "page",targetEntity = Article::class)
-        @JsonIgnore
-        var articleList: List<Article>?=null,
+        private var articleList: List<Article>?=null,
 
         @Transient
         var hasChild:Boolean = false
@@ -54,21 +54,62 @@ data class Page(
     }
 
     @Transient
-    @JsonProperty(value = "topLevelPage")
+    @JsonProperty
+    @XmlElement
     fun isTopLevelPage():Boolean{
         return parentPageId == TOP_LEVEL_PAGE_PARENT_ID
     }
 
     @Transient
-    @JsonProperty(value = "newsPaperId")
+    @JsonProperty
+    @XmlElement
     fun getNewsPaperId():String{
         return newspaper?.id ?: ""
     }
 
     @Transient
-    @JsonProperty(value = "hasData")
-    fun hasData():Boolean{
+    @JsonProperty
+    @XmlElement
+    fun isHasData():Boolean{
         return linkFormat !=null
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    fun getNewspaper():Newspaper?{
+        return newspaper
+    }
+    fun setNewspaper(newsPaper: Newspaper?){
+        this.newspaper=newsPaper
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    fun getArticleList():List<Article>?{
+        return articleList
+    }
+    fun setArticleList(articleList: List<Article>?){
+        this.articleList=articleList
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    fun getActive(): Boolean {
+        return active
+    }
+
+    fun setActive(active: Boolean) {
+        this.active = active
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    fun getLinkFormat(): String? {
+        return linkFormat
+    }
+
+    fun setLinkFormat(linkFormat: String?) {
+        this.linkFormat = linkFormat
     }
 
     override fun toString(): String {

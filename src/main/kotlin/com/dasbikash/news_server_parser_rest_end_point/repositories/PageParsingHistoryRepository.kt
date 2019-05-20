@@ -19,7 +19,7 @@ interface PageParsingHistoryRepository : JpaRepository<PageParsingHistory, Int>,
             nativeQuery = true)
     override fun getOldestLogs(pageSize: Int): List<PageParsingHistory>
 
-    @Query(value = "SELECT * FROM ${DatabaseTableNames.PAGE_PARSING_HISTORY_TABLE_NAME} WHERE id >= :lastPageParsingHistoryId order by id ASC limit :pageSize",
+    @Query(value = "SELECT * FROM ${DatabaseTableNames.PAGE_PARSING_HISTORY_TABLE_NAME} WHERE id >= :lastLogId order by id ASC limit :pageSize",
             nativeQuery = true)
-    override fun getLogsAfterGivenId(lastPageParsingHistoryId: Int, pageSize: Int): List<PageParsingHistory>
+    override fun getLogsAfterGivenId(lastLogId: Int, pageSize: Int): List<PageParsingHistory>
 }

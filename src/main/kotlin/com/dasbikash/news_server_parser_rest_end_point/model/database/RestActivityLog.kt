@@ -16,15 +16,19 @@ class RestActivityLog(
         val methodSignature:String,
         val timeTakenMs:Int,
         val returnedEntiryCount:Int?=null,
-        val exceptionClassName:String?=null
+        val exceptionClassName:String?=null,
+        val acceptHeader:String?=null,
+        val userAgentHeader:String?=null
 ){
     companion object{
         fun getInstance(joinPoint: JoinPoint, request: HttpServletRequest, timeTakenMs: Int,
-                        exceptionClassFullName: String?=null, returnedEntiryCount:Int?=null)
+                        exceptionClassFullName: String?=null, returnedEntiryCount:Int?=null,
+                        acceptHeader: String?=null,userAgentHeader: String?=null)
                 :RestActivityLog{
             return RestActivityLog(requestURL = request.requestURL.toString(),methodSignature = joinPoint.signature.toString(),
                     requestMethod = request.method,remoteHost = request.remoteHost,timeTakenMs = timeTakenMs,
-                    exceptionClassName = exceptionClassFullName,returnedEntiryCount = returnedEntiryCount)
+                    exceptionClassName = exceptionClassFullName,returnedEntiryCount = returnedEntiryCount,
+                    acceptHeader = acceptHeader,userAgentHeader = userAgentHeader)
         }
     }
 
