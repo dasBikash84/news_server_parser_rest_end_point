@@ -41,7 +41,8 @@ open class AroundAspects(open var restActivityLogRepository: RestActivityLogRepo
 
         val restActivityLog = RestActivityLog.getInstance(
                                                         proceedingJoinPoint,request,(System.currentTimeMillis() - startTime).toInt(),
-                                                        exception?.let { it::class.java.canonicalName} ,outputEntityCount)
+                                                        exception?.let { it::class.java.canonicalName} ,outputEntityCount,
+                                                        acceptHeader, userAgentHeader)
 
         restActivityLogRepository.save(restActivityLog)
         println(restActivityLog)
