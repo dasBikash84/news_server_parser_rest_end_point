@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = DatabaseTableNames.REST_ACTIVITY_LOG_TABLE_NAME)
-class RestActivityLog(
+data class RestActivityLog(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id:Int?=null,
@@ -31,10 +31,4 @@ class RestActivityLog(
                     acceptHeader = requestDetails.acceptHeader,userAgentHeader = requestDetails.userAgentHeader)
         }
     }
-
-    override fun toString(): String {
-        return "RestActivityLog(requestURL='$requestURL', requestMethod='$requestMethod', remoteHost='$remoteHost', " +
-                "timeTakenMs=$timeTakenMs, returnedEntiryCount=$returnedEntiryCount, exceptionClassName=$exceptionClassName)"
-    }
-
 }
