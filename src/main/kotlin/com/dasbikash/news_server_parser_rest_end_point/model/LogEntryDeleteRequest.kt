@@ -1,10 +1,12 @@
 package com.dasbikash.news_server_parser_rest_end_point.model
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.NsParserRestDbEntity
+import javax.xml.bind.annotation.XmlRootElement
 
+@XmlRootElement
 class LogEntryDeleteRequest(
-        val authToken: String? = null,
-        val targetLogId: Int? = null,
+        var authToken: String? = null,
+        var targetLogId: Int? = null,
         var entryDeleteCount: Int? = null
 ) : NsParserRestDbEntity {
     companion object {
@@ -12,12 +14,12 @@ class LogEntryDeleteRequest(
         const val DEFAULT_ENTRY_DELETE_COUNT = 10
     }
 }
-
+@XmlRootElement
 class LogEntryDeleteRequestFormat (
-        val authToken:String = "Emailed token",
-        val targetLogId: String = "Log id for entry deletion from specific location. " +
+        var authToken:String = "Emailed token",
+        var targetLogId: String = "Log id for entry deletion from specific location. " +
                                     "Oldest entry will be deleted for null",
-        val entryDeleteCount: String = "Log enrty delete count. " +
+        var entryDeleteCount: String = "Log enrty delete count. " +
                                         "Max:${LogEntryDeleteRequest.MAX_ENTRY_DELETE_LIMIT}. "+
                                         "Default:${LogEntryDeleteRequest.DEFAULT_ENTRY_DELETE_COUNT}"
 ): NsParserRestDbEntity

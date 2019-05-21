@@ -10,22 +10,23 @@ import com.dasbikash.news_server_parser_rest_end_point.services.AuthTokenService
 import com.dasbikash.news_server_parser_rest_end_point.services.DeletableLogService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import javax.ws.rs.core.Response
 
 @Service
 open class RestControllerUtils
 constructor(open var authTokenService: AuthTokenService){
-    fun <T : NsParserRestDbEntity> listEntityToResponseEntity(entiryList: List<T>): ResponseEntity<List<T>> {
+    fun <T : NsParserRestDbEntity> listEntityToResponseEntity(entiryList: List<T>): Response {
         if (entiryList.isEmpty()) {
             throw DataNotFoundException()
         }
-        return ResponseEntity.ok(entiryList)
+        return Response.status(Response.Status.OK).entity(entiryList).build()
     }
 
-    fun <T : NsParserRestDbEntity> entityToResponseEntity(entity: T?): ResponseEntity<T> {
+    fun <T : NsParserRestDbEntity> entityToResponseEntity(entity: T?): Response {
         if (entity == null) {
             throw DataNotFoundException()
         }
-        return ResponseEntity.ok(entity)
+        return Response.status(Response.Status.OK).entity(entity).build()
     }
 
     private fun <T> generateAndEmailNewAuthtoken(type: Class<T>){
@@ -33,12 +34,12 @@ constructor(open var authTokenService: AuthTokenService){
         EmailUtils.emailAuthTokenToAdmin(newToken, type)
     }
 
-    fun <T> generateLogDeleteToken(type: Class<T>): ResponseEntity<LogEntryDeleteRequestFormat> {
+    fun <T> generateLogDeleteToken(type: Class<T>): Response {
         generateAndEmailNewAuthtoken(type)
         return entityToResponseEntity(LogEntryDeleteRequestFormat())
     }
 
-    fun <T> generateNewspaperStatusChangeToken(type: Class<T>): ResponseEntity<NewsPaperStatusChangeRequestFormat> {
+    fun <T> generateNewspaperStatusChangeToken(type: Class<T>): Response {
         generateAndEmailNewAuthtoken(type)
         return entityToResponseEntity(NewsPaperStatusChangeRequestFormat())
     }
@@ -76,14 +77,14 @@ constructor(open var authTokenService: AuthTokenService){
         } else {
             if (logEntryDeleteRequest.entryDeleteCount == null ||
                     logEntryDeleteRequest.entryDeleteCount!! < 0) {
-                logEntriesForDeletion.addAll(deletableLogService.getLogsAfterGivenId(logEntryDeleteRequest.targetLogId, LogEntryDeleteRequest.DEFAULT_ENTRY_DELETE_COUNT))
+                logEntriesForDeletion.addAll(deletableLogService.getLogsAfterGivenId(logEntryDeleteRequest.targetLogId!!, LogEntryDeleteRequest.DEFAULT_ENTRY_DELETE_COUNT))
             } else {
                 if (logEntryDeleteRequest.entryDeleteCount!! > LogEntryDeleteRequest.MAX_ENTRY_DELETE_LIMIT) {
                     logEntriesForDeletion.addAll(deletableLogService
-                            .getLogsAfterGivenId(logEntryDeleteRequest.targetLogId, LogEntryDeleteRequest.MAX_ENTRY_DELETE_LIMIT))
+                            .getLogsAfterGivenId(logEntryDeleteRequest.targetLogId!!, LogEntryDeleteRequest.MAX_ENTRY_DELETE_LIMIT))
                 } else {
                     logEntriesForDeletion.addAll(deletableLogService
-                            .getLogsAfterGivenId(logEntryDeleteRequest.targetLogId, logEntryDeleteRequest.entryDeleteCount!!))
+                            .getLogsAfterGivenId(logEntryDeleteRequest.targetLogId!!, logEntryDeleteRequest.entryDeleteCount!!))
                 }
             }
         }
