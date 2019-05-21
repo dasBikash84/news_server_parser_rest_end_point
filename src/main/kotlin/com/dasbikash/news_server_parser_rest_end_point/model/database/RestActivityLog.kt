@@ -1,8 +1,8 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
+import com.dasbikash.news_server_parser_rest_end_point.model.RequestDetailsBean
 import org.aspectj.lang.JoinPoint
 import javax.persistence.*
-import javax.servlet.http.HttpServletRequest
 
 @Entity
 @Table(name = DatabaseTableNames.REST_ACTIVITY_LOG_TABLE_NAME)
@@ -21,19 +21,20 @@ class RestActivityLog(
         val userAgentHeader:String?=null
 ){
     companion object{
-        fun getInstance(joinPoint: JoinPoint, request: HttpServletRequest, timeTakenMs: Int,
+        fun getInstance(joinPoint: JoinPoint, timeTakenMs: Int,
                         exceptionClassFullName: String?=null, returnedEntiryCount:Int?=null,
-                        acceptHeader: String?=null,userAgentHeader: String?=null)
+                        requestDetails: RequestDetailsBean)
                 :RestActivityLog{
-            return RestActivityLog(requestURL = request.requestURL.toString(),methodSignature = joinPoint.signature.toString(),
-                    requestMethod = request.method,remoteHost = request.remoteHost,timeTakenMs = timeTakenMs,
+            return RestActivityLog(requestURL = requestDetails.requestURL,methodSignature = joinPoint.signature.toString(),
+                    requestMethod = requestDetails.requestMethod,remoteHost = requestDetails.remoteHost,timeTakenMs = timeTakenMs,
                     exceptionClassName = exceptionClassFullName,returnedEntiryCount = returnedEntiryCount,
-                    acceptHeader = acceptHeader,userAgentHeader = userAgentHeader)
+                    acceptHeader = requestDetails.acceptHeader,userAgentHeader = requestDetails.userAgentHeader)
         }
     }
 
     override fun toString(): String {
-        return "RestActivityLog(requestURL='$requestURL', requestMethod='$requestMethod', remoteHost='$remoteHost', timeTakenMs=$timeTakenMs, returnedEntiryCount=$returnedEntiryCount, exceptionClassName=$exceptionClassName)"
+        return "RestActivityLog(requestURL='$requestURL', requestMethod='$requestMethod', remoteHost='$remoteHost', " +
+                "timeTakenMs=$timeTakenMs, returnedEntiryCount=$returnedEntiryCount, exceptionClassName=$exceptionClassName)"
     }
 
 }

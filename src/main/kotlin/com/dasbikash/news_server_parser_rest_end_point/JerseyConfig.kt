@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration
 open class JerseyConfig : ResourceConfig() {
     init {
         registerClasses(GenericExceptionMapper::class.java, LanguageResource::class.java,
-                CountryResource::class.java, NewsPaperResource::class.java,
-                PageResource::class.java, PageGroupResource::class.java, ArticleResource::class.java, GeneralLogResource::class.java,
-                ErrorLogResource::class.java,PageParsingHistoryResource::class.java)
+                        CountryResource::class.java, NewsPaperResource::class.java,
+                        PageResource::class.java, PageGroupResource::class.java, ArticleResource::class.java,
+                        GeneralLogResource::class.java,ErrorLogResource::class.java,PageParsingHistoryResource::class.java)
     }
 }
