@@ -19,7 +19,6 @@ constructor(open var newsPaperService: NewsPaperService?=null,
             open var restControllerUtils: RestControllerUtils?=null) {
 
     @GET
-    @Path("")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
     open fun getAllActiveNewsPapersEndPoint(@BeanParam requestDetails: RequestDetailsBean): Response {
         return restControllerUtils!!.entityToResponseEntity(Newspapers(newsPaperService!!.getAllActiveNewsPapers()))

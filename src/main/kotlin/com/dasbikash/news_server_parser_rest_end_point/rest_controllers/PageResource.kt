@@ -17,7 +17,6 @@ open class PageResource (open var pageService: PageService?=null,
                          open var restControllerUtils: RestControllerUtils?=null){
 
     @GET
-    @Path("")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
     open fun getAllActivePagesEndPoint(@BeanParam requestDetails: RequestDetailsBean) =
             restControllerUtils!!.entityToResponseEntity(Pages(pageService!!.getAllActivePages()))

@@ -20,7 +20,6 @@ constructor(open var countryService: CountryService?=null,
             open var restControllerUtils: RestControllerUtils?=null) {
 
     @GET
-    @Path("")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
     open fun getAllCountriesEndPoint(@BeanParam requestDetails: RequestDetailsBean): Response {
         return restControllerUtils!!.entityToResponseEntity(Countries(countryService!!.getAllCountries()))

@@ -17,7 +17,6 @@ constructor(open var pageGroupService: PageGroupService?=null,
             open var restControllerUtils: RestControllerUtils?=null) {
 
     @GET
-    @Path("")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
     open fun getAllCountriesEndPoint(@BeanParam requestDetails: RequestDetailsBean)=
                 restControllerUtils!!.entityToResponseEntity(PageGroups(pageGroupService!!.getAllPageGroups()))

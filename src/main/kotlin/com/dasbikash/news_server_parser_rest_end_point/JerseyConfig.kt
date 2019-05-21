@@ -10,10 +10,11 @@ open class JerseyConfig : ResourceConfig() {
     init {
         registerClasses(GenericExceptionMapper::class.java, LanguageResource::class.java,
                 CountryResource::class.java, NewsPaperResource::class.java,
-                PageResource::class.java, PageGroupResource::class.java, ArticleResource::class.java/*,
+                PageResource::class.java, PageGroupResource::class.java, ArticleResource::class.java, GeneralLogResource::class.java
+                /*,
                 ArticleDownloadLogResource::class.java,
                 ArticleUploadLogResource::class.java, ArticleUploaderStatusChangeLogResource::class.java,
-                ErrorLogResource::class.java, GeneralLogResource::class.java,
+                ErrorLogResource::class.java,
                 SettingsUpdateLogResource::class.java, SettingsUploadLogResource::class.java*/)
     }
 }

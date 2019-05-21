@@ -41,7 +41,6 @@ constructor(open var articleService: ArticleService?=null,
     }
 
     @GET
-    @Path("")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
     open fun getLatestArticlesEmptyPath(@QueryParam("article_count") articleCount:Int?,
                                         @BeanParam requestDetails: RequestDetailsBean): Response{

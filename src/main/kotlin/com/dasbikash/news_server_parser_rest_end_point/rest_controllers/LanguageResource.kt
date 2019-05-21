@@ -19,7 +19,6 @@ open class LanguageResource
 constructor(open var languageService: LanguageService?=null,
             open var restControllerUtils: RestControllerUtils?=null) {
     @GET
-    @Path("")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
     open fun getAllLanguagesEndPoint(@BeanParam requestDetails: RequestDetailsBean): Response{
         return restControllerUtils!!.entityToResponseEntity(Languages(languageService!!.getAllLanguages()))
