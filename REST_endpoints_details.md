@@ -1,20 +1,20 @@
 ## REST service End point details:
 
-### For [`Language`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Language.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/LanguageController.kt):
+### For [`Language`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Language.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/LanguageResource.kt):
 
 * For all supported `Language` settings data:
    * Type: `GET`
    * Path: http://localhost:8098/languages
    * Response: A [list](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/OutputWrappers.kt) of `Language` setting entries.
    
-### For [`Country`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Country.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/CountryController.kt):
+### For [`Country`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Country.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/CountryResource.kt):
 
 * For all supported `Country` settings data:
    * Type: `GET`
    * Path: http://localhost:8098/countries
    * Response: A [list](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/OutputWrappers.kt) of `Country` setting entries.
    
-### For [`Newspaper`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Newspaper.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/NewsPaperController.kt):
+### For [`Newspaper`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Newspaper.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/NewsPaperResource.kt):
 
 * For all supported `Newspaper` settings data:
    * Type: `GET`
@@ -36,7 +36,7 @@
       in case of success or [`HttpStatus.BAD_REQUEST`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpStatus.html#BAD_REQUEST) for invalid `NewsPaperStatusChangeRequest`.
    
    
-### For [`Page`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Page.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/PageController.kt):
+### For [`Page`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Page.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/PageResource.kt):
 
 * For all supported `Page` settings data:
    * Type: `GET`
@@ -49,14 +49,14 @@
    * Path Param: newspaperId (Id of target News-Paper)
    * Response: A list of `Page` or [`HttpStatus.NOT_FOUND`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpStatus.html#NOT_FOUND) for invalid newspaperId.
 
-### For [`PageGroup`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/PageGroup.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/PageGroupController.kt):
+### For [`PageGroup`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/PageGroup.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/PageGroupResource.kt):
 
 * For all supported `PageGroup` settings data:
    * Type: `GET`
    * Path: http://localhost:8098/page-groups
    * Response: A [list](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/OutputWrappers.kt) of `PageGroup` setting entries.   
    
-### For [`Article`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Article.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/ArticleController.kt):
+### For [`Article`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/Article.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/ArticleResource.kt):
    
 * For latest `Article` data:
     * Type: `GET`
@@ -112,7 +112,7 @@
     * Query Param: article_count(result-count) | optional | Default 10 | Max 50
     * Response: A list of `Article` data of target *Page* before *Article* a specified id  or `HttpStatus.NOT_FOUND` for invalid pageId or articleId.
 
-#### For [`General Log`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/GeneralLog.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/GeneralLogController.kt):
+#### For [`General Log`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/GeneralLog.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/GeneralLogResource.kt):
 
 <a name="latest_log"></a>  
 * For latest `General Log` entries:
@@ -149,7 +149,7 @@
   * RequestBody : [`LogEntryDeleteRequest`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/LogEntryDeleteRequest.kt)
   * Response: List of deleted *General Log* entries or `HttpStatus.BAD_REQUEST` for invalid `LogEntryDeleteRequest`.
   
-#### For [`Error Log`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/ErrorLog.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/ErrorLogController.kt):
+#### For [`Error Log`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/ErrorLog.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/ErrorLogResource.kt):
 * For latest `Error Log` entries:
     * Type: `GET`
     * Path: http://localhost:8098/error-logs?page-size={page-size}
@@ -175,7 +175,7 @@
     * Path: http://localhost:8098/error-logs 
     * Response: Format same as [`General Log`](#log_delete_request) but for `Error Log`. 
     
-#### For [`Page Parsing History`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/PageParsingHistory.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_controllers/PageParsingHistoryController.kt):
+#### For [`Page Parsing History`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/model/database/PageParsingHistory.kt) data [endpoints](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/PageParsingHistoryResource.kt):
 * For latest `Page Parsing History` entries:
     * Type: `GET`
     * Path: http://localhost:8098/page-parsing-histories?page-size={page-size}
