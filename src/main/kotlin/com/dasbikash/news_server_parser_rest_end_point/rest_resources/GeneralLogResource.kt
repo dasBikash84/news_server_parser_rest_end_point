@@ -1,4 +1,4 @@
-package com.dasbikash.news_server_parser_rest_end_point.rest_controllers
+package com.dasbikash.news_server_parser_rest_end_point.rest_resources
 
 import com.dasbikash.news_server_parser_rest_end_point.model.GeneralLogs
 import com.dasbikash.news_server_parser_rest_end_point.model.LogEntryDeleteRequest
