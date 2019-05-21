@@ -47,7 +47,7 @@ data class Article(
         @Column(columnDefinition = "text")
         var articleText: String? = null,
 
-        @ElementCollection(targetClass = ArticleImage::class)
+        @ElementCollection(targetClass = ArticleImage::class,fetch = FetchType.EAGER)
         @CollectionTable(name = "image_links", joinColumns = [JoinColumn(name = "articleId")])
         @Column(name = "imageLink", columnDefinition = "text")
         var imageLinkList: List<ArticleImage> = ArrayList(),

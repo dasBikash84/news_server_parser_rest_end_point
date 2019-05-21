@@ -18,7 +18,7 @@ constructor(open var pageRepository: PageRepository,
                 it.hasChild = pageRepository.findPagesByParentPageIdAndLinkFormatNotNullAndActive(parentPageId = it.id).isNotEmpty()
             }
         }
-        return pageRepository.findAllByActive()
+        return pages
     }
 
     fun getAllActivePagesByNewspaperId(newspaperId: String): List<Page> {
@@ -33,6 +33,6 @@ constructor(open var pageRepository: PageRepository,
                 it.hasChild = pageRepository.findPagesByParentPageIdAndLinkFormatNotNullAndActive(parentPageId = it.id).isNotEmpty()
             }
         }
-        return pageRepository.findPagesByNewspaperAndActive(newspaperOptional.get())
+        return pages
     }
 }
