@@ -4,6 +4,8 @@ import com.dasbikash.news_server_parser_rest_end_point.model.OutputWrapper
 import com.dasbikash.news_server_parser_rest_end_point.model.RequestDetailsBean
 import com.dasbikash.news_server_parser_rest_end_point.model.database.RestActivityLog
 import com.dasbikash.news_server_parser_rest_end_point.repositories.RestActivityLogRepository
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -36,9 +38,14 @@ open class AroundAspects(open var restActivityLogRepository: RestActivityLogRepo
                 proceedingJoinPoint, (System.currentTimeMillis() - startTime).toInt(),
                 exception?.let { it::class.java.canonicalName }, outputEntityCount, requestDetails)
 
-        restActivityLogRepository.save(restActivityLog)
+        Observable.just(restActivityLog)
+                .subscribeOn(Schedulers.io())
+                .map {
+                    restActivityLogRepository.save(it)
+                }
+                .subscribe()
 
-        println(restActivityLog)
+//        println("From ${this::class.java.simpleName}: ${restActivityLog}")
 
         exception?.let {
             throw it

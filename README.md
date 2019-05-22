@@ -11,7 +11,7 @@ settings and article data.
 * Database: `MySQL`
 * Database access Api: `Spring JPA`
 * REST framework:  `Jersey` and `Spring Core`.
-* AOP framework: `Spring AOP` and `Aspectj`.
+* Loogging framework: `Jersey`,`Spring AOP` and `Aspectj`.
 
 #### This rest service supports following operations. For details check [here](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/REST_endpoints_details.md):
 * [`GET`](https://github.com/dasBikash84/news_server_parser_rest_end_point/blob/master/src/main/kotlin/com/dasbikash/news_server_parser_rest_end_point/rest_resources/CountryResource.kt) for

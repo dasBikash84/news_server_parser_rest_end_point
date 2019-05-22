@@ -9,20 +9,15 @@ import javax.ws.rs.ext.Provider
 
 @Provider
 class GenericExceptionMapper : ExceptionMapper<Throwable> {
-
     override fun toResponse(ex: Throwable): Response {
-
         return when(ex){
-            is NewsPaperNotFoundByIdException -> Response.status(Status.NOT_FOUND).entity(ex::class.java.simpleName).build()
-            is NewsPaperNotFoundByNameException -> Response.status(Status.NOT_FOUND).entity(ex::class.java.simpleName).build()
-            is CustomDataAccessException -> Response.status(Status.NOT_FOUND).entity(ex::class.java.simpleName).build()
-            is DataNotFoundException -> Response.status(Status.NOT_FOUND).entity(ex::class.java.simpleName).build()
-            is IllegalRequestBodyException -> Response.status(Status.BAD_REQUEST).entity(ex::class.java.simpleName).build()
-            is InternalError                    -> Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex::class.java.simpleName).build()
-            else ->{
-                throw ex
-            }
+            is NewsPaperNotFoundByIdException   -> Response.status(Status.NOT_FOUND).entity(ex::class.java.canonicalName).build()
+            is NewsPaperNotFoundByNameException -> Response.status(Status.NOT_FOUND).entity(ex::class.java.canonicalName).build()
+            is CustomDataAccessException        -> Response.status(Status.NOT_FOUND).entity(ex::class.java.canonicalName).build()
+            is DataNotFoundException            -> Response.status(Status.NOT_FOUND).entity(ex::class.java.canonicalName).build()
+            is IllegalRequestBodyException      -> Response.status(Status.BAD_REQUEST).entity(ex::class.java.canonicalName).build()
+            is InternalError                    -> Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex::class.java.canonicalName).build()
+            else                                -> Response.status(Status.NOT_FOUND).entity(ex::class.java.canonicalName).build()
         }
     }
-
 }
