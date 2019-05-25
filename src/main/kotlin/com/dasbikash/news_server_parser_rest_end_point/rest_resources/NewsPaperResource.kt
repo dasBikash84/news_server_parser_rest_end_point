@@ -1,5 +1,6 @@
 package com.dasbikash.news_server_parser_rest_end_point.rest_resources
 
+import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperParserModeChangeRequest
 import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperStatusChangeRequest
 import com.dasbikash.news_server_parser_rest_end_point.model.Newspapers
 import com.dasbikash.news_server_parser_rest_end_point.model.RequestDetailsBean
@@ -31,6 +32,13 @@ constructor(open var newsPaperService: NewsPaperService?=null,
         return restControllerUtils!!.generateNewspaperStatusChangeToken(this::class.java)
     }
 
+    @GET
+    @Path("request_newspaper_parser_mode_change_token_generation")
+    @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
+    open fun generateNewspaperParserModeChangeTokenEndPoint(@BeanParam requestDetails: RequestDetailsBean): Response {
+        return restControllerUtils!!.generateNewspaperParserModeChangeToken(this::class.java)
+    }
+
     @POST
     @Path("request_newspaper_status_change")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
@@ -40,6 +48,17 @@ constructor(open var newsPaperService: NewsPaperService?=null,
             : Response {
         return restControllerUtils!!.entityToResponseEntity(
                 newsPaperService!!.requestNewspaperStatusChange(newsPaperStatusChangeRequest))
+    }
+
+    @POST
+    @Path("request_newspaper_parser_mode_change")
+    @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
+    @Consumes(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
+    open fun requestNewspaperParserModeChangeEndPoint(newsPaperParserModeChangeRequest: NewsPaperParserModeChangeRequest?,
+                                                      @BeanParam requestDetails: RequestDetailsBean)
+            : Response {
+        return restControllerUtils!!.entityToResponseEntity(
+                newsPaperService!!.requestNewspaperParserModeChange(newsPaperParserModeChangeRequest))
     }
 
 }

@@ -13,17 +13,6 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
-object DatabaseTableNames {
-    const val COUNTRY_TABLE_NAME = "countries"
-    const val LANGUAGE_TABLE_NAME = "languages"
-    const val NEWSPAPER_TABLE_NAME = "newspapers"
-    const val PAGE_TABLE_NAME = "pages"
-    const val ARTICLE_TABLE_NAME = "articles"
-    const val PAGE_GROUP_TABLE_NAME = "page_groups"
-    const val AUTH_TOKEN_TABLE_NAME = "tokens"
-    const val GENERAL_LOG_TABLE_NAME = "general_log"
-    const val ERROR_LOG_TABLE_NAME = "exception_log"
-    const val PAGE_PARSING_HISTORY_TABLE_NAME = "page_parsing_history"
-    const val REST_ACTIVITY_LOG_TABLE_NAME = "rest_activity_log"
-    const val NEWS_PAPER_OP_MODE_ENTRY_NAME = "np_opmode_entry"
+enum class ParserMode {
+    RUNNING, GET_SYNCED
 }

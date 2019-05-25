@@ -4,8 +4,10 @@ import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundEx
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.IllegalRequestBodyException
 import com.dasbikash.news_server_parser_rest_end_point.model.LogEntryDeleteRequest
 import com.dasbikash.news_server_parser_rest_end_point.model.LogEntryDeleteRequestFormat
+import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperParserModeChangeRequestFormat
 import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperStatusChangeRequestFormat
 import com.dasbikash.news_server_parser_rest_end_point.model.database.NsParserRestDbEntity
+import com.dasbikash.news_server_parser_rest_end_point.rest_resources.NewsPaperResource
 import com.dasbikash.news_server_parser_rest_end_point.services.AuthTokenService
 import com.dasbikash.news_server_parser_rest_end_point.services.DeletableLogService
 import org.springframework.http.ResponseEntity
@@ -39,9 +41,15 @@ constructor(open var authTokenService: AuthTokenService){
         return entityToResponseEntity(LogEntryDeleteRequestFormat())
     }
 
-    fun <T> generateNewspaperStatusChangeToken(type: Class<T>): Response {
+    fun generateNewspaperStatusChangeToken(type: Class<out NewsPaperResource>): Response {
         generateAndEmailNewAuthtoken(type)
         return entityToResponseEntity(NewsPaperStatusChangeRequestFormat())
+    }
+
+
+    fun generateNewspaperParserModeChangeToken(type: Class<out NewsPaperResource>): Response {
+        generateAndEmailNewAuthtoken(type)
+        return entityToResponseEntity(NewsPaperParserModeChangeRequestFormat())
     }
 
     fun validateLogEntryDeleteRequest(logEntryDeleteRequest: LogEntryDeleteRequest?) {
