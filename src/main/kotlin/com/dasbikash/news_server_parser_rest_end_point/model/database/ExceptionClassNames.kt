@@ -11,5 +11,6 @@ enum class ExceptionClassNames {
     EmptyArticlePreviewPageException,
     EmptyArticleLinkException,
     EmptyArticleBodyException,
-    ArticleModificationTimeNotFoundException
+    ArticleModificationTimeNotFoundException,
+    ReportGenerationException
 }
