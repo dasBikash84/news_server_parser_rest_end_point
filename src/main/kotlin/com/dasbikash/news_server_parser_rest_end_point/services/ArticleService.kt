@@ -12,11 +12,11 @@ open class ArticleService
              open var articleRepository: ArticleRepository) {
 
     fun getOldestArticles(pageSize: Int): List<Article> {
-        return filterArticlesWithNullPublicationTime(articleRepository.findOldest(pageSize))
+        return filterInvalidArticles(articleRepository.findOldest(pageSize))
     }
 
     fun getLatestArticles(pageSize: Int): List<Article> {
-        return filterArticlesWithNullPublicationTime(articleRepository.findLatest(pageSize))
+        return filterInvalidArticles(articleRepository.findLatest(pageSize))
     }
 
     fun getArticlesAfterGivenId(articleId: String, pageSize: Int): List<Article> {
@@ -25,7 +25,7 @@ open class ArticleService
             throw DataNotFoundException()
         }
         val articles = articleRepository.getArticlesAfterGivenId(currentArticle.getSerial()!!,pageSize)
-        return filterArticlesWithNullPublicationTime(articles)
+        return filterInvalidArticles(articles)
     }
 
     fun getArticlesBeforeGivenId(articleId: String, pageSize: Int): List<Article> {
@@ -34,7 +34,7 @@ open class ArticleService
             throw DataNotFoundException()
         }
         val articles = articleRepository.getArticlesBeforeGivenId(currentArticle.getSerial()!!,pageSize)
-        return filterArticlesWithNullPublicationTime(articles)
+        return filterInvalidArticles(articles)
     }
 
     fun getLatestArticlesForPage(pageId: String, pageSize: Int): List<Article> {
@@ -43,7 +43,7 @@ open class ArticleService
             throw DataNotFoundException()
         }
         val articles = articleRepository.findLatestByPageId(pageId,pageSize)
-        return filterArticlesWithNullPublicationTime(articles)
+        return filterInvalidArticles(articles)
     }
 
     fun getOldestArticlesForPage(pageId: String, pageSize: Int): List<Article> {
@@ -52,7 +52,7 @@ open class ArticleService
             throw DataNotFoundException()
         }
         val articles = articleRepository.findOldestByPageId(pageId,pageSize)
-        return filterArticlesWithNullPublicationTime(articles)
+        return filterInvalidArticles(articles)
     }
 
     fun getArticlesAfterGivenIdForPage(articleId: String, pageId: String, pageSize: Int): List<Article> {
@@ -65,7 +65,7 @@ open class ArticleService
             throw DataNotFoundException()
         }
         val articles = articleRepository.getArticlesAfterGivenIdForPage(currentArticle.getSerial()!!,pageId,pageSize)
-        return filterArticlesWithNullPublicationTime(articles)
+        return filterInvalidArticles(articles)
     }
 
     fun getArticlesBeforeGivenIdForPage(articleId: String, pageId: String, pageSize: Int): List<Article> {
@@ -78,9 +78,14 @@ open class ArticleService
             throw DataNotFoundException()
         }
         val articles = articleRepository.getArticlesBeforeGivenIdForPage(currentArticle.getSerial()!!,pageId,pageSize)
-        return filterArticlesWithNullPublicationTime(articles)
+        return filterInvalidArticles(articles)
     }
 
-    private fun filterArticlesWithNullPublicationTime(articles: List<Article>) =
-            articles.filter { it.getPublicationTS()!=null || it.getModificationTS()!=null }.toList()
+    private fun filterInvalidArticles(articles: List<Article>):List<Article> {
+        val filteredArticles = articles.filter { it.getPublicationTS() != null || it.getModificationTS() != null || it.articleText==null }.toList()
+        if (filteredArticles.isEmpty()){
+            throw DataNotFoundException()
+        }
+        return filteredArticles
+    }
 }

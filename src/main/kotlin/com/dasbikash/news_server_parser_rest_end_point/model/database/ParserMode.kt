@@ -14,5 +14,5 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 enum class ParserMode {
-    RUNNING, GET_SYNCED
+    RUNNING, GET_SYNCED,PARSE_THROUGH_CLIENT
 }

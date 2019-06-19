@@ -14,5 +14,5 @@ class NewsPaperParserModeChangeRequest(
 class NewsPaperParserModeChangeRequestFormat(
         var authToken: String = "Emailed token",
         var targetNewspaperId: String = "targetNewspaperId",
-        var parserMode: String = "RUNNING/GET_SYNCED"
+        var parserMode: String = "RUNNING/GET_SYNCED/PARSE_THROUGH_CLIENT"
 ): NsParserRestDbEntity
