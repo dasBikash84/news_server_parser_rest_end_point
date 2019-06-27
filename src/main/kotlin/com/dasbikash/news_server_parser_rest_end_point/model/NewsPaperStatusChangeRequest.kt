@@ -13,5 +13,5 @@ class NewsPaperStatusChangeRequest(
 class NewsPaperStatusChangeRequestFormat(
         var authToken: String = "Emailed token",
         var targetNewspaperId: String = "targetNewspaperId",
-        var targetStatus: String = "ON/OFF"
+        var targetStatus: String = OffOnStatus.values().joinToString(separator = " | ")
 ): NsParserRestDbEntity
