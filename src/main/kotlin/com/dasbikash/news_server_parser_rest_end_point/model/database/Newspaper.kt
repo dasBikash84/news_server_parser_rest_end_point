@@ -54,8 +54,8 @@ data class Newspaper(
                 return language?.id
         }
 
-        @JsonIgnore
-        @XmlTransient
+//        @JsonIgnore
+//        @XmlTransient
         fun getActive(): Boolean {
                 return active
         }

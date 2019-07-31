@@ -35,4 +35,14 @@ constructor(open var pageRepository: PageRepository,
         }
         return pages
     }
+
+    fun getAllPages(): List<Page> {
+        val pages =  pageRepository.findAll()
+        pages.asSequence().forEach {
+            if (it.isTopLevelPage()){
+                it.hasChild = pageRepository.findPagesByParentPageIdAndLinkFormatNotNullAndActive(parentPageId = it.id).isNotEmpty()
+            }
+        }
+        return pages
+    }
 }

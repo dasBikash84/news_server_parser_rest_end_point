@@ -92,8 +92,8 @@ data class Page(
         this.articleList=articleList
     }
 
-    @JsonIgnore
-    @XmlTransient
+//    @JsonIgnore
+//    @XmlTransient
     fun getActive(): Boolean {
         return active
     }

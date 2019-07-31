@@ -22,6 +22,12 @@ open class PageResource (open var pageService: PageService?=null,
             restControllerUtils!!.entityToResponseEntity(Pages(pageService!!.getAllActivePages()))
 
     @GET
+    @Path("all")
+    @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
+    open fun getAllPagesEndPoint(@BeanParam requestDetails: RequestDetailsBean) =
+            restControllerUtils!!.entityToResponseEntity(Pages(pageService!!.getAllPages()))
+
+    @GET
     @Path("/newspaper_id/{newspaperId}")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
     open fun getAllActivePagesByNewspaperIdEndPoint(@PathParam("newspaperId") newspaperId:String,

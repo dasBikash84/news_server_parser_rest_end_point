@@ -26,6 +26,13 @@ constructor(open var newsPaperService: NewsPaperService?=null,
     }
 
     @GET
+    @Path("all")
+    @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
+    open fun getAllNewsPapersEndPoint(@BeanParam requestDetails: RequestDetailsBean): Response {
+        return restControllerUtils!!.entityToResponseEntity(Newspapers(newsPaperService!!.getAllNewsPapers()))
+    }
+
+    @GET
     @Path("request_newspaper_status_change_token_generation")
     @Produces(value = arrayOf(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
     open fun generateNewspaperStatusChangeTokenEndPoint(@BeanParam requestDetails: RequestDetailsBean): Response {

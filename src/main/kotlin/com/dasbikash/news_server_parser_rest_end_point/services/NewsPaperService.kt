@@ -20,6 +20,10 @@ constructor(open var newspaperRepository: NewspaperRepository,
             open var generalLogRepository: GeneralLogRepository,
             open var newspaperOpModeEntryRepository: NewspaperOpModeEntryRepository){
 
+    fun getAllNewsPapers(): List<Newspaper> {
+        return newspaperRepository.findAll()
+    }
+
     fun getAllActiveNewsPapers():List<Newspaper>{
         return newspaperRepository.findAllByActive()
     }
