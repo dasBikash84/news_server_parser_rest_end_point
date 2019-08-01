@@ -43,7 +43,7 @@ data class NewsCategoryEntry(
 
     @Transient
     @XmlElement
-    fun getNwsCategoryId(): String? {
+    fun getNewsCategoryId(): String? {
         return newsCategory?.id
     }
 
