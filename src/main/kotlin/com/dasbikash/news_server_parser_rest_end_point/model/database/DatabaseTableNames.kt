@@ -26,4 +26,6 @@ object DatabaseTableNames {
     const val PAGE_PARSING_HISTORY_TABLE_NAME = "page_parsing_history"
     const val REST_ACTIVITY_LOG_TABLE_NAME = "rest_activity_log"
     const val NEWS_PAPER_OP_MODE_ENTRY_NAME = "np_opmode_entry"
+    const val NEWS_CATERORIES_ENTRY_NAME = "news_categories"
+    const val NEWS_CATEGORY_ENTRY_ENTRY_NAME = "news_category_entry"
 }

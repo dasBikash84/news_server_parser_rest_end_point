@@ -13,6 +13,6 @@ open class JerseyConfig : ResourceConfig() {
                         CountryResource::class.java, NewsPaperResource::class.java,
                         PageResource::class.java, PageGroupResource::class.java, ArticleResource::class.java,
                         GeneralLogResource::class.java,ErrorLogResource::class.java,PageParsingHistoryResource::class.java,
-                        LoggingFilter::class.java)
+                        LoggingFilter::class.java,NewsCategoryResource::class.java,NewsCategoryEntryResource::class.java)
     }
 }

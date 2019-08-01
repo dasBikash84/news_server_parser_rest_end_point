@@ -83,6 +83,20 @@ class PageParsingHistories(
     }
 }
 
+@XmlRootElement
+class NewsCategories(var newsCategories: List<NewsCategory>?=null) : NsParserRestDbEntity, OutputWrapper {
+    override fun getOutPutCount(): Int {
+        return newsCategories?.size ?: 0
+    }
+}
+
+@XmlRootElement
+class NewsCategoryEntries(var newsCategoryEntries: List<NewsCategoryEntry>?=null) : NsParserRestDbEntity, OutputWrapper {
+    override fun getOutPutCount(): Int {
+        return newsCategoryEntries?.size ?: 0
+    }
+}
+
 interface OutputWrapper {
     fun getOutPutCount(): Int
 }
