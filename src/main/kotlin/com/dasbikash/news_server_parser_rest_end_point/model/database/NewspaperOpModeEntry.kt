@@ -29,14 +29,15 @@ data class NewspaperOpModeEntry(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Int? = null,
-        @Column(columnDefinition = "enum('RUNNING','GET_SYNCED','PARSE_THROUGH_CLIENT')")
+        @Column(columnDefinition = "enum('OFF','RUNNING','GET_SYNCED','PARSE_THROUGH_CLIENT')")
         @Enumerated(EnumType.STRING)
-        private var opMode: ParserMode? = null,
+        private var opMode: ParserMode = ParserMode.OFF,
 
         @ManyToOne(targetEntity = Newspaper::class, fetch = FetchType.EAGER)
         @JoinColumn(name = "newsPaperId")
         private var newspaper: Newspaper? = null,
-        @UpdateTimestamp
+//        @UpdateTimestamp
+        @Column(name = "created", nullable = false, updatable=false,insertable = false)
         var created: Date? = null
 ):NsParserRestDbEntity {
     @JsonProperty
@@ -64,11 +65,11 @@ data class NewspaperOpModeEntry(
 
     @JsonIgnore
     @XmlTransient
-    fun getOpMode(): ParserMode? {
+    fun getOpMode(): ParserMode {
         return opMode
     }
 
     fun setOpMode(opMode: ParserMode?) {
-        this.opMode = opMode
+        this.opMode = opMode ?: ParserMode.OFF
     }
 }
