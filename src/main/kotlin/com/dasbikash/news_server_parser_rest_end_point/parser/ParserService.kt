@@ -1,7 +1,7 @@
 package com.dasbikash.news_server_parser_rest_end_point.parser
 
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.handler.ParserExceptionHandlerService
-import com.dasbikash.news_server_parser.utils.ReportGenerationService
+import com.dasbikash.news_server_parser_rest_end_point.utils.ReportGenerationService
 import com.dasbikash.news_server_parser_rest_end_point.Init.SettingsBootstrapService
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.ReportGenerationException
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.generic.HighestLevelException
@@ -33,7 +33,6 @@ open class ParserService(
         currentDate = Calendar.getInstance()
         do {
             try {
-                val session = DbSessionManager.getNewSession()
 
                 if (articleDataFetcherForPageSelf == null){
                     if ((newsPaperService!!.getNpCountWithRunningOpMode() +
@@ -89,7 +88,6 @@ open class ParserService(
                     }
                 }
 
-                session.close()
                 RealTimeDbAdminTaskUtils.init()
                 Thread.sleep(ITERATION_DELAY)
             } catch (ex: InterruptedException) {

@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser.model
+package com.dasbikash.news_server_parser_rest_end_point.model
 
 import javax.persistence.Column
 import javax.persistence.Embeddable

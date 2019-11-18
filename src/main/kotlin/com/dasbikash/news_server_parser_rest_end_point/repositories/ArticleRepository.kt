@@ -50,4 +50,10 @@ interface ArticleRepository : JpaRepository<Article, String>{
 
     @Query(value = "SELECT COUNT(*) FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId",nativeQuery = true)
     fun getArticleCountForPage(pageId: String): Int
+
+    @Query(value = "SELECT publicationTS FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId order by created",nativeQuery = true)
+    fun getArticlePublicationTSForPage(pageId: String): List<Date?>
+
+    @Query(value = "SELECT modificationTS FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId  order by created",nativeQuery = true)
+    fun getArticleModificationTSForPage(pageId: String): List<Date?>
 }

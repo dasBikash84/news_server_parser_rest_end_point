@@ -28,4 +28,5 @@ object DatabaseTableNames {
     const val NEWS_PAPER_OP_MODE_ENTRY_NAME = "np_opmode_entry"
     const val NEWS_CATERORIES_ENTRY_NAME = "news_categories"
     const val NEWS_CATEGORY_ENTRY_ENTRY_NAME = "news_category_entry"
+    const val PAGE_PARSING_INTERVAL_TABLE_NAME = "page_parsing_interval"
 }

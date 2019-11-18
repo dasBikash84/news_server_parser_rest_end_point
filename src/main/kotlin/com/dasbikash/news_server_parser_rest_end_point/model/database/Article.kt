@@ -13,7 +13,7 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
-import com.dasbikash.news_server_parser.model.ArticleImage
+import com.dasbikash.news_server_parser_rest_end_point.model.ArticleImage
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*

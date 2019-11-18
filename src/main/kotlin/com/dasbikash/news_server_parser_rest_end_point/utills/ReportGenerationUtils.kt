@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser.utils
+package com.dasbikash.news_server_parser_rest_end_point.utils
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.repositories.ArticleRepository
@@ -19,7 +19,6 @@ import com.dasbikash.news_server_parser_rest_end_point.repositories.PageReposito
 import com.dasbikash.news_server_parser_rest_end_point.utills.DateUtils
 import com.dasbikash.news_server_parser_rest_end_point.utills.EmailUtils
 import com.dasbikash.news_server_parser_rest_end_point.utills.FileUtils
-import org.hibernate.Session
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
