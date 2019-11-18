@@ -13,7 +13,9 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
+import com.dasbikash.news_server_parser_rest_end_point.Init.Pages
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.google.gson.annotations.SerializedName
 import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -64,5 +66,33 @@ data class NewsCategoryEntry(
 
     fun setNewsCategory(newsCategory: NewsCategory?){
         this.newsCategory=newsCategory
+    }
+
+    @Transient
+    @SerializedName("newsCategoryId")
+    @XmlTransient
+    var newsCategoryIdData:String?=null
+
+    @Transient
+    @SerializedName("pageId")
+    @XmlTransient
+    var pageIdData:String?=null
+
+    fun setNewsCategoryData(newscategories: List<NewsCategory>){
+        newscategories.asSequence().forEach {
+            if (it.id == newsCategoryIdData){
+                newsCategory = it
+                return@forEach
+            }
+        }
+    }
+
+    fun setPageData(pages: List<Page>){
+        pages.asSequence().forEach {
+            if (it.id == pageIdData){
+                page = it
+                return@forEach
+            }
+        }
     }
 }

@@ -1,0 +1,148 @@
+{
+  "newsCategories": [
+    {
+      "id": "NEWS_CAT_001",
+      "name": "Latest (সর্বশেষ)"
+    },
+    {
+      "id": "NEWS_CAT_002",
+      "name": "Politics (রাজনীতি)"
+    },
+    {
+      "id": "NEWS_CAT_003",
+      "name": "Business & Economy (অর্থনীতি/বাণিজ্য)"
+    },
+    {
+      "id": "NEWS_CAT_004",
+      "name": "Sports (খেলার খবর)"
+    },
+    {
+      "id": "NEWS_CAT_005",
+      "name": "Editorial (সম্পাদকীয়)"
+    },
+    {
+      "id": "NEWS_CAT_006",
+      "name": "IT (বিজ্ঞান ও প্রযুক্তি)"
+    },
+    {
+      "id": "NEWS_CAT_007",
+      "name": "Entertainment (বিনোদন)"
+    },
+    {
+      "id": "NEWS_CAT_008",
+      "name": "Magazine (ফিচার)"
+    },
+    {
+      "id": "NEWS_CAT_009",
+      "name": "Style & Fashion (স্টাইল ও ফ্যাশন)"
+    },
+    {
+      "id": "NEWS_CAT_010",
+      "name": "Lifestyle (জীবনযাপন)"
+    },
+    {
+      "id": "NEWS_CAT_011",
+      "name": "Stock Markets (শেয়ার বাজার)"
+    },
+    {
+      "id": "NEWS_CAT_012",
+      "name": "Environment (পরিবেশ)"
+    },
+    {
+      "id": "NEWS_CAT_013",
+      "name": "Cricket (ক্রিকেট)"
+    },
+    {
+      "id": "NEWS_CAT_014",
+      "name": "Football (ফুটবল)"
+    },
+    {
+      "id": "NEWS_CAT_015",
+      "name": "Bangladesh (বাংলাদেশ)"
+    },
+    {
+      "id": "NEWS_CAT_016",
+      "name": "India (ভারত)"
+    },
+    {
+      "id": "NEWS_CAT_017",
+      "name": "Pakistan (পাকিস্তান)"
+    },
+    {
+      "id": "NEWS_CAT_018",
+      "name": "Dhaka (রাজধানী)"
+    },
+    {
+      "id": "NEWS_CAT_019",
+      "name": "International (আন্তর্জাতিক)"
+    },
+    {
+      "id": "NEWS_CAT_020",
+      "name": "Hollywood (হলিউড)"
+    },
+    {
+      "id": "NEWS_CAT_021",
+      "name": "Bollywood (বলিউড)"
+    },
+    {
+      "id": "NEWS_CAT_022",
+      "name": "Dhallywood (ঢালিউড)"
+    },
+    {
+      "id": "NEWS_CAT_023",
+      "name": "UK news (যুক্তরাজ্য)"
+    },
+    {
+      "id": "NEWS_CAT_024",
+      "name": "US News (আমেরিকা)"
+    },
+    {
+      "id": "NEWS_CAT_025",
+      "name": "Asia (এশিয়া)"
+    },
+    {
+      "id": "NEWS_CAT_026",
+      "name": "Europe (ইউরোপ)"
+    },
+    {
+      "id": "NEWS_CAT_027",
+      "name": "North America (উত্তর আমেরিকা)"
+    },
+    {
+      "id": "NEWS_CAT_028",
+      "name": "Travel (পর্যটন)"
+    },
+    {
+      "id": "NEWS_CAT_029",
+      "name": "Food (খাবারদাবার)"
+    },
+    {
+      "id": "NEWS_CAT_030",
+      "name": "Art & Literature (শিল্প ও সাহিত্য)"
+    },
+    {
+      "id": "NEWS_CAT_031",
+      "name": "Interview (সাক্ষাৎকার)"
+    },
+    {
+      "id": "NEWS_CAT_032",
+      "name": "Opinion (মতামত)"
+    },
+    {
+      "id": "NEWS_CAT_033",
+      "name": "Law (আইন-আদালত)"
+    },
+    {
+      "id": "NEWS_CAT_034",
+      "name": "Obituaries"
+    },
+    {
+      "id": "NEWS_CAT_035",
+      "name": "Picture Gallery (ছবি)"
+    },
+    {
+      "id": "NEWS_CAT_036",
+      "name": "Miscellaneous (বিবিধ)"
+    }
+  ]
+}

@@ -15,6 +15,7 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -110,6 +111,20 @@ data class Page(
 
     fun setLinkFormat(linkFormat: String?) {
         this.linkFormat = linkFormat
+    }
+
+    @Transient
+    @SerializedName("newsPaperId")
+    @XmlTransient
+    var newsPaperIdData:String?=null
+
+    fun setNewspaper(newspapers: List<Newspaper>) {
+        newspapers.asSequence().forEach {
+            if (it.id == newsPaperIdData){
+                newspaper = it
+                return@forEach
+            }
+        }
     }
 
     override fun toString(): String {

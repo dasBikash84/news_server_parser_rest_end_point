@@ -14,6 +14,7 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.google.gson.annotations.SerializedName
 import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -92,6 +93,34 @@ data class Newspaper(
 
         fun setPageList(pageList: List<Page>?) {
                 this.pageList = pageList
+        }
+
+        @Transient
+        @SerializedName("countryName")
+        @XmlTransient
+        var countryNameData:String?=null
+
+        @Transient
+        @SerializedName("languageId")
+        @XmlTransient
+        var languageIdData:String?=null
+
+        fun setCountryData(countries: List<Country>){
+                countries.asSequence().forEach {
+                        if (it.name == countryNameData){
+                                country = it
+                                return@forEach
+                        }
+                }
+        }
+
+        fun setLanguageData(languages: List<Language>){
+                languages.asSequence().forEach {
+                        if (it.id == languageIdData){
+                                language = it
+                                return@forEach
+                        }
+                }
         }
 
         override fun toString(): String {
