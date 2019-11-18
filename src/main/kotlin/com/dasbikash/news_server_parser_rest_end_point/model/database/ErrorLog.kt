@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement
 @Entity
 @Table(name = DatabaseTableNames.ERROR_LOG_TABLE_NAME)
 @XmlRootElement
-class ErrorLog(): NsParserRestDbEntity {
+class ErrorLog(exception: Throwable?=null): NsParserRestDbEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int?=null
@@ -34,4 +34,24 @@ class ErrorLog(): NsParserRestDbEntity {
     @Column(columnDefinition = "text")
     var stackTrace: String? = null
     var created: Date? = null
+
+    init {
+        exception?.let {
+//            this.exception = it
+            this.exceptionClassSimpleName = ExceptionClassNames.valueOf(it::class.java.simpleName)
+            this.exceptionClassFullName = it::class.java.canonicalName
+            this.exceptionCause = it.cause?.message ?: ""
+            this.exceptionMessage = it.message ?: ""
+            val stackTraceBuilder = StringBuilder("")
+            var exp: Throwable = it
+            do {
+                exp.stackTrace.asSequence().forEach { stackTraceBuilder.append(it.toString()).append("\n") }
+                if (exp.cause == null) {
+                    break
+                }
+                exp = exp.cause!!
+            } while (true)
+            this.stackTrace = stackTraceBuilder.toString()
+        }
+    }
 }

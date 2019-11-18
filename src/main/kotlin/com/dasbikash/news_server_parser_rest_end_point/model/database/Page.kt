@@ -39,6 +39,7 @@ data class Page(
         private var linkFormat:String? = null,
 
         private var active: Boolean = true,
+        var weekly: Boolean = true,
 
         @OneToMany(fetch = FetchType.LAZY,mappedBy = "page",targetEntity = Article::class)
         private var articleList: List<Article>?=null,

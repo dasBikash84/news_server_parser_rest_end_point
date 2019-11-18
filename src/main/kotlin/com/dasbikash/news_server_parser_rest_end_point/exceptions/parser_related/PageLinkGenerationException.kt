@@ -11,26 +11,17 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser_rest_end_point.utills
+package com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related
 
-import java.util.*
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.generic.ParserException
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 
-object LoggerUtils {
+class PageLinkGenerationException: ParserException {
 
-    /*fun logOnDb(message: String, session: Session) {
-        DatabaseUtils.runDbTransection(session) {
-            session.save(GeneralLog(message))
-        }
-        logOnConsole(message)
-    }*/
+    constructor(page: Page) : super(causePreamble +"${page.name} with id: ${page.id}")
+    constructor() : super()
 
-    fun logOnConsole(message: String) {
-        println("${Date()}: ${message}")
+    companion object {
+        val causePreamble = "PageLinkGenerationException for page: ";
     }
-
-    /*fun logError( exception: Throwable,session: Session){
-        DatabaseUtils.runDbTransection(session) {
-            session.save(ErrorLog(exception))
-        }
-    }*/
 }

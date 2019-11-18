@@ -16,14 +16,14 @@ import java.util.*
 
 @Service
 open class NewsPaperService
-constructor(open var newspaperRepository: NewspaperRepository,
-            open var authTokenService: AuthTokenService,
-            open var generalLogRepository: GeneralLogRepository,
-            open var newspaperOpModeEntryRepository: NewspaperOpModeEntryRepository) {
+constructor(private var newspaperRepository: NewspaperRepository?=null,
+            private var authTokenService: AuthTokenService?=null,
+            private var generalLogRepository: GeneralLogRepository?=null,
+            private var newspaperOpModeEntryRepository: NewspaperOpModeEntryRepository?=null) {
 
     fun getAllNewsPapers(): List<Newspaper> {
-        return newspaperRepository.findAll().map {
-            val allOpModeEntries = newspaperOpModeEntryRepository.findAllByNewspaper(it)
+        return newspaperRepository!!.findAll().map {
+            val allOpModeEntries = newspaperOpModeEntryRepository!!.findAllByNewspaper(it)
             if (allOpModeEntries.isEmpty()){
                 it.setActive(false)
             }else {
@@ -48,10 +48,10 @@ constructor(open var newspaperRepository: NewspaperRepository,
             throw IllegalRequestBodyException()
         }
 
-        authTokenService.invalidateAuthToken(newsPaperStatusChangeRequest.authToken!!)
+        authTokenService!!.invalidateAuthToken(newsPaperStatusChangeRequest.authToken!!)
 
         val targetNewsPaperOptional =
-                newspaperRepository.findById(newsPaperStatusChangeRequest.targetNewspaperId!!)
+                newspaperRepository!!.findById(newsPaperStatusChangeRequest.targetNewspaperId!!)
 
         if (!targetNewsPaperOptional.isPresent) {
             throw IllegalRequestBodyException()
@@ -61,7 +61,7 @@ constructor(open var newspaperRepository: NewspaperRepository,
             OffOnStatus.ON -> targetNewsPaper.setActive(true)
             OffOnStatus.OFF -> targetNewsPaper.setActive(false)
         }
-        newspaperRepository.save(targetNewsPaper)
+        newspaperRepository!!.save(targetNewsPaper)
 
         val logMessage = GeneralLog(created = Date())
         when (newsPaperStatusChangeRequest.targetStatus) {
@@ -72,7 +72,7 @@ constructor(open var newspaperRepository: NewspaperRepository,
                 logMessage.logMessage = "Np: ${targetNewsPaper.name} deactivated"
             }
         }
-        generalLogRepository.save(logMessage)
+        generalLogRepository!!.save(logMessage)
 
         return targetNewsPaper
     }
@@ -85,22 +85,59 @@ constructor(open var newspaperRepository: NewspaperRepository,
             throw IllegalRequestBodyException()
         }
 
-        authTokenService.invalidateAuthToken(newsPaperParserModeChangeRequest.authToken!!)
+        authTokenService!!.invalidateAuthToken(newsPaperParserModeChangeRequest.authToken!!)
 
         val targetNewsPaperOptional =
-                newspaperRepository.findById(newsPaperParserModeChangeRequest.targetNewspaperId!!)
+                newspaperRepository!!.findById(newsPaperParserModeChangeRequest.targetNewspaperId!!)
 
         if (!targetNewsPaperOptional.isPresent) {
             throw IllegalRequestBodyException()
         }
         val targetNewsPaper = targetNewsPaperOptional.get()
         val newspaperOpModeEntry = NewspaperOpModeEntry(newspaper = targetNewsPaper, opMode = newsPaperParserModeChangeRequest.parserMode!!)
-        newspaperOpModeEntryRepository.save(newspaperOpModeEntry)
+        newspaperOpModeEntryRepository!!.save(newspaperOpModeEntry)
 
         val logMessage = GeneralLog(created = Date(),
                 logMessage = "Np: ${targetNewsPaper.name} parser mode set to " +
                         "${newsPaperParserModeChangeRequest.parserMode!!.name}")
-        generalLogRepository.save(logMessage)
+        generalLogRepository!!.save(logMessage)
         return newspaperOpModeEntry
+    }
+
+    fun getNpCountWithRunningOpMode():Int{
+        return newspaperRepository!!
+                .findAll()
+                .asSequence()
+                .filter {
+                    newspaperOpModeEntryRepository!!
+                            .findAllByNewspaper(it)
+                            .sortedBy { it.created }
+                            .last().getOpMode()==ParserMode.RUNNING
+                }
+                .count()
+    }
+    fun getNpCountWithGetSyncedOpMode():Int{
+        return newspaperRepository!!
+                .findAll()
+                .asSequence()
+                .filter {
+                    newspaperOpModeEntryRepository!!
+                            .findAllByNewspaper(it)
+                            .sortedBy { it.created }
+                            .last().getOpMode()==ParserMode.GET_SYNCED
+                }
+                .count()
+    }
+    fun getNpCountWithParseThroughClientOpMode():Int{
+        return newspaperRepository!!
+                .findAll()
+                .asSequence()
+                .filter {
+                    newspaperOpModeEntryRepository!!
+                            .findAllByNewspaper(it)
+                            .sortedBy { it.created }
+                            .last().getOpMode()==ParserMode.PARSE_THROUGH_CLIENT
+                }
+                .count()
     }
 }

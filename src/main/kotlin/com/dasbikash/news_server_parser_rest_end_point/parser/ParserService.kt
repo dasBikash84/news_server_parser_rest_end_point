@@ -1,15 +1,129 @@
 package com.dasbikash.news_server_parser_rest_end_point.parser
 
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.handler.ParserExceptionHandlerService
+import com.dasbikash.news_server_parser.utils.ReportGenerationService
 import com.dasbikash.news_server_parser_rest_end_point.Init.SettingsBootstrapService
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.ReportGenerationException
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.generic.HighestLevelException
+import com.dasbikash.news_server_parser_rest_end_point.services.NewsPaperService
+import com.dasbikash.news_server_parser_rest_end_point.utills.DateUtils
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 open class ParserService(
-        private var settingsBootstrapService: SettingsBootstrapService?=null
+        private var settingsBootstrapService: SettingsBootstrapService?=null,
+        private var newsPaperService: NewsPaperService?=null,
+        private var reportGenerationService: ReportGenerationService?=null,
+        private var parserExceptionHandlerService: ParserExceptionHandlerService?=null
 )
     :CommandLineRunner {
+
+    private val ITERATION_DELAY = 15 * 60 * 1000L //15 mins
+
+    private var articleDataFetcherForPageSelf:ArticleDataFetcherForPageSelf?=null
+    private var articleDataFetcherForPageThroughClient:ArticleDataFetcherForPageThroughClient?=null
+
+    private lateinit var currentDate: Calendar
+
     override fun run(vararg args: String?) {
         settingsBootstrapService!!.bootstrapSettingsIfRequired()
+
+        currentDate = Calendar.getInstance()
+        do {
+            try {
+                val session = DbSessionManager.getNewSession()
+
+                if (articleDataFetcherForPageSelf == null){
+                    if ((newsPaperService!!.getNpCountWithRunningOpMode() +
+                                    newsPaperService!!.getNpCountWithGetSyncedOpMode()) > 0){
+                        articleDataFetcherForPageSelf = ArticleDataFetcherForPageSelf()
+                        articleDataFetcherForPageSelf!!.start()
+                    }
+                }else{
+                    if ((newsPaperService!!.getNpCountWithRunningOpMode()+
+                                    newsPaperService!!.getNpCountWithGetSyncedOpMode()) == 0){
+                        articleDataFetcherForPageSelf!!.interrupt()
+                        articleDataFetcherForPageSelf = null
+                    }else if (!articleDataFetcherForPageSelf!!.isAlive){
+                        articleDataFetcherForPageSelf = ArticleDataFetcherForPageSelf()
+                        articleDataFetcherForPageSelf!!.start()
+                    }
+                }
+
+                if (articleDataFetcherForPageThroughClient == null){
+                    if ((newsPaperService!!.getNpCountWithParseThroughClientOpMode()) > 0){
+                        articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient()
+                        articleDataFetcherForPageThroughClient!!.start()
+                    }
+                }else{
+                    if ((newsPaperService!!.getNpCountWithParseThroughClientOpMode()) == 0){
+                        articleDataFetcherForPageThroughClient!!.interrupt()
+                        articleDataFetcherForPageThroughClient = null
+                    }else if (!articleDataFetcherForPageThroughClient!!.isAlive){
+                        articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient()
+                        articleDataFetcherForPageThroughClient!!.start()
+                    }
+                }
+
+                val now = Calendar.getInstance()
+                if (now.get(Calendar.YEAR)> currentDate.get(Calendar.YEAR) ||
+                        now.get(Calendar.DAY_OF_YEAR)> currentDate.get(Calendar.DAY_OF_YEAR)){
+                    try {
+
+                        generateAndDistributeDailyReport(now.time!!)
+
+                        if (DateUtils.isFirstDayOfWeek(now.time)) {
+                            generateAndDistributeWeeklyReport(now.time)
+                        }
+
+                        if (DateUtils.isFirstDayOfMonth(now.time)) {
+                            generateAndDistributeMonthlyReport(now.time)
+                        }
+
+                        currentDate = now
+                    }catch (ex:Throwable){
+                        ex.printStackTrace()
+                        parserExceptionHandlerService!!.handleException(ReportGenerationException(ex))
+                    }
+                }
+
+                session.close()
+                RealTimeDbAdminTaskUtils.init()
+                Thread.sleep(ITERATION_DELAY)
+            } catch (ex: InterruptedException) {
+                ex.printStackTrace()
+                handleException(ex)
+            }
+        } while (true)
+    }
+
+    private fun generateAndDistributeDailyReport(today: Date) {
+        println("Starting daily article parsing report generation.")
+        reportGenerationService!!.prepareDailyReport(today)
+        println("Daily article parsing report generated.")
+        reportGenerationService!!.emailDailyReport(today)
+        println("Daily article parsing report distributed.")
+    }
+
+    private fun generateAndDistributeWeeklyReport(today: Date) {
+        println("Starting weekly article parsing report generation.")
+        reportGenerationService!!.prepareWeeklyReport(today)
+        println("Weekly article parsing report generated.")
+        reportGenerationService!!.emailWeeklyReport(today)
+        println("Weekly article parsing report distributed.")
+    }
+
+    private fun generateAndDistributeMonthlyReport(today: Date) {
+        println("Starting monthly article parsing report generation.")
+        reportGenerationService!!.prepareMonthlyReport(today)
+        println("Monthly article parsing report generated.")
+        reportGenerationService!!.emailMonthlyReport(today)
+        println("Monthly article parsing report distributed.")
+    }
+
+    private fun handleException(ex: InterruptedException) {
+        parserExceptionHandlerService!!.handleException(HighestLevelException(ex))
     }
 }

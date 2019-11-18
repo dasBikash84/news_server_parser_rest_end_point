@@ -6,7 +6,7 @@ import com.dasbikash.news_server_parser_rest_end_point.model.database.Newspaper
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.repositories.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.FileReaderUtils
-import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,7 +16,8 @@ open class SettingsBootstrapService(
         private var newspaperRepository: NewspaperRepository?=null,
         private var pageRepository: PageRepository?=null,
         private var newsCategoryRepository: NewsCategoryRepository?=null,
-        private var newsCategoryEntryRepository: NewsCategoryEntryRepository?=null
+        private var newsCategoryEntryRepository: NewsCategoryEntryRepository?=null,
+        private var loggerService: LoggerService?=null
 ) {
     fun bootstrapSettingsIfRequired(){
         loadCountries()
@@ -29,7 +30,7 @@ open class SettingsBootstrapService(
 
     private fun loadNewsCategoryEntries() {
         if (newsCategoryEntryRepository!!.count() == 0L) {
-            LoggerUtils.logOnConsole("Loading News-category Entry data.")
+            loggerService!!.logOnConsole("Loading News-category Entry data.")
             val pages = pageRepository!!.findAll().toList()
             val newCategories = newsCategoryRepository!!.findAll().toList()
 
@@ -50,7 +51,7 @@ open class SettingsBootstrapService(
 
     private fun loadNewsCategories() {
         if (newsCategoryRepository!!.count() == 0L) {
-            LoggerUtils.logOnConsole("Loading News-category data.")
+            loggerService!!.logOnConsole("Loading News-category data.")
 
             val newCategories = mutableListOf<NewsCategory>()
 
@@ -65,7 +66,7 @@ open class SettingsBootstrapService(
 
     private fun loadPages() {
         if (pageRepository!!.count() == 0L) {
-            LoggerUtils.logOnConsole("Loading page data.")
+            loggerService!!.logOnConsole("Loading page data.")
 
             val newspapers = newspaperRepository!!.findAll().toList()
             val pages = mutableListOf<Page>()
@@ -82,7 +83,7 @@ open class SettingsBootstrapService(
 
     private fun loadNewspapers() {
         if (newspaperRepository!!.count() == 0L) {
-            LoggerUtils.logOnConsole("Loading newspaper data.")
+            loggerService!!.logOnConsole("Loading newspaper data.")
 
             val languages = languageRepository!!.findAll().toList()
             val countries = countryRepository!!.findAll().toList()
@@ -104,7 +105,7 @@ open class SettingsBootstrapService(
 
     private fun loadCountries() {
         if (countryRepository!!.count() == 0L) {
-            LoggerUtils.logOnConsole("Loading country data.")
+            loggerService!!.logOnConsole("Loading country data.")
             FileReaderUtils
                     .jsonFileToEntityList(COUNTRY_DATA_FILE_PATH, Countries::class.java)
                     .countries!!.forEach {
@@ -115,7 +116,7 @@ open class SettingsBootstrapService(
 
     private fun loadLanguages() {
         if (languageRepository!!.count() == 0L) {
-            LoggerUtils.logOnConsole("Loading language data.")
+            loggerService!!.logOnConsole("Loading language data.")
             FileReaderUtils
                     .jsonFileToEntityList(LANGUAGE_DATA_FILE_PATH, Languages::class.java)
                     .languages!!.forEach {
