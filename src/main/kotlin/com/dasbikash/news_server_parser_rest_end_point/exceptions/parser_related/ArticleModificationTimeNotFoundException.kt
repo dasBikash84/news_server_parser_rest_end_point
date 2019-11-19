@@ -18,6 +18,6 @@ import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 
 class ArticleModificationTimeNotFoundException: MediumLevelException {
 
-    constructor(article: Article) : super("For article: "/*+article.articleLink*/)
+    constructor(article: Article) : super("For article: "+article.articleLink)
     constructor() : super()
 }

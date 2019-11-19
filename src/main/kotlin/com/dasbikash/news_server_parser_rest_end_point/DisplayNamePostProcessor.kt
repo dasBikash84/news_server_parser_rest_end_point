@@ -5,7 +5,7 @@ import org.springframework.beans.BeansException
 import org.springframework.beans.factory.config.BeanPostProcessor
 import org.springframework.stereotype.Component
 
-@Component("DisplayNamePostProcessor")
+//@Component("DisplayNamePostProcessor")
 class DisplayNamePostProcessor : BeanPostProcessor {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)

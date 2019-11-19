@@ -14,6 +14,7 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.dasbikash.news_server_parser_rest_end_point.model.ArticleImage
+import com.dasbikash.news_server_parser_rest_end_point.utills.HashUtils
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
@@ -22,7 +23,6 @@ import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlTransient
 import kotlin.collections.ArrayList
-
 
 @Entity
 @Table(name = DatabaseTableNames.ARTICLE_TABLE_NAME)
@@ -53,7 +53,14 @@ data class Article(
         var imageLinkList: List<ArticleImage> = ArrayList(),
 
         @Column(columnDefinition = "text")
-        var previewImageLink: String? = null
+        var previewImageLink: String? = null,
+
+        @Column(columnDefinition = "text")
+        var articleLink: String? = null,
+
+        @Temporal(TemporalType.TIMESTAMP)
+        @Column(name = "modified", nullable = false, updatable = false,insertable = false)
+        var modified: Date? = null
 ) : NsParserRestDbEntity {
 
     @JsonIgnore
@@ -119,5 +126,33 @@ data class Article(
     override fun toString(): String {
         return "Article(id='$articleId', page=${page?.name}, title=$title, modificationTS=$modificationTS, publicationTS=$publicationTS, " +
                 "articleText=${articleText ?: ""}, imageLinkList=$imageLinkList, previewImageLink=$previewImageLink)"
+    }
+    @Transient
+    @JsonIgnore
+    @XmlTransient
+    fun isDownloaded(): Boolean {
+        return articleText != null
+    }
+
+    fun setModificationTs(modificationTS: Long) {
+        val calander = Calendar.getInstance()
+        calander.timeInMillis = modificationTS
+        this.modificationTS = calander.time
+    }
+    companion object{
+        fun getArticleIdFromArticleLink(articleLink: String,page: Page):String{
+            val articleIdBuilder = StringBuilder(HashUtils.hash(articleLink)).append("_")
+
+            if (page.isTopLevelPage()) {
+                articleIdBuilder.append(page.id)
+            } else {
+                articleIdBuilder.append(page.parentPageId)
+            }
+            return articleIdBuilder.toString()
+        }
+
+        fun getStripedArticleId(articleId: String):String{
+            return articleId.split(Regex("_")).get(0)
+        }
     }
 }

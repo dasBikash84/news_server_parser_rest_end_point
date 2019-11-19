@@ -2,7 +2,6 @@ package com.dasbikash.news_server_parser_rest_end_point.repositories
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 import com.dasbikash.news_server_parser_rest_end_point.model.database.DatabaseTableNames
-import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -44,16 +43,12 @@ interface ArticleRepository : JpaRepository<Article, String>{
             nativeQuery = true)
     fun getArticlesBeforeGivenIdForPage(articleSerial: Int, pageId: String, pageSize: Int): List<Article>
 
-    @Query(value = "SELECT SUM(articleCount) FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId and created >= :startDate and created < :endDate",
-            nativeQuery = true)
-    fun getArticleCountForPageBetweenTwoDates(pageId: String, startDate: String, endDate: String): Int
-
     @Query(value = "SELECT COUNT(*) FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId",nativeQuery = true)
     fun getArticleCountForPage(pageId: String): Int
 
-    @Query(value = "SELECT publicationTS FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId order by created",nativeQuery = true)
+    @Query(value = "SELECT publicationTS FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId order by modified",nativeQuery = true)
     fun getArticlePublicationTSForPage(pageId: String): List<Date?>
 
-    @Query(value = "SELECT modificationTS FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId  order by created",nativeQuery = true)
+    @Query(value = "SELECT modificationTS FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where pageId=:pageId  order by modified",nativeQuery = true)
     fun getArticleModificationTSForPage(pageId: String): List<Date?>
 }

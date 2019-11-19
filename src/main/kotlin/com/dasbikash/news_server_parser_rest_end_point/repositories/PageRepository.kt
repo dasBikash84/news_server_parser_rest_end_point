@@ -13,6 +13,7 @@ interface PageRepository : JpaRepository<Page, String>{
     //Find active top level articles for a newspaper
     fun findPagesByNewspaperAndActive(newspaper: Newspaper,
                                       active:Boolean=true):List<Page>
+    fun findPagesByNewspaper(newspaper: Newspaper):List<Page>
 
     fun findAllByActive(active: Boolean = true): List<Page>
 

@@ -1,6 +1,7 @@
 package com.dasbikash.news_server_parser_rest_end_point.services
 
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundException
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.model.database.PageParsingHistory
 import com.dasbikash.news_server_parser_rest_end_point.repositories.PageParsingHistoryRepository
 import org.springframework.stereotype.Service
@@ -34,5 +35,17 @@ open class PageParsingHistoryService constructor(open var pageParsingHistoryRepo
     }
     override fun delete(logEntry: PageParsingHistory){
         pageParsingHistoryRepository.delete(logEntry)
+    }
+
+    fun getLatestForPage(page: Page):PageParsingHistory?{
+        return pageParsingHistoryRepository.getLatestForPage(page.id)
+    }
+
+    fun save(pageParsingHistory: PageParsingHistory):PageParsingHistory {
+        return pageParsingHistoryRepository.save(pageParsingHistory)
+    }
+
+    fun getArticleCountForPageBetweenTwoDates(page: Page, startDateString: String, endDateString: String): Int {
+        return pageParsingHistoryRepository.getArticleCountForPageBetweenTwoDates(page.id,startDateString,endDateString)
     }
 }

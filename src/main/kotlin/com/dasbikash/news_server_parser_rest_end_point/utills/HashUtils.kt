@@ -11,13 +11,17 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related
+package com.dasbikash.news_server_parser_rest_end_point.utills
 
-import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.generic.MediumLevelException
-import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
+object HashUtils {
 
-class EmptyArticleBodyException: MediumLevelException {
+    val SUPPLIED_PRIME_NUMBER = 157L;
 
-    constructor(article: Article) : super("For article: ${article.articleLink}")
-    constructor() : super()
+    fun hash(s: String): String {
+        var h = 0L
+        for (i in 0 until s.length) {
+            h = SUPPLIED_PRIME_NUMBER * h + s[i].toLong()
+        }
+        return h.toString()
+    }
 }

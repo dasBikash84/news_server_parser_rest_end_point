@@ -14,8 +14,9 @@
 package com.dasbikash.news_server_parser_rest_end_point.utils
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
-import com.dasbikash.news_server_parser_rest_end_point.repositories.ArticleRepository
-import com.dasbikash.news_server_parser_rest_end_point.repositories.PageRepository
+import com.dasbikash.news_server_parser_rest_end_point.services.ArticleService
+import com.dasbikash.news_server_parser_rest_end_point.services.PageParsingHistoryService
+import com.dasbikash.news_server_parser_rest_end_point.services.PageService
 import com.dasbikash.news_server_parser_rest_end_point.utills.DateUtils
 import com.dasbikash.news_server_parser_rest_end_point.utills.EmailUtils
 import com.dasbikash.news_server_parser_rest_end_point.utills.FileUtils
@@ -25,8 +26,9 @@ import java.util.*
 
 @Service
 open class ReportGenerationService(
-        private var pageRepository: PageRepository?=null,
-        private var articleRepository: ArticleRepository?=null
+        private var pageService: PageService?=null,
+        private var articleService: ArticleService?=null,
+        private var pageParsingHistoryService: PageParsingHistoryService?=null
 ) {
 
     fun getTableHeader(): String {
@@ -44,7 +46,7 @@ open class ReportGenerationService(
 
         reportFile.appendText("Article parsing report of: ${DateUtils.getDateStringForDb(yesterDay)}\n\n")
 
-        val pages = pageRepository!!.findAll().toList()
+        val pages = pageService!!.getAllPages()
         val pageArticleCountMap = mutableMapOf<Page,Int>()
         pages.asSequence().filter { it.isHasData() }.sortedBy { it.getNewspaper()!!.name!! }.forEach {
             val articleCountOfYesterday = getArticleCountForPageOfYesterday(it, today)
@@ -69,7 +71,7 @@ open class ReportGenerationService(
         reportFile.appendText("Article parsing report of week: ${DateUtils.getDateStringForDb(lastWeekFirstDay)} to "+
                                 "${DateUtils.getDateStringForDb(lastWeekLastDay)}\n\n")
 
-        val pages = pageRepository!!.findAll().toList()
+        val pages = pageService!!.getAllPages()
         val pageArticleCountMap = mutableMapOf<Page,Int>()
         pages.asSequence().filter { it.isHasData() }.sortedBy { it.getNewspaper()!!.name!! }.forEach {
             val articleCountOfLastWeek = getArticleCountForPageOfLastWeek(it, today)
@@ -92,7 +94,7 @@ open class ReportGenerationService(
 
         reportFile.appendText("Article parsing report of: ${DateUtils.getYearMonthStr(firstDayOfLastMonth)}\n\n")
 
-        val pages = pageRepository!!.findAll().toList()
+        val pages = pageService!!.getAllPages()
         val pageArticleCountMap = mutableMapOf<Page,Int>()
 
         pages.asSequence().filter { it.isHasData() }.sortedBy { it.getNewspaper()!!.name!! }.forEach {
@@ -161,7 +163,7 @@ open class ReportGenerationService(
 
         val pageArticleCountMap = mutableMapOf<Page,Int>()
         pages.asSequence().filter { it.isHasData() }.sortedBy { it.getNewspaper()!!.name!! }.forEach {
-            val articleCountFromBeginning = articleRepository!!.getArticleCountForPage(it.id)
+            val articleCountFromBeginning = articleService!!.getArticleCountForPage(it)
             pageArticleCountMap.put(it,articleCountFromBeginning)
         }
         addReportDataToFile(reportFile, pageArticleCountMap)
@@ -199,7 +201,7 @@ open class ReportGenerationService(
     }
 
     private fun getArticleCountForPageBetweenTwoDates(page: Page, startDate: Date, endDate: Date): Int{
-        return articleRepository!!.getArticleCountForPageBetweenTwoDates(
-                page.id,DateUtils.getDateStringForDb(startDate),DateUtils.getDateStringForDb(endDate))
+        return pageParsingHistoryService!!.getArticleCountForPageBetweenTwoDates(
+                page,DateUtils.getDateStringForDb(startDate),DateUtils.getDateStringForDb(endDate))
     }
 }

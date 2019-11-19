@@ -36,6 +36,21 @@ constructor(open var pageRepository: PageRepository,
         return pages
     }
 
+    fun getAllPagesByNewspaperId(newspaperId: String): List<Page> {
+        val newspaperOptional = newspaperRepository.findById(newspaperId)
+        if (!newspaperOptional.isPresent){
+            throw DataNotFoundException()
+        }
+        val newspaper = newspaperOptional.get()
+        val pages = pageRepository.findPagesByNewspaper(newspaper)
+        pages.asSequence().forEach {
+            if (it.isTopLevelPage()){
+                it.hasChild = pageRepository.findPagesByParentPageIdAndLinkFormatNotNullAndActive(parentPageId = it.id).isNotEmpty()
+            }
+        }
+        return pages
+    }
+
     fun getAllPages(): List<Page> {
         val pages =  pageRepository.findAll()
         pages.asSequence().forEach {
@@ -47,14 +62,14 @@ constructor(open var pageRepository: PageRepository,
     }
 
     fun getCount(): Long {
-        return pageRepository!!.count()
+        return pageRepository.count()
     }
 
     fun save(page: Page):Page {
-        return pageRepository!!.save(page)
+        return pageRepository.save(page)
     }
 
     fun saveAll(pages: Collection<Page>):List<Page> {
-        return pageRepository!!.saveAll(pages)
+        return pageRepository.saveAll(pages)
     }
 }

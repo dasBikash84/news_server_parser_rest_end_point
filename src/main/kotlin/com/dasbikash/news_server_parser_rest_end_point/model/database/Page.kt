@@ -45,7 +45,22 @@ data class Page(
         private var articleList: List<Article>?=null,
 
         @Transient
-        var hasChild:Boolean = false
+        var hasChild:Boolean = false,
+
+        @JsonIgnore
+        @XmlTransient
+        var linkVariablePartFormat:String? = DEFAULT_LINK_TRAILING_FORMAT,
+        @JsonIgnore
+        @XmlTransient
+        var firstEditionDateString:String? = null,
+        @JsonIgnore
+        @XmlTransient
+        var weeklyPublicationDay:Int? = 0,
+
+        @JsonIgnore
+        @XmlTransient
+        @OneToMany(fetch = FetchType.LAZY,mappedBy = "page",targetEntity = PageParsingHistory::class)
+        var pageParsingHistory: List<PageParsingHistory>?=null
 
 ): NsParserRestDbEntity {
     companion object {
@@ -132,5 +147,7 @@ data class Page(
         return "Page(id='$id', newspaper=${newspaper?.name}, parentPageId=$parentPageId, name=$name, active=$active,hasChild = $hasChild)"
     }
 
-
+    fun isPaginated(): Boolean {
+        return linkFormat!=null
+    }
 }

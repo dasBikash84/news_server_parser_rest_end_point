@@ -50,7 +50,7 @@ data class NewspaperOpModeEntry(
     @XmlElement
     @Transient
     fun getChangedOpMode(): String? {
-        return opMode?.name
+        return opMode.name
     }
 
     @JsonIgnore

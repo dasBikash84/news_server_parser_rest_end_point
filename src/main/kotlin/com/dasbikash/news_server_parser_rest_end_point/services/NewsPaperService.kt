@@ -104,20 +104,43 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
         return newspaperOpModeEntry
     }
 
-    fun getNpCountWithRunningOpMode():Int{
+    fun getNpCountForOpMode(parserMode: ParserMode):Int{
         return newspaperRepository!!
                 .findAll()
                 .asSequence()
                 .filter {
-                    newspaperOpModeEntryRepository!!
+                    val opModeList = newspaperOpModeEntryRepository!!
                             .findAllByNewspaper(it)
                             .sortedBy { it.created }
-                            .last().getOpMode()==ParserMode.RUNNING
+                    if (opModeList.isNotEmpty()) {
+                        return@filter opModeList.last().getOpMode() == parserMode
+                    }else{
+                        newspaperOpModeEntryRepository!!.save(NewspaperOpModeEntry(newspaper=it))
+                    }
+                    false
                 }
                 .count()
     }
+
+    fun getNpCountWithRunningOpMode():Int{
+        return getNpCountForOpMode(ParserMode.RUNNING)
+        /*return newspaperRepository!!
+                .findAll()
+                .asSequence()
+                .filter {
+                    val opModeList = newspaperOpModeEntryRepository!!
+                            .findAllByNewspaper(it)
+                            .sortedBy { it.created }
+                    if (opModeList.isNotEmpty()) {
+                        return@filter opModeList.last().getOpMode() == ParserMode.RUNNING
+                    }
+                    false
+                }
+                .count()*/
+    }
     fun getNpCountWithGetSyncedOpMode():Int{
-        return newspaperRepository!!
+        return getNpCountForOpMode(ParserMode.GET_SYNCED)
+        /*return newspaperRepository!!
                 .findAll()
                 .asSequence()
                 .filter {
@@ -126,10 +149,11 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
                             .sortedBy { it.created }
                             .last().getOpMode()==ParserMode.GET_SYNCED
                 }
-                .count()
+                .count()*/
     }
     fun getNpCountWithParseThroughClientOpMode():Int{
-        return newspaperRepository!!
+        return getNpCountForOpMode(ParserMode.PARSE_THROUGH_CLIENT)
+        /*return newspaperRepository!!
                 .findAll()
                 .asSequence()
                 .filter {
@@ -138,7 +162,7 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
                             .sortedBy { it.created }
                             .last().getOpMode()==ParserMode.PARSE_THROUGH_CLIENT
                 }
-                .count()
+                .count()*/
     }
 
     fun getCount(): Long {
@@ -151,5 +175,15 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
 
     fun saveAll(newspapers: Collection<Newspaper>):List<Newspaper> {
         return newspaperRepository!!.saveAll(newspapers)
+    }
+
+    fun getLatestOpModeEntryForNewspaper(newspaper: Newspaper):NewspaperOpModeEntry{
+        newspaperOpModeEntryRepository!!
+                .getAllByNewspaperOrderByCreatedDesc(newspaper).apply {
+                    if (isNotEmpty()){
+                        return get(0)
+                    }
+                }
+        return newspaperOpModeEntryRepository!!.save(NewspaperOpModeEntry(newspaper=newspaper))
     }
 }

@@ -13,8 +13,7 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
-import com.dasbikash.news_server_parser_rest_end_point.repositories.ArticleRepository
-import org.hibernate.Session
+import com.dasbikash.news_server_parser_rest_end_point.services.ArticleService
 import java.util.*
 import javax.persistence.*
 
@@ -37,8 +36,8 @@ data class PageParsingInterval(
     override fun toString(): String {
         return "PageParsingInterval(id=$id, Np=${page?.getNewspaper()?.name},page=${page?.id}, pageName=${page?.name}, parsingIntervalMin=${parsingIntervalMS!!/ 60/1000}, modified=$modified)"
     }
-    fun needRecalculation(session: Session):Boolean{
-        session.refresh(this)
+    fun needRecalculation(/*session: Session*/):Boolean{
+//        session.refresh(this)
         return (System.currentTimeMillis() - this.modified!!.time)>MINIMUM_RECALCULATE_INTERVAL
     }
 
@@ -55,14 +54,14 @@ data class PageParsingInterval(
             return PageParsingInterval(page = page,parsingIntervalMS = parsingIntervalMS)
         }
 
-        fun recalculate(articleRepository: ArticleRepository,page: Page):PageParsingInterval {
+        fun recalculate(articleService: ArticleService,page: Page):PageParsingInterval {
 
             if (page.weekly){
                 return getInstanceForPage(page,WEEKLY_ARTICLE_PARSING_INTERVAL.toInt())
             }
 
-            val articlePublicationTimeList = articleRepository.getArticlePublicationTSForPage(page.id)
-            val articleModificationTimeList = articleRepository.getArticleModificationTSForPage(page.id)
+            val articlePublicationTimeList = articleService.getArticlePublicationTSForPage(page)
+            val articleModificationTimeList = articleService.getArticleModificationTSForPage(page)
 
             val articlePublicationTimes = mutableListOf<ArticlePublicationTime>()
 

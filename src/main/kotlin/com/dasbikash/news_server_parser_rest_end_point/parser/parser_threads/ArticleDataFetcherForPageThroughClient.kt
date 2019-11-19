@@ -11,34 +11,52 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser.parser
+package com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads
 
-import com.dasbikash.news_server_parser.database.DatabaseUtils
+/*import com.dasbikash.news_server_parser.database.DatabaseUtils
 import com.dasbikash.news_server_parser.exceptions.NewsPaperNotFoundForPageException
 import com.dasbikash.news_server_parser.exceptions.ParserNotFoundException
 import com.dasbikash.news_server_parser.exceptions.generic.ParserException
 import com.dasbikash.news_server_parser.exceptions.handler.ParserExceptionHandler
-import com.dasbikash.news_server_parser.firebase.FireStoreDataUtils
+import com.dasbikash.news_server_parser_rest_end_point.parser.firebase.FireStoreDataUtils
 import com.dasbikash.news_server_parser.model.*
 import com.dasbikash.news_server_parser.parser.article_body_parsers.ArticleBodyParser
 import com.dasbikash.news_server_parser.parser.preview_page_parsers.PreviewPageParser
 import com.dasbikash.news_server_parser.utils.LoggerUtils
 import com.dasbikash.news_server_parser.utils.PageDownloadRequestUtils
-import com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads.ArticleDataFetcherBase
-import org.hibernate.Session
+import org.hibernate.Session*/
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.handler.ParserExceptionHandlerService
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
+import com.dasbikash.news_server_parser_rest_end_point.model.database.ParserMode
+import com.dasbikash.news_server_parser_rest_end_point.parser.firebase.FireStoreDataUtils
+import com.dasbikash.news_server_parser_rest_end_point.services.*
+import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
 import java.util.*
 
-class ArticleDataFetcherForPageThroughClient : ArticleDataFetcherBase(ParserMode.PARSE_THROUGH_CLIENT) {
+class ArticleDataFetcherForPageThroughClient(
+        pageService: PageService,
+        articleService: ArticleService,
+        loggerService: LoggerService,
+        rxJavaUtils: RxJavaUtils,
+        newsPaperService: NewsPaperService,
+        pageParsingIntervalService: PageParsingIntervalService,
+        pageParsingHistoryService: PageParsingHistoryService,
+        val parserExceptionHandlerService: ParserExceptionHandlerService)
+    : ArticleDataFetcherBase(
+        ParserMode.PARSE_THROUGH_CLIENT,pageService, articleService, loggerService,
+        rxJavaUtils, newsPaperService, pageParsingIntervalService, pageParsingHistoryService) {
 
     init {
         FireStoreDataUtils.nop()
     }
 
-    override fun doParsingForPage(currentPage: Page,session: Session) {
+    override fun doParsingForPage(currentPage: Page/*, session: Session*/) {
 
-        val opMode = DatabaseUtils.getOpModeForNewsPaper(session, currentPage.newspaper!!)
+//        val opMode = DatabaseUtils.getOpModeForNewsPaper(session, currentPage.newspaper!!)
+        /*val opMode = newsPaperService.getLatestOpModeEntryForNewspaper(currentPage.getNewspaper()!!)
 
-        if (opMode != ParserMode.PARSE_THROUGH_CLIENT) {
+        if (opMode.getOpMode() != ParserMode.PARSE_THROUGH_CLIENT) {
             return
         }
 //            LoggerUtils.logOnConsole("Running Parser for page ${currentPage.name} of Np: ${newspaper.name}")
@@ -115,7 +133,7 @@ class ArticleDataFetcherForPageThroughClient : ArticleDataFetcherBase(ParserMode
                 } else {
 //                        LoggerUtils.logOnConsole("No Preview page content for page ${currentPage.name} of Np: ${newspaper.name}")
                 }
-            } else /*if (activePageDownloadRequestEntries.filter { it.pageDownloadRequestMode == PageDownloadRequestMode.ARTICLE_BODY }.count() > 0)*/ {
+            } else {
 //                    LoggerUtils.logOnConsole("activePageDownloadRequestEntries.size for article for page ${currentPage.name} of Np: ${activePageDownloadRequestEntries.size}")
                 var processedArticleCount = 0
                 var newArticleCount = 0
@@ -176,10 +194,10 @@ class ArticleDataFetcherForPageThroughClient : ArticleDataFetcherBase(ParserMode
                     emptyPageAction(currentPage, "",session = session)
                 }
             }
-        }
+        }*/
     }
 
-    private fun getCurrentPageNumber(currentPage: Page,session: Session): Int {
+    /*private fun getCurrentPageNumber(currentPage: Page,session: Session): Int {
         val currentPageNumber: Int
 
         if (currentPage.isPaginated()) {
@@ -194,5 +212,5 @@ class ArticleDataFetcherForPageThroughClient : ArticleDataFetcherBase(ParserMode
         DatabaseUtils.runDbTransection(session) {
             session.delete(articlePreviewPagepageDownloadRequestEntry)
         }
-    }
+    }*/
 }

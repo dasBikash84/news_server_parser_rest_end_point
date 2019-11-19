@@ -2,9 +2,11 @@ package com.dasbikash.news_server_parser_rest_end_point.services
 
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.DataNotFoundException
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.repositories.ArticleRepository
 import com.dasbikash.news_server_parser_rest_end_point.repositories.PageRepository
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 open class ArticleService
@@ -87,5 +89,25 @@ open class ArticleService
             throw DataNotFoundException()
         }
         return filteredArticles
+    }
+
+    fun getArticleCountForPage(page: Page): Int{
+        return articleRepository.getArticleCountForPage(page.id)
+    }
+
+    fun getArticlePublicationTSForPage(page: Page): List<Date?> {
+        return articleRepository.getArticlePublicationTSForPage(page.id)
+    }
+
+    fun getArticleModificationTSForPage(page: Page): List<Date?> {
+        return articleRepository.getArticleModificationTSForPage(page.id)
+    }
+
+    fun findArticleById(articleId: String):Article?{
+        return articleRepository.findByArticleId(articleId)
+    }
+
+    fun save(article: Article):Article {
+        return articleRepository.save(article)
     }
 }

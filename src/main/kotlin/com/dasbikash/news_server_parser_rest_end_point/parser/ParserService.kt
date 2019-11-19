@@ -5,8 +5,12 @@ import com.dasbikash.news_server_parser_rest_end_point.utils.ReportGenerationSer
 import com.dasbikash.news_server_parser_rest_end_point.Init.SettingsBootstrapService
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.ReportGenerationException
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.generic.HighestLevelException
-import com.dasbikash.news_server_parser_rest_end_point.services.NewsPaperService
+import com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads.ArticleDataFetcherForPageSelf
+import com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads.ArticleDataFetcherForPageThroughClient
+import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.DateUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Service
 import java.util.*
@@ -16,14 +20,20 @@ open class ParserService(
         private var settingsBootstrapService: SettingsBootstrapService?=null,
         private var newsPaperService: NewsPaperService?=null,
         private var reportGenerationService: ReportGenerationService?=null,
-        private var parserExceptionHandlerService: ParserExceptionHandlerService?=null
+        private var parserExceptionHandlerService: ParserExceptionHandlerService?=null,
+        private var pageService: PageService?=null,
+        private var articleService: ArticleService?=null,
+        private var loggerService: LoggerService?=null,
+        private var rxJavaUtils: RxJavaUtils?=null,
+        private var pageParsingIntervalService: PageParsingIntervalService?=null,
+        private var pageParsingHistoryService: PageParsingHistoryService?=null
 )
     :CommandLineRunner {
 
     private val ITERATION_DELAY = 15 * 60 * 1000L //15 mins
 
-    private var articleDataFetcherForPageSelf:ArticleDataFetcherForPageSelf?=null
-    private var articleDataFetcherForPageThroughClient:ArticleDataFetcherForPageThroughClient?=null
+    private var articleDataFetcherForPageSelf: ArticleDataFetcherForPageSelf?=null
+    private var articleDataFetcherForPageThroughClient: ArticleDataFetcherForPageThroughClient?=null
 
     private lateinit var currentDate: Calendar
 
@@ -37,7 +47,11 @@ open class ParserService(
                 if (articleDataFetcherForPageSelf == null){
                     if ((newsPaperService!!.getNpCountWithRunningOpMode() +
                                     newsPaperService!!.getNpCountWithGetSyncedOpMode()) > 0){
-                        articleDataFetcherForPageSelf = ArticleDataFetcherForPageSelf()
+                        articleDataFetcherForPageSelf =
+                                ArticleDataFetcherForPageSelf(
+                                        pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
+                                        newsPaperService!!,pageParsingIntervalService!!,
+                                        pageParsingHistoryService!!,parserExceptionHandlerService!!)
                         articleDataFetcherForPageSelf!!.start()
                     }
                 }else{
@@ -46,14 +60,20 @@ open class ParserService(
                         articleDataFetcherForPageSelf!!.interrupt()
                         articleDataFetcherForPageSelf = null
                     }else if (!articleDataFetcherForPageSelf!!.isAlive){
-                        articleDataFetcherForPageSelf = ArticleDataFetcherForPageSelf()
+                        articleDataFetcherForPageSelf = ArticleDataFetcherForPageSelf(
+                                pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
+                                newsPaperService!!,pageParsingIntervalService!!,
+                                pageParsingHistoryService!!,parserExceptionHandlerService!!)
                         articleDataFetcherForPageSelf!!.start()
                     }
                 }
 
                 if (articleDataFetcherForPageThroughClient == null){
                     if ((newsPaperService!!.getNpCountWithParseThroughClientOpMode()) > 0){
-                        articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient()
+                        articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient(
+                                pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
+                                newsPaperService!!,pageParsingIntervalService!!,
+                                pageParsingHistoryService!!,parserExceptionHandlerService!!)
                         articleDataFetcherForPageThroughClient!!.start()
                     }
                 }else{
@@ -61,7 +81,10 @@ open class ParserService(
                         articleDataFetcherForPageThroughClient!!.interrupt()
                         articleDataFetcherForPageThroughClient = null
                     }else if (!articleDataFetcherForPageThroughClient!!.isAlive){
-                        articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient()
+                        articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient(
+                                pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
+                                newsPaperService!!,pageParsingIntervalService!!,
+                                pageParsingHistoryService!!,parserExceptionHandlerService!!)
                         articleDataFetcherForPageThroughClient!!.start()
                     }
                 }
@@ -88,7 +111,7 @@ open class ParserService(
                     }
                 }
 
-                RealTimeDbAdminTaskUtils.init()
+//                RealTimeDbAdminTaskUtils.init()
                 Thread.sleep(ITERATION_DELAY)
             } catch (ex: InterruptedException) {
                 ex.printStackTrace()

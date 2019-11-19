@@ -11,34 +11,44 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser.parser
+package com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads
 
-import com.dasbikash.news_server_parser.database.DatabaseUtils
-import com.dasbikash.news_server_parser.exceptions.NewsPaperNotFoundForPageException
-import com.dasbikash.news_server_parser.exceptions.ParserNotFoundException
-import com.dasbikash.news_server_parser.exceptions.generic.ParserException
-import com.dasbikash.news_server_parser.exceptions.handler.ParserExceptionHandler
-import com.dasbikash.news_server_parser.model.Article
-import com.dasbikash.news_server_parser.model.Page
-import com.dasbikash.news_server_parser.model.ParserMode
-import com.dasbikash.news_server_parser.parser.article_body_parsers.ArticleBodyParser
-import com.dasbikash.news_server_parser.parser.preview_page_parsers.PreviewPageParser
-import com.dasbikash.news_server_parser.utils.LoggerUtils
-import com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads.ArticleDataFetcherBase
-import org.hibernate.Session
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.NewsPaperNotFoundForPageException
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.ParserNotFoundException
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.generic.ParserException
+import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.handler.ParserExceptionHandlerService
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
+import com.dasbikash.news_server_parser_rest_end_point.model.database.ParserMode
+import com.dasbikash.news_server_parser_rest_end_point.parser.ArticleBodyParser
+import com.dasbikash.news_server_parser_rest_end_point.parser.PreviewPageParser
+import com.dasbikash.news_server_parser_rest_end_point.services.*
+import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
 import java.util.*
 
-class ArticleDataFetcherForPageSelf : ArticleDataFetcherBase(ParserMode.RUNNING) {
+class ArticleDataFetcherForPageSelf(
+        pageService: PageService,
+        articleService: ArticleService,
+        loggerService: LoggerService,
+        rxJavaUtils: RxJavaUtils,
+        newsPaperService: NewsPaperService,
+        pageParsingIntervalService: PageParsingIntervalService,
+        pageParsingHistoryService: PageParsingHistoryService,
+        val parserExceptionHandlerService: ParserExceptionHandlerService)
+    : ArticleDataFetcherBase(
+        ParserMode.RUNNING, pageService, articleService, loggerService,
+        rxJavaUtils, newsPaperService, pageParsingIntervalService, pageParsingHistoryService) {
 
-    override fun doParsingForPage(currentPage: Page,session: Session) {
+    override fun doParsingForPage(currentPage: Page) {
 
-        val opMode = currentPage.newspaper!!.getOpMode(session)//DatabaseUtils.getOpModeForNewsPaper(session,currentPage.newspaper!!)
+        val opMode = newsPaperService.getLatestOpModeEntryForNewspaper(currentPage.getNewspaper()!!)
 
-        if (opMode==ParserMode.PARSE_THROUGH_CLIENT || opMode==ParserMode.OFF){
+        if (opMode.getOpMode() == ParserMode.PARSE_THROUGH_CLIENT || opMode.getOpMode() == ParserMode.OFF) {
             return
         }
 
-        if (opMode!=ParserMode.GET_SYNCED && !goForPageParsing(currentPage,session)) {
+        if (opMode.getOpMode() != ParserMode.GET_SYNCED && !goForPageParsing(currentPage)) {
             return
         }
 
@@ -51,7 +61,7 @@ class ArticleDataFetcherForPageSelf : ArticleDataFetcherBase(ParserMode.RUNNING)
         val currentPageNumber: Int
 
         if (currentPage.isPaginated()) {
-            currentPageNumber = getLastParsedPageNumber(currentPage,session) + 1
+            currentPageNumber = getLastParsedPageNumber(currentPage) + 1
         } else {
             currentPageNumber = PAGE_NUMBER_NOT_APPLICABLE
         }
@@ -63,21 +73,23 @@ class ArticleDataFetcherForPageSelf : ArticleDataFetcherBase(ParserMode.RUNNING)
             parsingResult = PreviewPageParser.parsePreviewPageForArticles(currentPage, currentPageNumber)
             articleList.addAll(parsingResult.first)
         } catch (e: NewsPaperNotFoundForPageException) {
-            LoggerUtils.logOnConsole("${e::class.java.simpleName} for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
-            ParserExceptionHandler.handleException(e)
+            loggerService.logOnConsole("${e::class.java.simpleName} for page: ${currentPage.name} Np: ${currentPage.getNewspaper()?.name}")
+            parserExceptionHandlerService.handleException(e)
             throw InterruptedException()
         } catch (e: ParserNotFoundException) {
-            LoggerUtils.logOnConsole("${e::class.java.simpleName} for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
-            ParserExceptionHandler.handleException(e)
+            loggerService.logOnConsole("${e::class.java.simpleName} for page: ${currentPage.name} Np: ${currentPage.getNewspaper()?.name}")
+            parserExceptionHandlerService.handleException(e)
             throw InterruptedException()
         } catch (e: Throwable) {
-            LoggerUtils.logOnConsole("${e::class.java.simpleName} for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
+            loggerService.logOnConsole("${e::class.java.simpleName} for page: ${currentPage.name} Np: ${currentPage.getNewspaper()?.name}")
             when (e) {
-                is ParserException -> {ParserExceptionHandler.handleException(e)}
-                else -> ParserExceptionHandler.handleException(ParserException(e))
+                is ParserException -> {
+                    parserExceptionHandlerService.handleException(e)
+                }
+                else -> parserExceptionHandlerService.handleException(ParserException(e))
             }
-            if (opMode != ParserMode.GET_SYNCED ) {
-                emptyPageAction(currentPage, parsingResult?.second ?: "",session = session)
+            if (opMode.getOpMode() != ParserMode.GET_SYNCED) {
+                emptyPageAction(currentPage, parsingResult?.second ?: "")
             }
             return
         }
@@ -86,13 +98,13 @@ class ArticleDataFetcherForPageSelf : ArticleDataFetcherBase(ParserMode.RUNNING)
                 articleList
                         .asSequence()
                         .filter {
-                            (DatabaseUtils.findArticleById(session, it.id)) == null &&
-                            (DatabaseUtils.findArticleById(session, Article.getStripedArticleId(it.id))) == null
+                            articleService.findArticleById(it.articleId!!) == null &&
+                                    articleService.findArticleById(Article.getStripedArticleId(it.articleId!!)) == null
                         }
                         .toMutableList()
         //For Full repeat
-        if (opMode != ParserMode.GET_SYNCED && parsableArticleList.size == 0) {
-            allArticleRepeatAction(currentPage, parsingResult?.second ?: "",session=session)
+        if (opMode.getOpMode() != ParserMode.GET_SYNCED && parsableArticleList.size == 0) {
+            allArticleRepeatAction(currentPage, parsingResult?.second ?: "")
             return
         }
 
@@ -109,30 +121,29 @@ class ArticleDataFetcherForPageSelf : ArticleDataFetcherBase(ParserMode.RUNNING)
             try {
                 ArticleBodyParser.getArticleBody(article)
             } catch (ex: ParserException) {
-                ParserExceptionHandler.handleException(ex)
+                parserExceptionHandlerService.handleException(ex)
             } catch (ex: Throwable) {
-                ParserExceptionHandler.handleException(ParserException(ex))
+                parserExceptionHandlerService.handleException(ParserException(ex))
             }
             if (article.isDownloaded()) {
                 if (article.previewImageLink == null && article.imageLinkList.size > 0) {
                     try {
-                        article.previewImageLink = article.imageLinkList.first { it.link!=null }.link
-                    }catch (ex:Throwable){}
+                        article.previewImageLink = article.imageLinkList.first { it.link != null }.link
+                    } catch (ex: Throwable) {
+                    }
                 }
-                if (article.publicationTS !=null && article.publicationTS!! > Date()){
-                    article.publicationTS = Date()
+                if (article.getPublicationTS() != null && article.getPublicationTS()!! > Date()) {
+                    article.setPublicationTS(Date())
                 }
-                if (article.modificationTS !=null && article.modificationTS!! > Date()){
-                    article.modificationTS = Date()
+                if (article.getModificationTS() != null && article.getModificationTS()!! > Date()) {
+                    article.setModificationTS(Date())
                 }
-                DatabaseUtils.runDbTransection(session) {
-                    session.save(article)
-                    newArticleCount++
-                }
+                articleService.save(article)
+                newArticleCount++
             }
         }
 
         savePageParsingHistory(
-                currentPage, currentPageNumber, newArticleCount, parsingResult?.second ?: "",session = session)
+                currentPage, currentPageNumber, newArticleCount, parsingResult?.second ?: "")
     }
 }
