@@ -26,7 +26,8 @@ open class ParserService(
         private var loggerService: LoggerService?=null,
         private var rxJavaUtils: RxJavaUtils?=null,
         private var pageParsingIntervalService: PageParsingIntervalService?=null,
-        private var pageParsingHistoryService: PageParsingHistoryService?=null
+        private var pageParsingHistoryService: PageParsingHistoryService?=null,
+        private var pageDownloadRequestEntryService: PageDownloadRequestEntryService?=null
 )
     :CommandLineRunner {
 
@@ -73,7 +74,7 @@ open class ParserService(
                         articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient(
                                 pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
                                 newsPaperService!!,pageParsingIntervalService!!,
-                                pageParsingHistoryService!!,parserExceptionHandlerService!!)
+                                pageParsingHistoryService!!,parserExceptionHandlerService!!,pageDownloadRequestEntryService!!)
                         articleDataFetcherForPageThroughClient!!.start()
                     }
                 }else{
@@ -84,7 +85,7 @@ open class ParserService(
                         articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient(
                                 pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
                                 newsPaperService!!,pageParsingIntervalService!!,
-                                pageParsingHistoryService!!,parserExceptionHandlerService!!)
+                                pageParsingHistoryService!!,parserExceptionHandlerService!!,pageDownloadRequestEntryService!!)
                         articleDataFetcherForPageThroughClient!!.start()
                     }
                 }

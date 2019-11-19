@@ -60,12 +60,12 @@ data class PageParsingInterval(
                 return getInstanceForPage(page,WEEKLY_ARTICLE_PARSING_INTERVAL.toInt())
             }
 
-            val articlePublicationTimeList = articleService.getArticlePublicationTSForPage(page)
+//            val articlePublicationTimeList = articleService.getArticlePublicationTSForPage(page)
             val articleModificationTimeList = articleService.getArticleModificationTSForPage(page)
 
             val articlePublicationTimes = mutableListOf<ArticlePublicationTime>()
 
-            articlePublicationTimeList.asSequence().forEachIndexed({i,date->
+            articleService.getArticlePublicationTSForPage(page).asSequence().forEachIndexed({i,date->
                 articlePublicationTimes.add(
                         ArticlePublicationTime(date,articleModificationTimeList.get(i))
                 )

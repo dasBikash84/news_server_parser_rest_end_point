@@ -15,7 +15,7 @@ package com.dasbikash.news_server_parser_rest_end_point.parser.firebase
 
 /*import com.dasbikash.news_server_parser.database.DatabaseUtils
 import com.dasbikash.news_server_parser.database.DbSessionManager
-import com.dasbikash.news_server_parser.model.PageDownLoadRequestResponse
+import com.dasbikash.news_server_parser_rest_end_point.model.database.PageDownLoadRequestResponse
 import com.dasbikash.news_server_parser.utils.LoggerUtils
 import com.google.cloud.firestore.DocumentChange
 import com.google.cloud.firestore.FirestoreException

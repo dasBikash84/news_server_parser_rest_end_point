@@ -13,7 +13,7 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.parser.firebase
 
-//import com.dasbikash.news_server_parser.model.PageDownloadRequestEntry
+import com.dasbikash.news_server_parser_rest_end_point.model.database.PageDownloadRequestEntry
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 
@@ -22,7 +22,7 @@ object RealTimeDbDataUtils {
 
     private const val MAX_WAITING_TIME = 60*1000L
 
-    /*fun addPageDownloadRequest(pageDownloadRequestEntry: PageDownloadRequestEntry): String? {
+    fun addPageDownloadRequest(pageDownloadRequestEntry: PageDownloadRequestEntry): String? {
         val pageDownloadRequest = pageDownloadRequestEntry.getPageDownLoadRequest()
 
         val lock = Object()
@@ -55,5 +55,5 @@ object RealTimeDbDataUtils {
             Thread.sleep(10L)
         }
         return (System.currentTimeMillis()-startTime) < 2* MAX_WAITING_TIME
-    }*/
+    }
 }

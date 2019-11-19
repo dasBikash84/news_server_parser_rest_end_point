@@ -29,4 +29,5 @@ object DatabaseTableNames {
     const val NEWS_CATERORIES_ENTRY_NAME = "news_categories"
     const val NEWS_CATEGORY_ENTRY_ENTRY_NAME = "news_category_entry"
     const val PAGE_PARSING_INTERVAL_TABLE_NAME = "page_parsing_interval"
+    const val PAGE_DOWNLOAD_REQUEST_ENTRY_TABLE_NAME = "page_download_request"
 }
