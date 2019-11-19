@@ -6,9 +6,21 @@ import org.springframework.stereotype.Service
 
 @Service
 open class NewsCategoryEntryService
-constructor(open var newsCategoryEntryService: NewsCategoryEntryRepository){
+constructor(private var newsCategoryEntryService: NewsCategoryEntryRepository?=null){
 
     fun getAllNewsCategoryEntries():List<NewsCategoryEntry>{
-        return newsCategoryEntryService.findAll()
+        return newsCategoryEntryService!!.findAll()
+    }
+
+    fun getCount(): Long {
+        return newsCategoryEntryService!!.count()
+    }
+
+    fun save(newsCategoryEntry: NewsCategoryEntry):NewsCategoryEntry {
+        return newsCategoryEntryService!!.save(newsCategoryEntry)
+    }
+
+    fun saveAll(newsCategoryEntries: Collection<NewsCategoryEntry>):List<NewsCategoryEntry> {
+        return newsCategoryEntryService!!.saveAll(newsCategoryEntries)
     }
 }

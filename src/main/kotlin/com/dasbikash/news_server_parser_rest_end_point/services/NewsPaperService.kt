@@ -140,4 +140,16 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
                 }
                 .count()
     }
+
+    fun getCount(): Long {
+        return newspaperRepository!!.count()
+    }
+
+    fun save(newspaper: Newspaper):Newspaper {
+        return newspaperRepository!!.save(newspaper)
+    }
+
+    fun saveAll(newspapers: Collection<Newspaper>):List<Newspaper> {
+        return newspaperRepository!!.saveAll(newspapers)
+    }
 }

@@ -45,4 +45,16 @@ constructor(open var pageRepository: PageRepository,
         }
         return pages
     }
+
+    fun getCount(): Long {
+        return pageRepository!!.count()
+    }
+
+    fun save(page: Page):Page {
+        return pageRepository!!.save(page)
+    }
+
+    fun saveAll(pages: Collection<Page>):List<Page> {
+        return pageRepository!!.saveAll(pages)
+    }
 }

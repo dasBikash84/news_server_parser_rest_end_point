@@ -5,9 +5,17 @@ import com.dasbikash.news_server_parser_rest_end_point.repositories.LanguageRepo
 import org.springframework.stereotype.Service
 
 @Service
-open class LanguageService(open var languageRepository: LanguageRepository) {
+open class LanguageService(private var languageRepository: LanguageRepository?=null) {
 
     fun getAllLanguages(): List<Language> {
-        return languageRepository.findAll()
+        return languageRepository!!.findAll()
+    }
+
+    fun getCount(): Long {
+        return languageRepository!!.count()
+    }
+
+    fun save(language: Language):Language {
+        return languageRepository!!.save(language)
     }
 }
