@@ -54,4 +54,8 @@ data class PageParsingHistory(
     override fun toString(): String {
         return "PageParsingHistory(id=$id, page=${page?.name}, pageNumber=$pageNumber, articleCount=$articleCount, created=$created)"
     }
+    companion object{
+        fun getEmptyParsingHistoryForPage(page: Page)
+                = PageParsingHistory(page = page,pageNumber = 0,articleCount = 0)
+    }
 }

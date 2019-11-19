@@ -9,7 +9,28 @@ class NewsPaperParserModeChangeRequest(
         var authToken: String? = null,
         var targetNewspaperId: String? = null,
         var parserMode: ParserMode? = null
-): NsParserRestDbEntity
+): NsParserRestDbEntity{
+
+    fun isRunningRequest():Boolean{
+        return parserMode?.equals(ParserMode.RUNNING) ?: false
+    }
+    fun isGetSyncedRequest():Boolean{
+        return parserMode?.equals(ParserMode.GET_SYNCED) ?: false
+    }
+    fun isParseThroughClientRequest():Boolean{
+        return parserMode?.equals(ParserMode.PARSE_THROUGH_CLIENT) ?: false
+    }
+    fun isOffRequest():Boolean{
+        return parserMode?.equals(ParserMode.OFF) ?: false
+    }
+    fun hasValidMode():Boolean{
+        return parserMode?.equals(ParserMode.OFF) ?: false ||
+                parserMode?.equals(ParserMode.GET_SYNCED) ?: false ||
+                parserMode?.equals(ParserMode.PARSE_THROUGH_CLIENT) ?: false ||
+                parserMode?.equals(ParserMode.RUNNING) ?: false
+    }
+
+}
 @XmlRootElement
 class NewsPaperParserModeChangeRequestFormat(
         var authToken: String = "Emailed token",

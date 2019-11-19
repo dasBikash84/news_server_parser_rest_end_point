@@ -61,7 +61,7 @@ abstract class ArticleDataFetcherBase constructor(
             val pageListForParsing = mutableListOf<Page>()
             val newspapers = getReleventNewsPapers()
             newspapers
-                    .flatMap {pageService.getAllPagesByNewspaperId(it.id).filter { it.isHasData() } ?: emptyList()}
+                    .flatMap {pageService.getAllPagesByNewspaperId(it.id).filter { it.isHasData() }}
                     .forEach { pageListForParsing.add(it) }
 
             while (pageListForParsing.isNotEmpty()){

@@ -13,21 +13,20 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.parser.firebase
 
-/*import com.dasbikash.news_server_parser.database.DatabaseUtils
-import com.dasbikash.news_server_parser.database.DbSessionManager
 import com.dasbikash.news_server_parser_rest_end_point.model.database.PageDownLoadRequestResponse
-import com.dasbikash.news_server_parser.utils.LoggerUtils
+import com.dasbikash.news_server_parser_rest_end_point.services.PageDownloadRequestEntryService
+import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
 import com.google.cloud.firestore.DocumentChange
 import com.google.cloud.firestore.FirestoreException
-import com.google.cloud.firestore.QuerySnapshot*/
+import com.google.cloud.firestore.QuerySnapshot
 
 
-object FireStoreDataUtils {
-
-    fun nop(){}
-
-    init {
-        /*FireStoreRefUtils.getPageDownloadRequestResponseCollectionRef()
+class FireStoreDataUtils private constructor(
+        private val loggerService:LoggerService,
+        private val pageDownloadRequestEntryService: PageDownloadRequestEntryService
+) {
+    init{
+        FireStoreRefUtils.getPageDownloadRequestResponseCollectionRef()
                 .addSnapshotListener(object : com.google.cloud.firestore.EventListener<QuerySnapshot> {
                     override fun onEvent(value: QuerySnapshot?, error: FirestoreException?) {
                         error?.let {
@@ -41,37 +40,49 @@ object FireStoreDataUtils {
                                         val document = it.document
                                         val pageDownLoadRequestResponse =
                                                 document.toObject(PageDownLoadRequestResponse::class.java)
-                                        LoggerUtils.logOnConsole("DocumentChange.Type.ADDED : ${document.id}")
-                                        LoggerUtils.logOnConsole(pageDownLoadRequestResponse.toString())
-                                        val session = DbSessionManager.getNewSession()
-                                        val pageDownloadRequestEntry =
-                                                DatabaseUtils.findPageDownloadRequestEntryBYServerNodeName(session,document.id)
-                                        pageDownloadRequestEntry?.let {
-                                            if (it.requestKey.isBlank()){
-                                                throw IllegalStateException()
-                                            }
-                                            RealTimeDbDataUtils.deleteRequest(it.requestKey)
-                                            FireStoreRefUtils.getPageDownloadRequestResponseCollectionRef()
-                                                    .document(document.id)
-                                                    .delete()
-                                            it.setResponseContentFromServerResponse(pageDownLoadRequestResponse)
-                                            DatabaseUtils.runDbTransection(session){
-                                                session.update(it)
-                                            }
-                                            LoggerUtils.logOnConsole(it.toString())
+                                        loggerService.logOnConsole("DocumentChange.Type.ADDED : ${document.id}")
+                                        loggerService.logOnConsole(pageDownLoadRequestResponse.toString())
+                                        pageDownloadRequestEntryService.findPageDownloadRequestEntryByResponseId(document.id)
+                                            ?.let {
+                                                if (it.requestKey.isBlank()){
+                                                    throw IllegalStateException()
+                                                }
+                                                RealTimeDbDataUtils.deleteRequest(it.requestKey)
+                                                FireStoreRefUtils.getPageDownloadRequestResponseCollectionRef()
+                                                        .document(document.id)
+                                                        .delete()
+                                                it.setResponseContentFromServerResponse(pageDownLoadRequestResponse)
+                                                pageDownloadRequestEntryService.save(it)
+                                                loggerService.logOnConsole(it.toString())
                                         }
                                     }
                                     DocumentChange.Type.MODIFIED ->{
-                                        LoggerUtils.logOnConsole("DocumentChange.Type.MODIFIED : ${it.document.id}")
+                                        loggerService.logOnConsole("DocumentChange.Type.MODIFIED : ${it.document.id}")
                                     }
                                     DocumentChange.Type.REMOVED ->{
-                                        LoggerUtils.logOnConsole("DocumentChange.Type.REMOVED : ${it.document.id}")
+                                        loggerService.logOnConsole("DocumentChange.Type.REMOVED : ${it.document.id}")
                                     }
                                 }
                             }
                         }
                     }
-                })*/
+                })
+    }
 
+    companion object {
+        @Volatile
+        private lateinit var INSTANCE: FireStoreDataUtils
+
+        internal fun getInstance(loggerService:LoggerService,
+                                 pageDownloadRequestEntryService: PageDownloadRequestEntryService): FireStoreDataUtils {
+            if (!Companion::INSTANCE.isInitialized) {
+                synchronized(FireStoreDataUtils::class.java) {
+                    if (!Companion::INSTANCE.isInitialized) {
+                        INSTANCE = FireStoreDataUtils(loggerService,pageDownloadRequestEntryService)
+                    }
+                }
+            }
+            return INSTANCE
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.dasbikash.news_server_parser_rest_end_point.utils.ReportGenerationSer
 import com.dasbikash.news_server_parser_rest_end_point.Init.SettingsBootstrapService
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.ReportGenerationException
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.generic.HighestLevelException
+import com.dasbikash.news_server_parser_rest_end_point.parser.firebase.RealTimeDbAdminTaskUtils
 import com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads.ArticleDataFetcherForPageSelf
 import com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads.ArticleDataFetcherForPageThroughClient
 import com.dasbikash.news_server_parser_rest_end_point.services.*
@@ -27,7 +28,9 @@ open class ParserService(
         private var rxJavaUtils: RxJavaUtils?=null,
         private var pageParsingIntervalService: PageParsingIntervalService?=null,
         private var pageParsingHistoryService: PageParsingHistoryService?=null,
-        private var pageDownloadRequestEntryService: PageDownloadRequestEntryService?=null
+        private var pageDownloadRequestEntryService: PageDownloadRequestEntryService?=null,
+        private var authTokenService: AuthTokenService?=null,
+        private var newspaperOpModeEntryService: NewspaperOpModeEntryService?=null
 )
     :CommandLineRunner {
 
@@ -112,7 +115,8 @@ open class ParserService(
                     }
                 }
 
-//                RealTimeDbAdminTaskUtils.init()
+//                RealTimeDbAdminTaskUtils.getInstance(loggerService!!, rxJavaUtils!!, authTokenService!!, newsPaperService!!,
+//                        newspaperOpModeEntryService!!, pageParsingHistoryService!!, pageService!!).init()
                 Thread.sleep(ITERATION_DELAY)
             } catch (ex: InterruptedException) {
                 ex.printStackTrace()

@@ -124,45 +124,12 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
 
     fun getNpCountWithRunningOpMode():Int{
         return getNpCountForOpMode(ParserMode.RUNNING)
-        /*return newspaperRepository!!
-                .findAll()
-                .asSequence()
-                .filter {
-                    val opModeList = newspaperOpModeEntryRepository!!
-                            .findAllByNewspaper(it)
-                            .sortedBy { it.created }
-                    if (opModeList.isNotEmpty()) {
-                        return@filter opModeList.last().getOpMode() == ParserMode.RUNNING
-                    }
-                    false
-                }
-                .count()*/
     }
     fun getNpCountWithGetSyncedOpMode():Int{
         return getNpCountForOpMode(ParserMode.GET_SYNCED)
-        /*return newspaperRepository!!
-                .findAll()
-                .asSequence()
-                .filter {
-                    newspaperOpModeEntryRepository!!
-                            .findAllByNewspaper(it)
-                            .sortedBy { it.created }
-                            .last().getOpMode()==ParserMode.GET_SYNCED
-                }
-                .count()*/
     }
     fun getNpCountWithParseThroughClientOpMode():Int{
         return getNpCountForOpMode(ParserMode.PARSE_THROUGH_CLIENT)
-        /*return newspaperRepository!!
-                .findAll()
-                .asSequence()
-                .filter {
-                    newspaperOpModeEntryRepository!!
-                            .findAllByNewspaper(it)
-                            .sortedBy { it.created }
-                            .last().getOpMode()==ParserMode.PARSE_THROUGH_CLIENT
-                }
-                .count()*/
     }
 
     fun getCount(): Long {
@@ -185,5 +152,16 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
                     }
                 }
         return newspaperOpModeEntryRepository!!.save(NewspaperOpModeEntry(newspaper=newspaper))
+    }
+
+    fun findById(targetNewspaperId: String?): Newspaper? {
+        targetNewspaperId?.let {
+            newspaperRepository!!.findById(it).apply {
+                if(isPresent){
+                    return get()
+                }
+            }
+        }
+        return null
     }
 }

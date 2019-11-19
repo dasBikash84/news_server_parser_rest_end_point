@@ -48,9 +48,18 @@ constructor(private var pageDownloadRequestEntryRepository: PageDownloadRequestE
         documentId?.let {
             pageDownloadRequestEntry.requestKey = it
             pageDownloadRequestEntryRepository!!.save(pageDownloadRequestEntry)
-//            DatabaseUtils.runDbTransection(session) { session.save(pageDownloadRequestEntry) }
             return true
         }
         return false
+    }
+
+    fun findPageDownloadRequestEntryByResponseId(responseDocumentId:String):PageDownloadRequestEntry?{
+        pageDownloadRequestEntryRepository!!
+                .getAllByResponseDocumentId(responseDocumentId).apply {
+                    if (isNotEmpty()){
+                        return get(0)
+                    }
+                }
+        return null
     }
 }

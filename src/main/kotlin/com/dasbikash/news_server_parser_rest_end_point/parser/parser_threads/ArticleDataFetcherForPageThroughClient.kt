@@ -41,7 +41,7 @@ class ArticleDataFetcherForPageThroughClient(
         rxJavaUtils, newsPaperService, pageParsingIntervalService, pageParsingHistoryService) {
 
     init {
-        FireStoreDataUtils.nop()
+        FireStoreDataUtils.getInstance(loggerService,pageDownloadRequestEntryService)
     }
 
     override fun doParsingForPage(currentPage: Page) {

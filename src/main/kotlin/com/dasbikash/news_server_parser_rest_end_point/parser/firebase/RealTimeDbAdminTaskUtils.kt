@@ -13,46 +13,47 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.parser.firebase
 
-/*import com.dasbikash.news_server_parser.database.DatabaseUtils
-import com.dasbikash.news_server_parser.database.DbSessionManager
-import com.dasbikash.news_server_parser.model.*
-import com.dasbikash.news_server_parser.utils.EmailUtils
-import com.dasbikash.news_server_parser.utils.LoggerUtils
-import com.dasbikash.news_server_parser.utils.RxJavaUtils*/
+import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperParserModeChangeRequest
+import com.dasbikash.news_server_parser_rest_end_point.model.database.NewspaperOpModeEntry
+import com.dasbikash.news_server_parser_rest_end_point.model.database.PageParsingHistory
+import com.dasbikash.news_server_parser_rest_end_point.model.database.ParserMode
+import com.dasbikash.news_server_parser_rest_end_point.model.database.TokenGenerationRequest
+import com.dasbikash.news_server_parser_rest_end_point.services.*
+import com.dasbikash.news_server_parser_rest_end_point.utills.EmailUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
 
-object RealTimeDbAdminTaskUtils {
-
-    private const val TOKEN_GENERATION_REQUEST_NODE = "parser_token_generation_request"
-    private const val NP_STATUS_CHANGE_REQUEST_NODE = "np_status_change_request"
-    private const val NP_PARSER_MODE_CHANGE_REQUEST_NODE = "np_parser_mode_change_request"
-
+class RealTimeDbAdminTaskUtils private constructor(
+        val loggerService: LoggerService,
+        val rxJavaUtils: RxJavaUtils,
+        val authTokenService: AuthTokenService,
+        val newsPaperService: NewsPaperService,
+        val newspaperOpModeEntryService: NewspaperOpModeEntryService,
+        val pageParsingHistoryService: PageParsingHistoryService,
+        val pageService: PageService
+){
     init {
-        /*RealTimeDbRefUtils.getAdminTaskDataNode()
+        RealTimeDbRefUtils.getAdminTaskDataNode()
                 .child(TOKEN_GENERATION_REQUEST_NODE)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError?) {}
 
                     override fun onDataChange(snapshot: DataSnapshot?) {
-                        RxJavaUtils.doTaskInBackGround {
+                        rxJavaUtils.doTaskInBackGround {
                             snapshot?.let {
-                                println()
-                                println("${it.toString()}")
-                                val session = DbSessionManager.getNewSession()
                                 it.children.asSequence().forEach {
                                     val tokenGenerationRequest = it.getValue(TokenGenerationRequest::class.java)
                                     if (tokenGenerationRequest.isValid()) {
-                                        val token = AuthToken()
-                                        DatabaseUtils.runDbTransection(session) { session.save(token) }
-                                        EmailUtils.emailAuthTokenToAdmin(token)
-                                        LoggerUtils.logOnDb("New auth token generated.", session)
+                                        val token = authTokenService.getNewAuthToken()
+                                        EmailUtils.emailAuthTokenToAdmin(token,this@RealTimeDbAdminTaskUtils::class.java)
+                                        loggerService.logOnDb("New auth token generated.")
                                     }
                                 }
                                 deleteTokenGenerationRequest()
-                                session.close()
                             }
                         }
                     }
@@ -64,61 +65,55 @@ object RealTimeDbAdminTaskUtils {
                     override fun onCancelled(error: DatabaseError?) {}
 
                     override fun onDataChange(snapshot: DataSnapshot?) {
-                        RxJavaUtils.doTaskInBackGround {
+                        rxJavaUtils.doTaskInBackGround {
                             snapshot?.let {
-                                println()
-                                println("${it.toString()}")
-                                val session = DbSessionManager.getNewSession()
 
                                 it.children.asSequence().forEach {
                                     val newsPaperParserModeChangeRequest =
                                             it.getValue(NewsPaperParserModeChangeRequest::class.java)
-                                    val token = session.get(AuthToken::class.java, newsPaperParserModeChangeRequest.authToken)
 
-                                    val newspaper = session.get(Newspaper::class.java, newsPaperParserModeChangeRequest.targetNewspaperId)
+                                    val token = authTokenService.findToken(newsPaperParserModeChangeRequest.authToken)
+
+                                    val newspaper = newsPaperService.findById(newsPaperParserModeChangeRequest.targetNewspaperId)
+
                                     if (newsPaperParserModeChangeRequest.hasValidMode() && (newspaper != null) &&
                                             token != null && !token.hasExpired()) {
-                                        val oldMode = newspaper.getOpMode(session)
+                                        val oldMode = newsPaperService.getLatestOpModeEntryForNewspaper(newspaper)
+                                        var npOpModeEntry:NewspaperOpModeEntry?=null
                                         if (newsPaperParserModeChangeRequest.isRunningRequest()) {
-                                            val npOpModeEntry = NewspaperOpModeEntry(opMode = ParserMode.RUNNING, newspaper = newspaper)
-                                            DatabaseUtils.runDbTransection(session) { session.save(npOpModeEntry) }
-                                            LoggerUtils.logOnDb("Operation mode set to ${ParserMode.RUNNING} for Np ${newspaper.name}.", session)
+                                            npOpModeEntry = NewspaperOpModeEntry(opMode = ParserMode.RUNNING, newspaper = newspaper)
                                         } else if (newsPaperParserModeChangeRequest.isGetSyncedRequest()) {
-                                            val npOpModeEntry = NewspaperOpModeEntry(opMode = ParserMode.GET_SYNCED, newspaper = newspaper)
-                                            DatabaseUtils.runDbTransection(session) { session.save(npOpModeEntry) }
-                                            LoggerUtils.logOnDb("Operation mode set to ${ParserMode.GET_SYNCED} for Np ${newspaper.name}.", session)
+                                            npOpModeEntry = NewspaperOpModeEntry(opMode = ParserMode.GET_SYNCED, newspaper = newspaper)
                                         } else if (newsPaperParserModeChangeRequest.isParseThroughClientRequest()) {
-                                            val npOpModeEntry = NewspaperOpModeEntry(opMode = ParserMode.PARSE_THROUGH_CLIENT, newspaper = newspaper)
-                                            DatabaseUtils.runDbTransection(session) { session.save(npOpModeEntry) }
-                                            LoggerUtils.logOnDb("Operation mode set to ${ParserMode.PARSE_THROUGH_CLIENT} for Np ${newspaper.name}.", session)
+                                            npOpModeEntry = NewspaperOpModeEntry(opMode = ParserMode.PARSE_THROUGH_CLIENT, newspaper = newspaper)
                                         } else if (newsPaperParserModeChangeRequest.isOffRequest()) {
-                                            val npOpModeEntry = NewspaperOpModeEntry(opMode = ParserMode.OFF, newspaper = newspaper)
-                                            DatabaseUtils.runDbTransection(session) { session.save(npOpModeEntry) }
-                                            LoggerUtils.logOnDb("Operation mode set to ${ParserMode.OFF} for Np ${newspaper.name}.", session)
+                                            npOpModeEntry = NewspaperOpModeEntry(opMode = ParserMode.OFF, newspaper = newspaper)
                                         }
-                                        val newMode = newspaper.getOpMode(session)
-                                        if ((oldMode !=newMode) && oldMode!=ParserMode.OFF){
-                                            newspaper.pageList?.filter { it.hasData() && it.isPaginated() }?.asSequence()?.forEach {
-                                                val pageParsingHistory =
-                                                        PageParsingHistory.getEmptyParsingHistoryForPage(it)
-                                                DatabaseUtils.runDbTransection(session) { session.save(pageParsingHistory) }
+                                        npOpModeEntry?.let {
+                                            newspaperOpModeEntryService.save(it)
+                                            loggerService.logOnDb("Operation mode set to ${it.getOpMode().name} for Np ${newspaper.name}.")
+                                            if (oldMode.getOpMode()!=ParserMode.OFF &&
+                                                    oldMode.getOpMode()!= it.getOpMode()){
+                                                pageService.getAllPagesByNewspaperId(newspaper.id)
+                                                        .filter { it.isHasData() && it.isPaginated() }.asSequence().forEach {
+                                                            pageParsingHistoryService.save(PageParsingHistory.getEmptyParsingHistoryForPage(it))
+                                                        }
                                             }
                                         }
                                         token.makeExpired()
-                                        DatabaseUtils.runDbTransection(session) { session.update(token) }
+                                        authTokenService.save(token)
                                     }
                                 }
                                 deleteNewsPaperParserModeChangeRequest()
-                                session.close()
                             }
                         }
                     }
-                })*/
+                })
     }
 
     fun init() {}
 
-    /*private fun deleteTokenGenerationRequest() {
+    private fun deleteTokenGenerationRequest() {
         deleteParserAdminTaskDataForNode(TOKEN_GENERATION_REQUEST_NODE)
     }
 
@@ -132,6 +127,30 @@ object RealTimeDbAdminTaskUtils {
 
     private fun deleteParserAdminTaskDataForNode(nodeName: String) {
         RealTimeDbDataUtils.clearData(RealTimeDbRefUtils.getAdminTaskDataNode().child(nodeName))
-    }*/
+    }
 
+    companion object {
+
+        private const val TOKEN_GENERATION_REQUEST_NODE = "parser_token_generation_request"
+        private const val NP_STATUS_CHANGE_REQUEST_NODE = "np_status_change_request"
+        private const val NP_PARSER_MODE_CHANGE_REQUEST_NODE = "np_parser_mode_change_request"
+
+        @Volatile
+        private lateinit var INSTANCE: RealTimeDbAdminTaskUtils
+
+        internal fun getInstance(loggerService: LoggerService,rxJavaUtils: RxJavaUtils,authTokenService: AuthTokenService,
+                                 newsPaperService: NewsPaperService,newspaperOpModeEntryService: NewspaperOpModeEntryService,
+                                 pageParsingHistoryService: PageParsingHistoryService,pageService: PageService)
+                : RealTimeDbAdminTaskUtils {
+            if (!Companion::INSTANCE.isInitialized) {
+                synchronized(RealTimeDbAdminTaskUtils::class.java) {
+                    if (!Companion::INSTANCE.isInitialized) {
+                        INSTANCE = RealTimeDbAdminTaskUtils(loggerService, rxJavaUtils, authTokenService, newsPaperService,
+                                                                newspaperOpModeEntryService, pageParsingHistoryService, pageService)
+                    }
+                }
+            }
+            return INSTANCE
+        }
+    }
 }

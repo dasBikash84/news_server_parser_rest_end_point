@@ -33,4 +33,19 @@ class AuthTokenService @Autowired constructor(val authTokenRepository: AuthToken
             throw IllegalRequestBodyException(ex)
         }
     }
+
+    fun save(token: AuthToken) {
+        authTokenRepository.save(token)
+    }
+
+    fun findToken(authToken: String?): AuthToken? {
+        authToken?.let {
+            authTokenRepository.findById(it).apply {
+                if (isPresent){
+                    return get()
+                }
+            }
+        }
+        return null
+    }
 }

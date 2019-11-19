@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface PageDownloadRequestEntryRepository : JpaRepository<PageDownloadRequestEntry, Int>{
     fun getAllByPageAndActive(page: Page,active:Boolean):List<PageDownloadRequestEntry>
+    fun getAllByResponseDocumentId(responseDocumentId: String):List<PageDownloadRequestEntry>
 }
