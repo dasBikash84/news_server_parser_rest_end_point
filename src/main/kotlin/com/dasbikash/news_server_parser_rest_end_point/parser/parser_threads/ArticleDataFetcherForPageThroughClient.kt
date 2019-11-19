@@ -20,7 +20,7 @@ import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related
 import com.dasbikash.news_server_parser_rest_end_point.model.database.*
 import com.dasbikash.news_server_parser_rest_end_point.parser.ArticleBodyParser
 import com.dasbikash.news_server_parser_rest_end_point.parser.PreviewPageParser
-import com.dasbikash.news_server_parser_rest_end_point.parser.firebase.FireStoreDataUtils
+import com.dasbikash.news_server_parser_rest_end_point.firebase.FireStoreDataUtils
 import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
 import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaService

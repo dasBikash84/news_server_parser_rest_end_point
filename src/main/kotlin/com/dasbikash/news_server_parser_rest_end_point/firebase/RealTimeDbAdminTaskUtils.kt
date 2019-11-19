@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser_rest_end_point.parser.firebase
+package com.dasbikash.news_server_parser_rest_end_point.firebase
 
 import com.dasbikash.news_server_parser_rest_end_point.model.NewsPaperParserModeChangeRequest
 import com.dasbikash.news_server_parser_rest_end_point.model.database.NewspaperOpModeEntry
@@ -146,7 +146,7 @@ class RealTimeDbAdminTaskUtils private constructor(
                 synchronized(RealTimeDbAdminTaskUtils::class.java) {
                     if (!Companion::INSTANCE.isInitialized) {
                         INSTANCE = RealTimeDbAdminTaskUtils(loggerService, rxJavaService, authTokenService, newsPaperService,
-                                                                newspaperOpModeEntryService, pageParsingHistoryService, pageService)
+                                newspaperOpModeEntryService, pageParsingHistoryService, pageService)
                     }
                 }
             }

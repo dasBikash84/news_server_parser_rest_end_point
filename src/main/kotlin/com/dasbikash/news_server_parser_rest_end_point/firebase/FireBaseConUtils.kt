@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser_rest_end_point.parser.firebase
+package com.dasbikash.news_server_parser_rest_end_point.firebase
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.firestore.Firestore

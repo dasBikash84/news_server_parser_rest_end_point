@@ -1,4 +1,4 @@
-package com.dasbikash.news_server_parser_rest_end_point.parser.firebase
+package com.dasbikash.news_server_parser_rest_end_point.firebase
 
 object FirebaseCredentials {
 

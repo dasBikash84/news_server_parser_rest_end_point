@@ -1,4 +1,4 @@
-package com.dasbikash.news_server_parser_rest_end_point.parser
+package com.dasbikash.news_server_parser_rest_end_point.services
 
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.handler.ParserExceptionHandlerService
 import com.dasbikash.news_server_parser_rest_end_point.utils.ReportGenerationService

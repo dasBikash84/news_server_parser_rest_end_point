@@ -3,7 +3,7 @@ package com.dasbikash.news_server_parser_rest_end_point.services
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.model.database.PageDownloadRequestEntry
-import com.dasbikash.news_server_parser_rest_end_point.parser.firebase.RealTimeDbDataUtils
+import com.dasbikash.news_server_parser_rest_end_point.firebase.RealTimeDbDataUtils
 import com.dasbikash.news_server_parser_rest_end_point.repositories.PageDownloadRequestEntryRepository
 import org.springframework.stereotype.Service
 

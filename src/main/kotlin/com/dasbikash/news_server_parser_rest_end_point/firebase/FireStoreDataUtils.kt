@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-package com.dasbikash.news_server_parser_rest_end_point.parser.firebase
+package com.dasbikash.news_server_parser_rest_end_point.firebase
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.PageDownLoadRequestResponse
 import com.dasbikash.news_server_parser_rest_end_point.services.PageDownloadRequestEntryService
@@ -78,7 +78,7 @@ class FireStoreDataUtils private constructor(
             if (!Companion::INSTANCE.isInitialized) {
                 synchronized(FireStoreDataUtils::class.java) {
                     if (!Companion::INSTANCE.isInitialized) {
-                        INSTANCE = FireStoreDataUtils(loggerService,pageDownloadRequestEntryService)
+                        INSTANCE = FireStoreDataUtils(loggerService, pageDownloadRequestEntryService)
                     }
                 }
             }
