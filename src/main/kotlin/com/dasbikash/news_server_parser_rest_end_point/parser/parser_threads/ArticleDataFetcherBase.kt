@@ -13,22 +13,29 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads
 
-import com.dasbikash.news_server_parser.database.DatabaseUtils
-import com.dasbikash.news_server_parser.database.DbSessionManager
-import com.dasbikash.news_server_parser.model.*
-import com.dasbikash.news_server_parser.utils.LoggerUtils
-import com.dasbikash.news_server_parser.utils.RxJavaUtils
+//import com.dasbikash.news_server_parser.database.DatabaseUtils
+//import com.dasbikash.news_server_parser.database.DbSessionManager
+//import com.dasbikash.news_server_parser.model.*
+//import com.dasbikash.news_server_parser.utils.LoggerUtils
+//import com.dasbikash.news_server_parser.utils.RxJavaUtils
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Newspaper
+import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.model.database.ParserMode
 import com.dasbikash.news_server_parser_rest_end_point.repositories.ArticleRepository
+import com.dasbikash.news_server_parser_rest_end_point.repositories.NewspaperRepository
 import com.dasbikash.news_server_parser_rest_end_point.repositories.PageRepository
+import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
 import org.hibernate.Session
 import kotlin.random.Random
 
 abstract class ArticleDataFetcherBase constructor(
         opMode: ParserMode,
         val pageRepository: PageRepository,
-        val articleRepository: ArticleRepository
+        val articleRepository: ArticleRepository,
+        val loggerService: LoggerService,
+        val rxJavaUtils: RxJavaUtils,
+        val newspaperRepository: NewspaperRepository
         ) : Thread() {
 
     private val isSelfParser: Boolean
@@ -49,7 +56,7 @@ abstract class ArticleDataFetcherBase constructor(
     private val activeNewsPapers = mutableListOf<Newspaper>()
 
     override fun run() {
-        LoggerUtils.logOnDb("Starting ${this::class.java.simpleName}", getDatabaseSession())
+        loggerService.logOnDb("Starting ${this::class.java.simpleName}")
         sleep(MIN_START_DELAY + Random(System.currentTimeMillis()).nextLong(MIN_START_DELAY))
 
         do {
@@ -64,7 +71,7 @@ abstract class ArticleDataFetcherBase constructor(
                     }
 
             val pageListForParsing = mutableListOf<Page>()
-            val newspapers = getReleventNewsPapers(getDatabaseSession())
+            val newspapers = getReleventNewsPapers(/*getDatabaseSession()*/newspaperRepository)
             newspapers
                     .flatMap {it.pageList?.filter { it.hasData() } ?: emptyList()}
                     .forEach { pageListForParsing.add(it) }
@@ -81,15 +88,15 @@ abstract class ArticleDataFetcherBase constructor(
         } while (newspapers.isNotEmpty())
     }
 
-    private fun launchParserForPage(page:Page,session: Session):Boolean{
+    private fun launchParserForPage(page:Page/*,session: Session*/):Boolean{
         synchronized(activeNewsPapers){
             if (activeNewsPapers.size >= ACTIVE_PARSER_COUNT ||
-                    activeNewsPapers.count { it.id == page.newspaper!!.id }>0){
+                    activeNewsPapers.count { it.id == page.getNewspaper()!!.id }>0){
                 return false
             }else{
-                activeNewsPapers.add(page.newspaper!!)
-                session.detach(page)
-                RxJavaUtils.doTaskInBackGround {
+                activeNewsPapers.add(page.getNewspaper()!!)
+//                session.detach(page)
+                rxJavaUtils.doTaskInBackGround {
                     parsePage(page,{it -> removeNewsPaperForActiveList(it)})
                 }
                 return true
@@ -139,7 +146,7 @@ abstract class ArticleDataFetcherBase constructor(
                 pageParsingInterval = PageParsingInterval.recalculate(session, page)
                 DatabaseUtils.runDbTransection(session) {
                     session.save(pageParsingInterval)
-                    LoggerUtils.logOnConsole("PageParsingInterval set to: ${pageParsingInterval.parsingIntervalMS} " +
+                    loggerService.logOnConsole("PageParsingInterval set to: ${pageParsingInterval.parsingIntervalMS} " +
                             "for page ${page.name} of NP: ${page.newspaper?.name}")
                 }
             } else if (pageParsingInterval.needRecalculation(session)) {
@@ -150,18 +157,18 @@ abstract class ArticleDataFetcherBase constructor(
                 pageParsingInterval.parsingIntervalMS = newInterval.parsingIntervalMS!!
                 DatabaseUtils.runDbTransection(session) {
                     session.update(pageParsingInterval)
-                    LoggerUtils.logOnConsole("PageParsingInterval updated to: ${pageParsingInterval.parsingIntervalMS!! / 1000 / 60} mins " +
+                    loggerService.logOnConsole("PageParsingInterval updated to: ${pageParsingInterval.parsingIntervalMS!! / 1000 / 60} mins " +
                             "for page ${page.name} of NP: ${page.newspaper?.name}")
                 }
             }
 
         } catch (ex: InterruptedException) {
             ex.printStackTrace()
-            LoggerUtils.logOnDb("Exiting ${this::class.java.simpleName}", session)
+            loggerService.logOnDb("Exiting ${this::class.java.simpleName}")
             session.close()
         } catch (ex: Throwable) {
             ex.printStackTrace()
-            LoggerUtils.logError(ex, session)
+            loggerService.logError(ex)
         }
 
         removeNewsPaperForActiveList(page.newspaper!!.id)
@@ -170,8 +177,8 @@ abstract class ArticleDataFetcherBase constructor(
 
     abstract fun doParsingForPage(currentPage: Page,session: Session)
 
-    private fun getReleventNewsPapers(session: Session) =
-            DatabaseUtils.getAllNewspapers(session)
+    private fun getReleventNewsPapers(newspaperRepository: NewspaperRepository) =
+            newspaperRepository.findAll(/*session*/)
                     .filter {
                         if (isSelfParser) {
                             val opMode = it.getOpMode(session)
@@ -209,12 +216,12 @@ abstract class ArticleDataFetcherBase constructor(
     {
         if (!resetOnStart) {
             if (articleCount > 0) {
-                LoggerUtils.logOnConsole("${articleCount} new article found for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
+                loggerService.logOnConsole("${articleCount} new article found for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
             } else {
-                LoggerUtils.logOnConsole("No new article found for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
+                loggerService.logOnConsole("No new article found for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
             }
         } else {
-            LoggerUtils.logOnConsole("Parser reset on start for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
+            loggerService.logOnConsole("Parser reset on start for page: ${currentPage.name} Np: ${currentPage.newspaper?.name}")
         }
         DatabaseUtils.runDbTransection(session) {
             session.save(PageParsingHistory(page = currentPage, pageNumber = currentPageNumber,
@@ -224,7 +231,7 @@ abstract class ArticleDataFetcherBase constructor(
 
     protected fun waitForFareNetworkUsage(page: Page) {
 
-        val lastNetworkRequestTS = lastNetworkRequestTSMap.get(page.newspaper!!.id) ?: 0L
+        val lastNetworkRequestTS = lastNetworkRequestTSMap.get(page.getNewspaper()!!.id) ?: 0L
 
         val ramdomDelay = Random(System.currentTimeMillis()).nextLong(MIN_DELAY_BETWEEN_NETWORK_REQUESTS)
 
@@ -237,7 +244,7 @@ abstract class ArticleDataFetcherBase constructor(
         }
 
         sleep(delayPeriod)
-        lastNetworkRequestTSMap.put(page.newspaper!!.id, System.currentTimeMillis())
+        lastNetworkRequestTSMap.put(page.getNewspaper()!!.id, System.currentTimeMillis())
     }
 
     protected fun getLastParsedPageNumber(page: Page,session: Session): Int {
