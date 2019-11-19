@@ -6,25 +6,25 @@ import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement
-class Languages(var languages: List<Language>?=null) : NsParserRestDbEntity, OutputWrapper {
+data class Languages(var languages: List<Language>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
         return languages?.size ?: 0
     }
 }
 @XmlRootElement
-class Countries(var countries: List<Country>?=null) : NsParserRestDbEntity, OutputWrapper {
+data class Countries(var countries: List<Country>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
         return countries?.size ?: 0
     }
 }
 @XmlRootElement
-class Newspapers(var newspapers: List<Newspaper>?=null) : NsParserRestDbEntity, OutputWrapper {
+data class Newspapers(var newspapers: List<Newspaper>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
         return newspapers?.size ?: 0
     }
 }
 @XmlRootElement
-class Pages(var pages: List<Page>?=null) : NsParserRestDbEntity, OutputWrapper {
+data class Pages(var pages: List<Page>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
         return pages?.size ?: 0
     }
@@ -53,13 +53,13 @@ class Articles(articles: List<Article>?=null) : NsParserRestDbEntity, OutputWrap
     }
 }
 @XmlRootElement
-class PageGroups(var pageGroups: List<PageGroup>?=null) : NsParserRestDbEntity, OutputWrapper {
+data class PageGroups(var pageGroups: List<PageGroup>?=null) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {
         return pageGroups?.size ?: 0
     }
 }
 @XmlRootElement
-class GeneralLogs(
+data class GeneralLogs(
         var generalLogs: List<GeneralLog>?=null
 ) : NsParserRestDbEntity, OutputWrapper {
     override fun getOutPutCount(): Int {

@@ -26,6 +26,13 @@ object FileUtils {
     private val PROJECT_HOME_DIR_PATH:String
     private val PROJECT_DIR_NAME = ".ns-parser"
 
+    const val LANGUAGE_DATA_FILE_PATH = "language_data.json"
+    const val COUNTRY_DATA_FILE_PATH = "country_data.json"
+    const val NEWSPAPER_DATA_FILE_PATH = "newspaper_data.json"
+    const val PAGE_DATA_FILE_PATH = "page_data_full.json"
+    const val NEWS_CATEGORY_DATA_FILE_PATH = "news_category_data.json"
+    const val NEWS_CATEGORY_ENTRY_DATA_FILE_PATH = "news_category_entry_data.json"
+
     init {
         HOME_DIR_PATH = System.getProperty("user.home")
         PROJECT_HOME_DIR_PATH = HOME_DIR_PATH+"/"+ PROJECT_DIR_NAME+"/"
@@ -67,5 +74,29 @@ object FileUtils {
                 .append(DateUtils.getYearMonthStr(lastMonthFirstDay))
                 .append(REPORT_FILE_NAME_EXT)
                 .toString()
+    }
+
+    fun getLanguageSettingsFile():File{
+        return File(StringBuilder(PROJECT_HOME_DIR_PATH).append(LANGUAGE_DATA_FILE_PATH).toString())
+    }
+
+    fun getCountrySettingsFile():File{
+        return File(StringBuilder(PROJECT_HOME_DIR_PATH).append(COUNTRY_DATA_FILE_PATH).toString())
+    }
+
+    fun getNewspaperSettingsFile():File{
+        return File(StringBuilder(PROJECT_HOME_DIR_PATH).append(NEWSPAPER_DATA_FILE_PATH).toString())
+    }
+
+    fun getPageSettingsFile():File{
+        return File(StringBuilder(PROJECT_HOME_DIR_PATH).append(PAGE_DATA_FILE_PATH).toString())
+    }
+
+    fun getNewsCategorySettingsFile():File{
+        return File(StringBuilder(PROJECT_HOME_DIR_PATH).append(NEWS_CATEGORY_DATA_FILE_PATH).toString())
+    }
+
+    fun getNewsCategoryEntriesSettingsFile():File{
+        return File(StringBuilder(PROJECT_HOME_DIR_PATH).append(NEWS_CATEGORY_ENTRY_DATA_FILE_PATH).toString())
     }
 }

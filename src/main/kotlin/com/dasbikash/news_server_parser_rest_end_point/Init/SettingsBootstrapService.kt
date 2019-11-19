@@ -6,6 +6,7 @@ import com.dasbikash.news_server_parser_rest_end_point.model.database.Newspaper
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.FileReaderUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.FileUtils
 import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
 import org.springframework.stereotype.Service
 
@@ -126,11 +127,11 @@ open class SettingsBootstrapService(
     }
 
     companion object{
-        private val LANGUAGE_DATA_FILE_PATH = "/language_data.json"
-        private val COUNTRY_DATA_FILE_PATH = "/country_data.json"
-        private val NEWSPAPER_DATA_FILE_PATH = "/newspaper_data.json"
-        private val PAGE_DATA_FILE_PATH = "/page_data_full.json"
-        private val NEWS_CATEGORY_DATA_FILE_PATH = "/news_category_data.json"
-        private val NEWS_CATEGORY_ENTRY_DATA_FILE_PATH = "/news_category_entry_data.json"
+        const val LANGUAGE_DATA_FILE_PATH = "/${FileUtils.LANGUAGE_DATA_FILE_PATH}"
+        const val COUNTRY_DATA_FILE_PATH = "/${FileUtils.COUNTRY_DATA_FILE_PATH}"
+        const val NEWSPAPER_DATA_FILE_PATH = "/${FileUtils.NEWSPAPER_DATA_FILE_PATH}"
+        const val PAGE_DATA_FILE_PATH = "/${FileUtils.PAGE_DATA_FILE_PATH}"
+        const val NEWS_CATEGORY_DATA_FILE_PATH = "/${FileUtils.NEWS_CATEGORY_DATA_FILE_PATH}"
+        const val NEWS_CATEGORY_ENTRY_DATA_FILE_PATH = "/${FileUtils.NEWS_CATEGORY_ENTRY_DATA_FILE_PATH}"
     }
 }

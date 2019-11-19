@@ -41,7 +41,7 @@ class NewsPaperNotFoundAdvice {
         return genExceptionHandler(ex)
     }
 
-    @ExceptionHandler(Throwable::class)
+//    @ExceptionHandler(Throwable::class)
     fun genExceptionHandler(ex:Throwable):ResponseEntity<Unit>{
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
     }

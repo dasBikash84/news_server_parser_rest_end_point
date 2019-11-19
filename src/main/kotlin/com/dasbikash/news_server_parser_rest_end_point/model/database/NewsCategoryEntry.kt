@@ -68,11 +68,13 @@ data class NewsCategoryEntry(
         this.newsCategory=newsCategory
     }
 
+    @JsonIgnore
     @Transient
     @SerializedName("newsCategoryId")
     @XmlTransient
     var newsCategoryIdData:String?=null
 
+    @JsonIgnore
     @Transient
     @SerializedName("pageId")
     @XmlTransient

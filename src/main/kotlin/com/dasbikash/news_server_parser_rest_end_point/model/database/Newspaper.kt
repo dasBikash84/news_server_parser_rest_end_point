@@ -35,7 +35,7 @@ data class Newspaper(
         @JoinColumn(name="languageId")
         private var language: Language? = null,
 
-        private var active: Boolean=true,
+        private var active: Boolean=false,
 
         @OneToMany(fetch = FetchType.LAZY,mappedBy = "newspaper",targetEntity = Page::class)
         private var pageList: List<Page>? = null
@@ -98,11 +98,13 @@ data class Newspaper(
         @Transient
         @SerializedName("countryName")
         @XmlTransient
+        @JsonIgnore
         var countryNameData:String?=null
 
         @Transient
         @SerializedName("languageId")
         @XmlTransient
+        @JsonIgnore
         var languageIdData:String?=null
 
         fun setCountryData(countries: List<Country>){
