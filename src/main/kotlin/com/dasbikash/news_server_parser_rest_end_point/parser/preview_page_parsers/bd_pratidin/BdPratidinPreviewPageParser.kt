@@ -22,10 +22,6 @@ class BdPratidinPreviewPageParser : PreviewPageParser() {
 
     private val mSiteBaseAddress = "https://www.bd-pratidin.com"
 
-    /*@Override
-    protected int getMaxReRunCountOnEmptyWithRepeat() {
-        return MAX_RERUN_COUNT_FOR_EMPTY_WITH_REPEAT_FOR_REGULAR_FEATURE;
-    }*/
     override fun getSiteBaseAddress(): String {
         return mSiteBaseAddress
     }

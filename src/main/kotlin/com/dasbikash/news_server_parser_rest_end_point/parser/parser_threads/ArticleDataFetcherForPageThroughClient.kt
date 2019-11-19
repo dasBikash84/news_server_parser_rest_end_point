@@ -23,14 +23,14 @@ import com.dasbikash.news_server_parser_rest_end_point.parser.PreviewPageParser
 import com.dasbikash.news_server_parser_rest_end_point.parser.firebase.FireStoreDataUtils
 import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
-import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaService
 import java.util.*
 
 class ArticleDataFetcherForPageThroughClient(
         pageService: PageService,
         articleService: ArticleService,
         loggerService: LoggerService,
-        rxJavaUtils: RxJavaUtils,
+        rxJavaService: RxJavaService,
         newsPaperService: NewsPaperService,
         pageParsingIntervalService: PageParsingIntervalService,
         pageParsingHistoryService: PageParsingHistoryService,
@@ -38,7 +38,7 @@ class ArticleDataFetcherForPageThroughClient(
         val pageDownloadRequestEntryService: PageDownloadRequestEntryService)
     : ArticleDataFetcherBase(
         ParserMode.PARSE_THROUGH_CLIENT,pageService, articleService, loggerService,
-        rxJavaUtils, newsPaperService, pageParsingIntervalService, pageParsingHistoryService) {
+        rxJavaService, newsPaperService, pageParsingIntervalService, pageParsingHistoryService) {
 
     init {
         FireStoreDataUtils.getInstance(loggerService,pageDownloadRequestEntryService)

@@ -21,7 +21,7 @@ import com.dasbikash.news_server_parser_rest_end_point.model.database.TokenGener
 import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.EmailUtils
 import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
-import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaService
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener
 
 class RealTimeDbAdminTaskUtils private constructor(
         val loggerService: LoggerService,
-        val rxJavaUtils: RxJavaUtils,
+        val rxJavaService: RxJavaService,
         val authTokenService: AuthTokenService,
         val newsPaperService: NewsPaperService,
         val newspaperOpModeEntryService: NewspaperOpModeEntryService,
@@ -43,7 +43,7 @@ class RealTimeDbAdminTaskUtils private constructor(
                     override fun onCancelled(error: DatabaseError?) {}
 
                     override fun onDataChange(snapshot: DataSnapshot?) {
-                        rxJavaUtils.doTaskInBackGround {
+                        rxJavaService.doTaskInBackGround {
                             snapshot?.let {
                                 it.children.asSequence().forEach {
                                     val tokenGenerationRequest = it.getValue(TokenGenerationRequest::class.java)
@@ -65,7 +65,7 @@ class RealTimeDbAdminTaskUtils private constructor(
                     override fun onCancelled(error: DatabaseError?) {}
 
                     override fun onDataChange(snapshot: DataSnapshot?) {
-                        rxJavaUtils.doTaskInBackGround {
+                        rxJavaService.doTaskInBackGround {
                             snapshot?.let {
 
                                 it.children.asSequence().forEach {
@@ -138,14 +138,14 @@ class RealTimeDbAdminTaskUtils private constructor(
         @Volatile
         private lateinit var INSTANCE: RealTimeDbAdminTaskUtils
 
-        internal fun getInstance(loggerService: LoggerService,rxJavaUtils: RxJavaUtils,authTokenService: AuthTokenService,
-                                 newsPaperService: NewsPaperService,newspaperOpModeEntryService: NewspaperOpModeEntryService,
-                                 pageParsingHistoryService: PageParsingHistoryService,pageService: PageService)
+        internal fun getInstance(loggerService: LoggerService, rxJavaService: RxJavaService, authTokenService: AuthTokenService,
+                                 newsPaperService: NewsPaperService, newspaperOpModeEntryService: NewspaperOpModeEntryService,
+                                 pageParsingHistoryService: PageParsingHistoryService, pageService: PageService)
                 : RealTimeDbAdminTaskUtils {
             if (!Companion::INSTANCE.isInitialized) {
                 synchronized(RealTimeDbAdminTaskUtils::class.java) {
                     if (!Companion::INSTANCE.isInitialized) {
-                        INSTANCE = RealTimeDbAdminTaskUtils(loggerService, rxJavaUtils, authTokenService, newsPaperService,
+                        INSTANCE = RealTimeDbAdminTaskUtils(loggerService, rxJavaService, authTokenService, newsPaperService,
                                                                 newspaperOpModeEntryService, pageParsingHistoryService, pageService)
                     }
                 }

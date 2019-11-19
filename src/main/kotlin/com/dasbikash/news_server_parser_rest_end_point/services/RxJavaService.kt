@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers
 import org.springframework.stereotype.Service
 
 @Service
-open class RxJavaUtils(
+open class RxJavaService(
         private var errorLogRepository: ErrorLogRepository?=null
 ) {
 
@@ -38,9 +38,6 @@ open class RxJavaUtils(
                     override fun onNext(t: Unit) {}
 
                     override fun onError(e: Throwable) {
-//                        val session = DbSessionManager.getNewSession()
-//                        LoggerUtils.logError(e,session)
-//                        session.close()
                         errorLogRepository!!.save(ErrorLog(e))
                         e.printStackTrace()
                     }

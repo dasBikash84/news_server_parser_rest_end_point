@@ -52,8 +52,6 @@ class DawnPreviewPageParser : PreviewPageParser() {
     }
 
     companion object {
-
-        //*private static final String TAG = "StackTrace";
         private val TAG = "DawnEdLoader"
     }
 

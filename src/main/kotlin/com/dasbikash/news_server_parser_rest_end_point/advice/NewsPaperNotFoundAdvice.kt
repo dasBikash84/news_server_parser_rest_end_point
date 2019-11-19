@@ -38,11 +38,11 @@ class NewsPaperNotFoundAdvice {
 
     @ExceptionHandler(InternalError::class)
     fun internalErrorHandler(ex: InternalError): ResponseEntity<Unit> {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        return genExceptionHandler(ex)
     }
 
-    /*@ExceptionHandler(Throwable::class)
+    @ExceptionHandler(Throwable::class)
     fun genExceptionHandler(ex:Throwable):ResponseEntity<Unit>{
-        return ResponseEntity.notFound().build()
-    }*/
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+    }
 }

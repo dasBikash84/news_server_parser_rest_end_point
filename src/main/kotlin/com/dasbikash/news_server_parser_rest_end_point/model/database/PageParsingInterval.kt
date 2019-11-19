@@ -36,8 +36,7 @@ data class PageParsingInterval(
     override fun toString(): String {
         return "PageParsingInterval(id=$id, Np=${page?.getNewspaper()?.name},page=${page?.id}, pageName=${page?.name}, parsingIntervalMin=${parsingIntervalMS!!/ 60/1000}, modified=$modified)"
     }
-    fun needRecalculation(/*session: Session*/):Boolean{
-//        session.refresh(this)
+    fun needRecalculation():Boolean{
         return (System.currentTimeMillis() - this.modified!!.time)>MINIMUM_RECALCULATE_INTERVAL
     }
 
@@ -60,7 +59,6 @@ data class PageParsingInterval(
                 return getInstanceForPage(page,WEEKLY_ARTICLE_PARSING_INTERVAL.toInt())
             }
 
-//            val articlePublicationTimeList = articleService.getArticlePublicationTSForPage(page)
             val articleModificationTimeList = articleService.getArticleModificationTSForPage(page)
 
             val articlePublicationTimes = mutableListOf<ArticlePublicationTime>()

@@ -18,7 +18,7 @@ import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 
 class EmptyArticleLinkException: MediumLevelException {
 
-    constructor(article: Article) : super(causePreamble +"${article.title} with id: "/*${article.id}"*/)
+    constructor(article: Article) : super(causePreamble +"${article.title} with id: ${article.articleId}")
     constructor() : super()
 
     companion object {

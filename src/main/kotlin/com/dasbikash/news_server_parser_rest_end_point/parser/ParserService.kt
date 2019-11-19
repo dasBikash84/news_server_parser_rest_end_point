@@ -5,13 +5,12 @@ import com.dasbikash.news_server_parser_rest_end_point.utils.ReportGenerationSer
 import com.dasbikash.news_server_parser_rest_end_point.Init.SettingsBootstrapService
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.ReportGenerationException
 import com.dasbikash.news_server_parser_rest_end_point.exceptions.parser_related.generic.HighestLevelException
-import com.dasbikash.news_server_parser_rest_end_point.parser.firebase.RealTimeDbAdminTaskUtils
 import com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads.ArticleDataFetcherForPageSelf
 import com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads.ArticleDataFetcherForPageThroughClient
 import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.DateUtils
 import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
-import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Service
 import java.util.*
@@ -25,7 +24,7 @@ open class ParserService(
         private var pageService: PageService?=null,
         private var articleService: ArticleService?=null,
         private var loggerService: LoggerService?=null,
-        private var rxJavaUtils: RxJavaUtils?=null,
+        private var rxJavaService: RxJavaService?=null,
         private var pageParsingIntervalService: PageParsingIntervalService?=null,
         private var pageParsingHistoryService: PageParsingHistoryService?=null,
         private var pageDownloadRequestEntryService: PageDownloadRequestEntryService?=null,
@@ -53,7 +52,7 @@ open class ParserService(
                                     newsPaperService!!.getNpCountWithGetSyncedOpMode()) > 0){
                         articleDataFetcherForPageSelf =
                                 ArticleDataFetcherForPageSelf(
-                                        pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
+                                        pageService!!,articleService!!,loggerService!!,rxJavaService!!,
                                         newsPaperService!!,pageParsingIntervalService!!,
                                         pageParsingHistoryService!!,parserExceptionHandlerService!!)
                         articleDataFetcherForPageSelf!!.start()
@@ -65,7 +64,7 @@ open class ParserService(
                         articleDataFetcherForPageSelf = null
                     }else if (!articleDataFetcherForPageSelf!!.isAlive){
                         articleDataFetcherForPageSelf = ArticleDataFetcherForPageSelf(
-                                pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
+                                pageService!!,articleService!!,loggerService!!,rxJavaService!!,
                                 newsPaperService!!,pageParsingIntervalService!!,
                                 pageParsingHistoryService!!,parserExceptionHandlerService!!)
                         articleDataFetcherForPageSelf!!.start()
@@ -75,7 +74,7 @@ open class ParserService(
                 if (articleDataFetcherForPageThroughClient == null){
                     if ((newsPaperService!!.getNpCountWithParseThroughClientOpMode()) > 0){
                         articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient(
-                                pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
+                                pageService!!,articleService!!,loggerService!!,rxJavaService!!,
                                 newsPaperService!!,pageParsingIntervalService!!,
                                 pageParsingHistoryService!!,parserExceptionHandlerService!!,pageDownloadRequestEntryService!!)
                         articleDataFetcherForPageThroughClient!!.start()
@@ -86,7 +85,7 @@ open class ParserService(
                         articleDataFetcherForPageThroughClient = null
                     }else if (!articleDataFetcherForPageThroughClient!!.isAlive){
                         articleDataFetcherForPageThroughClient = ArticleDataFetcherForPageThroughClient(
-                                pageService!!,articleService!!,loggerService!!,rxJavaUtils!!,
+                                pageService!!,articleService!!,loggerService!!,rxJavaService!!,
                                 newsPaperService!!,pageParsingIntervalService!!,
                                 pageParsingHistoryService!!,parserExceptionHandlerService!!,pageDownloadRequestEntryService!!)
                         articleDataFetcherForPageThroughClient!!.start()
@@ -115,7 +114,7 @@ open class ParserService(
                     }
                 }
 
-//                RealTimeDbAdminTaskUtils.getInstance(loggerService!!, rxJavaUtils!!, authTokenService!!, newsPaperService!!,
+//                RealTimeDbAdminTaskUtils.getInstance(loggerService!!, rxJavaService!!, authTokenService!!, newsPaperService!!,
 //                        newspaperOpModeEntryService!!, pageParsingHistoryService!!, pageService!!).init()
                 Thread.sleep(ITERATION_DELAY)
             } catch (ex: InterruptedException) {

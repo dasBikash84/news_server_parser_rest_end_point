@@ -16,7 +16,7 @@ package com.dasbikash.news_server_parser_rest_end_point.parser.parser_threads
 import com.dasbikash.news_server_parser_rest_end_point.model.database.*
 import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
-import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaService
 import kotlin.random.Random
 
 abstract class ArticleDataFetcherBase constructor(
@@ -24,7 +24,7 @@ abstract class ArticleDataFetcherBase constructor(
         val pageService: PageService,
         val articleService: ArticleService,
         val loggerService: LoggerService,
-        val rxJavaUtils: RxJavaUtils,
+        val rxJavaService: RxJavaService,
         val newsPaperService: NewsPaperService,
         val pageParsingIntervalService: PageParsingIntervalService,
         val pageParsingHistoryService: PageParsingHistoryService
@@ -82,7 +82,7 @@ abstract class ArticleDataFetcherBase constructor(
                 return false
             }else{
                 activeNewsPapers.add(page.getNewspaper()!!)
-                rxJavaUtils.doTaskInBackGround {
+                rxJavaService.doTaskInBackGround {
                     parsePage(page,{it -> removeNewsPaperForActiveList(it)})
                 }
                 return true

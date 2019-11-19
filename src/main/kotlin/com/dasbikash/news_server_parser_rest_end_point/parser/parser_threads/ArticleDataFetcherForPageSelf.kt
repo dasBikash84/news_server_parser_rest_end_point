@@ -24,21 +24,21 @@ import com.dasbikash.news_server_parser_rest_end_point.parser.ArticleBodyParser
 import com.dasbikash.news_server_parser_rest_end_point.parser.PreviewPageParser
 import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.LoggerService
-import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaUtils
+import com.dasbikash.news_server_parser_rest_end_point.utills.RxJavaService
 import java.util.*
 
 class ArticleDataFetcherForPageSelf(
         pageService: PageService,
         articleService: ArticleService,
         loggerService: LoggerService,
-        rxJavaUtils: RxJavaUtils,
+        rxJavaService: RxJavaService,
         newsPaperService: NewsPaperService,
         pageParsingIntervalService: PageParsingIntervalService,
         pageParsingHistoryService: PageParsingHistoryService,
         val parserExceptionHandlerService: ParserExceptionHandlerService)
     : ArticleDataFetcherBase(
         ParserMode.RUNNING, pageService, articleService, loggerService,
-        rxJavaUtils, newsPaperService, pageParsingIntervalService, pageParsingHistoryService) {
+        rxJavaService, newsPaperService, pageParsingIntervalService, pageParsingHistoryService) {
 
     override fun doParsingForPage(currentPage: Page) {
 

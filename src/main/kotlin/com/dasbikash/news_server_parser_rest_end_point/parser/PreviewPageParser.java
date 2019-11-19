@@ -294,13 +294,6 @@ abstract public class PreviewPageParser {
                         mCurrentPage.getWeeklyPublicationDay() != currentTime.get(Calendar.DAY_OF_WEEK)) {
                     return null;
                 }
-                /*do {
-                    if (mCurrentPage.getWeeklyPublicationDay() == currentTime.get(Calendar.DAY_OF_WEEK)) {
-                        break;
-                    }
-                    currentTime.add(Calendar.DAY_OF_YEAR, -1);
-                } while (true);
-                currentTime.add(Calendar.DAY_OF_YEAR,-1*(mCurrentPageNumber-1)*7);*/
             } else {
                 currentTime.add(Calendar.DAY_OF_YEAR, -1 * (mCurrentPageNumber - 1));
             }
