@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface NewspaperOpModeEntryRepository : JpaRepository<NewspaperOpModeEntry, Int>{
     fun findAllByNewspaper(newspaper: Newspaper):List<NewspaperOpModeEntry>
-    fun getAllByNewspaperOrderByCreatedDesc(newspaper: Newspaper):List<NewspaperOpModeEntry>
+    fun getAllByNewspaperOrderByIdDesc(newspaper: Newspaper):List<NewspaperOpModeEntry>
 }

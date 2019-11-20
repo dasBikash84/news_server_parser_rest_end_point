@@ -1,9 +1,7 @@
 package com.dasbikash.news_server_parser_rest_end_point.Init
 
-import com.dasbikash.news_server_parser_rest_end_point.model.database.NewsCategory
-import com.dasbikash.news_server_parser_rest_end_point.model.database.NewsCategoryEntry
-import com.dasbikash.news_server_parser_rest_end_point.model.database.Newspaper
-import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
+import com.dasbikash.news_server_parser_rest_end_point.model.*
+import com.dasbikash.news_server_parser_rest_end_point.model.database.*
 import com.dasbikash.news_server_parser_rest_end_point.services.*
 import com.dasbikash.news_server_parser_rest_end_point.utills.FileReaderUtils
 import com.dasbikash.news_server_parser_rest_end_point.utills.FileUtils
@@ -18,15 +16,37 @@ open class SettingsBootstrapService(
         private var pageService: PageService?=null,
         private var newsCategoryService: NewsCategoryService?=null,
         private var newsCategoryEntryService: NewsCategoryEntryService?=null,
-        private var loggerService: LoggerService?=null
+        private var loggerService: LoggerService?=null,
+        private var newspaperOpModeEntryService: NewspaperOpModeEntryService?=null
 ) {
     fun bootstrapSettingsIfRequired(){
         loadCountries()
         loadLanguages()
         loadNewspapers()
+        loadNewspaperOpModeEntries()
         loadPages()
         loadNewsCategories()
         loadNewsCategoryEntries()
+    }
+
+    private fun loadNewspaperOpModeEntries() {
+        if (newspaperOpModeEntryService!!.getCount() == 0L) {
+            loggerService!!.logOnConsole("Loading Newspaper Op-mode Entry data.")
+
+            val newspapers = newsPaperService!!.getAllNewsPapers()
+            val newspaperOpModeEntries = mutableListOf<NewspaperOpModeEntry>()
+
+            FileReaderUtils
+                    .jsonFileToEntityList(NEWSPAPER_OPMODE_ENTRY_DATA_FILE_PATH, NewspaperOpmodeEntries::class.java)
+                    .newspaperOpModeEntries!!.asSequence().forEach {
+                it.setNewspaperData(newspapers)
+                it.setOpModeData()
+                if (it.getNewspaper()!=null){
+                    newspaperOpModeEntries.add(it)
+                }
+            }
+            newspaperOpModeEntryService!!.saveAll(newspaperOpModeEntries)
+        }
     }
 
     private fun loadNewsCategoryEntries() {
@@ -133,5 +153,6 @@ open class SettingsBootstrapService(
         const val PAGE_DATA_FILE_PATH = "/${FileUtils.PAGE_DATA_FILE_PATH}"
         const val NEWS_CATEGORY_DATA_FILE_PATH = "/${FileUtils.NEWS_CATEGORY_DATA_FILE_PATH}"
         const val NEWS_CATEGORY_ENTRY_DATA_FILE_PATH = "/${FileUtils.NEWS_CATEGORY_ENTRY_DATA_FILE_PATH}"
+        const val NEWSPAPER_OPMODE_ENTRY_DATA_FILE_PATH = "/${FileUtils.NEWSPAPER_OPMODE_ENTRY_DATA_FILE_PATH}"
     }
 }

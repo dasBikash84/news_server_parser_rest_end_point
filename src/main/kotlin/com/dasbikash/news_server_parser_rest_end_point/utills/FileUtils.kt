@@ -32,6 +32,7 @@ object FileUtils {
     const val PAGE_DATA_FILE_PATH = "page_data_full.json"
     const val NEWS_CATEGORY_DATA_FILE_PATH = "news_category_data.json"
     const val NEWS_CATEGORY_ENTRY_DATA_FILE_PATH = "news_category_entry_data.json"
+    const val NEWSPAPER_OPMODE_ENTRY_DATA_FILE_PATH = "newspaper_opmode_entry_data.json"
 
     init {
         HOME_DIR_PATH = System.getProperty("user.home")
@@ -98,5 +99,9 @@ object FileUtils {
 
     fun getNewsCategoryEntriesSettingsFile():File{
         return File(StringBuilder(PROJECT_HOME_DIR_PATH).append(NEWS_CATEGORY_ENTRY_DATA_FILE_PATH).toString())
+    }
+
+    fun getNewspaperOpModeEntriesSettingsFile():File{
+        return File(StringBuilder(PROJECT_HOME_DIR_PATH).append(NEWSPAPER_OPMODE_ENTRY_DATA_FILE_PATH).toString())
     }
 }

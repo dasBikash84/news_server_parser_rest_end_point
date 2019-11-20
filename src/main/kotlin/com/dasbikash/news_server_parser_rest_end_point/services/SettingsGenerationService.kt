@@ -16,6 +16,7 @@ open class SettingsGenerationService(
     private var loggerService: LoggerService?=null,
     private var newsCategoryService: NewsCategoryService?=null,
     private var newsCategoryEntryService: NewsCategoryEntryService?=null,
+    private var newspaperOpModeEntryService: NewspaperOpModeEntryService?=null,
     private var pageService: PageService?=null
 ) {
 
@@ -97,6 +98,19 @@ open class SettingsGenerationService(
         return newsCategoryEntries
     }
 
+    private fun generateNewspaperOpmodeEntriesSettingsFile():NewspaperOpmodeEntries{
+        val objectMapper = ObjectMapper()
+        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true)
+
+        val newspaperOpmodeEntries = NewspaperOpmodeEntries(newspaperOpModeEntryService!!.findAll())
+        loggerService!!.logOnConsole(newspaperOpmodeEntries.toString())
+        val settingsFile = FileUtils.getNewspaperOpModeEntriesSettingsFile()
+        loggerService!!.logOnConsole(settingsFile.absolutePath)
+
+        objectMapper.writeValue(settingsFile, newspaperOpmodeEntries)
+        return newspaperOpmodeEntries
+    }
+
     fun generateSettingsData(){
         generateLanguageSettingsFile()
         generateCountrySettingsFile()
@@ -104,5 +118,6 @@ open class SettingsGenerationService(
         generatePageSettingsFile()
         generateNewsCategorySettingsFile()
         generateNewsCategoryEntriesSettingsFile()
+        generateNewspaperOpmodeEntriesSettingsFile()
     }
 }

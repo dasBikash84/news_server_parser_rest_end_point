@@ -20,4 +20,8 @@ open class NewspaperOpModeEntryService (
     fun saveAll(newspaperOpModeEntries: Collection<NewspaperOpModeEntry>):List<NewspaperOpModeEntry> {
         return newspaperOpModeEntryRepository!!.saveAll(newspaperOpModeEntries)
     }
+
+    fun findAll():List<NewspaperOpModeEntry> {
+        return newspaperOpModeEntryRepository!!.findAll()
+    }
 }

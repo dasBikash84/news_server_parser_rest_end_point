@@ -75,6 +75,7 @@ data class Page(
     fun isTopLevelPage():Boolean{
         return parentPageId == TOP_LEVEL_PAGE_PARENT_ID
     }
+    fun setTopLevelPage(value:Boolean){}
 
     @Transient
     @JsonProperty
@@ -89,6 +90,7 @@ data class Page(
     fun isHasData():Boolean{
         return linkFormat !=null
     }
+    fun setHasData(value:Boolean){}
 
     @JsonIgnore
     @XmlTransient
@@ -124,7 +126,9 @@ data class Page(
         return "Page(id='$id', newspaper=${newspaper?.name}, parentPageId=$parentPageId, name=$name, active=$active,hasChild = $hasChild)"
     }
 
+    @Transient
     fun isPaginated(): Boolean {
         return linkFormat!=null
     }
+    fun setPaginated(value:Boolean){}
 }

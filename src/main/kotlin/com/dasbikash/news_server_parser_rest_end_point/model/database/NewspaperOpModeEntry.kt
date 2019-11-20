@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlTransient
 data class NewspaperOpModeEntry(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @JsonIgnore
+        @XmlTransient
         var id: Int? = null,
         @Column(columnDefinition = "enum('OFF','RUNNING','GET_SYNCED','PARSE_THROUGH_CLIENT')")
         @Enumerated(EnumType.STRING)
@@ -37,20 +39,56 @@ data class NewspaperOpModeEntry(
         @JoinColumn(name = "newsPaperId")
         private var newspaper: Newspaper? = null,
 //        @UpdateTimestamp
+        @JsonIgnore
+        @XmlTransient
         @Column(name = "created", nullable = false, updatable=false,insertable = false)
         var created: Date? = null
 ):NsParserRestDbEntity {
+
+    @Transient
+    private var newsPaperId:String?=null
+
     @JsonProperty
     @XmlElement
     @Transient
-    fun getNewsPapername(): String? {
-        return newspaper?.name
+    fun getNewsPaperId(): String? {
+        return newspaper?.id
     }
+
+    fun setNewsPaperId(name:String) {
+        newsPaperId = name
+    }
+
+    fun setNewspaperData(newspapers: List<Newspaper>) {
+        newspapers.asSequence().forEach {
+            if (it.id == newsPaperId){
+                newspaper = it
+                return@forEach
+            }
+        }
+    }
+
+    @Transient
+    private var opModeName:String?=null
+
     @JsonProperty
     @XmlElement
     @Transient
-    fun getChangedOpMode(): String? {
+    fun getOpModeName(): String? {
         return opMode.name
+    }
+
+    fun setOpModeName(name:String) {
+        opModeName = name
+    }
+
+    fun setOpModeData() {
+        ParserMode.values().asSequence().forEach {
+            if (it.name == opModeName){
+                opMode = it
+                return@forEach
+            }
+        }
     }
 
     @JsonIgnore

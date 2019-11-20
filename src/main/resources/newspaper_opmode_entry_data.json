@@ -1,0 +1,62 @@
+{
+  "newspaperOpModeEntries" : [ {
+    "newsPaperId" : "NP_ID_1",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_10",
+    "opModeName" : "RUNNING"
+  }, {
+    "newsPaperId" : "NP_ID_11",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_12",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_13",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_14",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_15",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_16",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_17",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_18",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_2",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_3",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_4",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_5",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_6",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_7",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_8",
+    "opModeName" : "OFF"
+  }, {
+    "newsPaperId" : "NP_ID_9",
+    "opModeName" : "OFF"
+  } , {
+    "newsPaperId" : "NP_ID_6",
+    "opModeName" : "RUNNING"
+  }
+  ],
+  "outPutCount" : 18
+}

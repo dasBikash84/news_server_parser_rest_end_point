@@ -63,7 +63,6 @@ abstract class ArticleDataFetcherBase constructor(
             newspapers
                     .flatMap {pageService.getAllPagesByNewspaperId(it.id).filter { it.isHasData() }}
                     .forEach {
-                        loggerService.logOnConsole(it.toString())
                         pageListForParsing.add(it)
                     }
             while (pageListForParsing.isNotEmpty()){

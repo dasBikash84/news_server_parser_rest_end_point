@@ -24,14 +24,6 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
     fun getAllNewsPapers(): List<Newspaper> {
         return newspaperRepository!!.findAll().map {
             it.active = getLatestOpModeEntryForNewspaper(it).getOpMode() != ParserMode.OFF
-//            val allOpModeEntries = newspaperOpModeEntryRepository!!.findAllByNewspaper(it)
-//            if (allOpModeEntries.isEmpty()){
-//                it.active =false
-//            }else {
-//                allOpModeEntries.sortedBy { it.created }.last().apply {
-//                    it.active = ((this.getOpMode() != ParserMode.OFF) && (this.getOpMode() != ParserMode.GET_SYNCED) )
-//                }
-//            }
             it
         }
     }
@@ -112,11 +104,10 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
                 .filter {
                     val opModeList = newspaperOpModeEntryRepository!!
                             .findAllByNewspaper(it)
-                            .sortedBy { it.created }
+                            .sortedBy { it.id }
                     if (opModeList.isNotEmpty()) {
-                        return@filter opModeList.last().getOpMode() == parserMode
-                    }else{
-                        newspaperOpModeEntryRepository!!.save(NewspaperOpModeEntry(newspaper=it))
+                        val latestParserMode = opModeList.last().getOpMode()
+                        return@filter latestParserMode == parserMode
                     }
                     false
                 }
@@ -147,12 +138,12 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
 
     fun getLatestOpModeEntryForNewspaper(newspaper: Newspaper):NewspaperOpModeEntry{
         newspaperOpModeEntryRepository!!
-                .getAllByNewspaperOrderByCreatedDesc(newspaper).apply {
+                .getAllByNewspaperOrderByIdDesc(newspaper).apply {
                     if (isNotEmpty()){
                         return get(0)
                     }
                 }
-        return newspaperOpModeEntryRepository!!.save(NewspaperOpModeEntry(newspaper=newspaper))
+        return NewspaperOpModeEntry(newspaper=newspaper)
     }
 
     fun findById(targetNewspaperId: String?): Newspaper? {
