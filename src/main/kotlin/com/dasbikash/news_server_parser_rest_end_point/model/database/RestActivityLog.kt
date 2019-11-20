@@ -2,13 +2,15 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.dasbikash.news_server_parser_rest_end_point.model.RequestDetailsBean
 import org.aspectj.lang.JoinPoint
-import javax.persistence.*
+import org.springframework.data.annotation.Id
 
-@Entity
-@Table(name = DatabaseTableNames.REST_ACTIVITY_LOG_TABLE_NAME)
+//import javax.persistence.*
+
+//@Entity
+//@Table(name = DatabaseTableNames.REST_ACTIVITY_LOG_TABLE_NAME)
 data class RestActivityLog(
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+//        @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Int? = null,
         val requestURL: String,
         val requestMethod: String,

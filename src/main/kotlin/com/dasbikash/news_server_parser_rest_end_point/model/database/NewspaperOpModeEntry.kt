@@ -15,33 +15,34 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.hibernate.annotations.UpdateTimestamp
+//import org.hibernate.annotations.UpdateTimestamp
+import org.springframework.data.annotation.*
 import java.util.*
-import javax.persistence.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlTransient
 
-@Entity
-@Table(name = DatabaseTableNames.NEWS_PAPER_OP_MODE_ENTRY_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.NEWS_PAPER_OP_MODE_ENTRY_NAME)
 @XmlRootElement
 data class NewspaperOpModeEntry(
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+//        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @JsonIgnore
         @XmlTransient
         var id: Int? = null,
-        @Column(columnDefinition = "enum('OFF','RUNNING','GET_SYNCED','PARSE_THROUGH_CLIENT')")
-        @Enumerated(EnumType.STRING)
+//        @Column(columnDefinition = "enum('OFF','RUNNING','GET_SYNCED','PARSE_THROUGH_CLIENT')")
+//        @Enumerated(EnumType.STRING)
         private var opMode: ParserMode = ParserMode.OFF,
 
-        @ManyToOne(targetEntity = Newspaper::class, fetch = FetchType.EAGER)
-        @JoinColumn(name = "newsPaperId")
+//        @ManyToOne(targetEntity = Newspaper::class, fetch = FetchType.EAGER)
+//        @JoinColumn(name = "newsPaperId")
         private var newspaper: Newspaper? = null,
 //        @UpdateTimestamp
         @JsonIgnore
         @XmlTransient
-        @Column(name = "created", nullable = false, updatable=false,insertable = false)
+//        @Column(name = "created", nullable = false, updatable=false,insertable = false)
         var created: Date? = null
 ):NsParserRestDbEntity {
 

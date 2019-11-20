@@ -5,6 +5,8 @@ import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Page
 import com.dasbikash.news_server_parser_rest_end_point.repositories.ArticleRepository
 import com.dasbikash.news_server_parser_rest_end_point.repositories.PageRepository
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -14,19 +16,22 @@ open class ArticleService
              open var articleRepository: ArticleRepository) {
 
     fun getOldestArticles(pageSize: Int): List<Article> {
-        return filterInvalidArticles(articleRepository.findOldest(pageSize))
+        val pageable = PageRequest.of(0,pageSize, Sort.by(Article.MODIFIED_PROPERTY_NAME).ascending())
+        return filterInvalidArticles(articleRepository.findAll(pageable).content)
     }
 
     fun getLatestArticles(pageSize: Int): List<Article> {
-        return filterInvalidArticles(articleRepository.findLatest(pageSize))
+        val pageable = PageRequest.of(0,pageSize, Sort.by(Article.MODIFIED_PROPERTY_NAME).descending())
+        return filterInvalidArticles(articleRepository.findAll(pageable).content)
     }
 
     fun getArticlesAfterGivenId(articleId: String, pageSize: Int): List<Article> {
-        val currentArticle = articleRepository.findByArticleId(articleId)
-        if (currentArticle == null){
+        val currentArticleOptional = articleRepository.findById(articleId)
+        if (!currentArticleOptional.isPresent){
             throw DataNotFoundException()
         }
-        val articles = articleRepository.getArticlesAfterGivenId(currentArticle.getSerial()!!,pageSize)
+        val currentArticle = currentArticleOptional.get()
+        val articles = articleRepository.getArticlesAfterGivenId(currentArticleOptional.getSerial()!!,pageSize)
         return filterInvalidArticles(articles)
     }
 

@@ -2,12 +2,19 @@ package com.dasbikash.news_server_parser_rest_end_point.repositories
 
 import com.dasbikash.news_server_parser_rest_end_point.model.database.Article
 import com.dasbikash.news_server_parser_rest_end_point.model.database.DatabaseTableNames
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
+import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.mongodb.repository.Query
+//import org.springframework.data.jpa.repository.JpaRepository
+//import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.util.*
+import java.util.stream.Stream
 
-interface ArticleRepository : JpaRepository<Article, String>{
+//interface ArticleRepository : JpaRepository<Article, String>{
+//interface ArticleRepository : JpaRepository<Article, String>{
+interface ArticleRepository : MongoRepository<Article, String>{
+
+    fun getByOrderByModifiedAsc():Stream<Article>
 
     @Query(value = "SELECT * FROM ${DatabaseTableNames.ARTICLE_TABLE_NAME} where articleText is not null order by serial ASC limit :articleCount",
             nativeQuery = true)

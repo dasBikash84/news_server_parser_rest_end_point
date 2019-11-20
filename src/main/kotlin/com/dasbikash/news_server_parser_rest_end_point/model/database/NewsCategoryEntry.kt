@@ -14,27 +14,28 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import javax.persistence.*
+import org.springframework.data.annotation.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlTransient
 
-@Entity
-@Table(name = DatabaseTableNames.NEWS_CATEGORY_ENTRY_ENTRY_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.NEWS_CATEGORY_ENTRY_ENTRY_NAME)
 @XmlRootElement
 data class NewsCategoryEntry(
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+//        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @JsonIgnore
         @XmlTransient
         var id: Int? = null,
 
-        @ManyToOne(targetEntity = NewsCategory::class, fetch = FetchType.EAGER)
-        @JoinColumn(name = "newsCategoryId")
+//        @ManyToOne(targetEntity = NewsCategory::class, fetch = FetchType.EAGER)
+//        @JoinColumn(name = "newsCategoryId")
         private var newsCategory: NewsCategory? = null,
 
-        @ManyToOne(targetEntity = Page::class, fetch = FetchType.EAGER)
-        @JoinColumn(name = "pageId")
+//        @ManyToOne(targetEntity = Page::class, fetch = FetchType.EAGER)
+//        @JoinColumn(name = "pageId")
         private var page: Page? = null
 ) : NsParserRestDbEntity {
     @Transient

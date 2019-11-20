@@ -13,13 +13,14 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+//import javax.persistence.Entity
+//import javax.persistence.Id
+//import javax.persistence.Table
+import org.springframework.data.annotation.Id
 import javax.xml.bind.annotation.XmlRootElement
 
-@Entity
-@Table(name = DatabaseTableNames.NEWS_CATERORIES_ENTRY_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.NEWS_CATERORIES_ENTRY_NAME)
 @XmlRootElement
 data class NewsCategory(
         @Id var id: String="",

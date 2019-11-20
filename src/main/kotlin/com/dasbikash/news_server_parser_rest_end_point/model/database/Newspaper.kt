@@ -14,29 +14,31 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import javax.persistence.*
+import org.springframework.data.annotation.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlTransient
 
-@Entity
-@Table(name = DatabaseTableNames.NEWSPAPER_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.NEWSPAPER_TABLE_NAME)
 @XmlRootElement
 data class Newspaper(
         @Id var id: String="",
         var name: String?=null,
 
-        @ManyToOne(targetEntity = Country::class,fetch = FetchType.EAGER)
-        @JoinColumn(name="countryName")
+//        @ManyToOne(targetEntity = Country::class,fetch = FetchType.EAGER)
+//        @JoinColumn(name="countryName")
         private var country: Country? = null,
 
-        @ManyToOne(targetEntity = Language::class,fetch = FetchType.EAGER)
-        @JoinColumn(name="languageId")
+//        @ManyToOne(targetEntity = Language::class,fetch = FetchType.EAGER)
+//        @JoinColumn(name="languageId")
         private var language: Language? = null,
 
         var active: Boolean=false,
 
-        @OneToMany(fetch = FetchType.LAZY,mappedBy = "newspaper",targetEntity = Page::class)
+//        @OneToMany(fetch = FetchType.LAZY,mappedBy = "newspaper",targetEntity = Page::class)
+        @Transient
         private var pageList: List<Page>? = null
 
 

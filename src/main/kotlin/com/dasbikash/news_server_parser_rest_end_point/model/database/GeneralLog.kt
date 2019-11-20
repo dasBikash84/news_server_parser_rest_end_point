@@ -13,18 +13,19 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
+import org.springframework.data.annotation.*
 import java.util.*
-import javax.persistence.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlRootElement
 
-@Entity
-@Table(name = DatabaseTableNames.GENERAL_LOG_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.GENERAL_LOG_TABLE_NAME)
 @XmlRootElement
 class GeneralLog(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
-    @Column(columnDefinition = "text")
+//    @Column(columnDefinition = "text")
     var logMessage: String? = null,
     var created: Date?=null
 ) :NsParserRestDbEntity

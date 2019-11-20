@@ -13,13 +13,13 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model
 
-import javax.persistence.Column
-import javax.persistence.Embeddable
+//import javax.persistence.Column
+//import javax.persistence.Embeddable
 
-@Embeddable
+//@Embeddable
 data class ArticleImage(
-        @Column(columnDefinition = "text")
+//        @Column(columnDefinition = "text")
         var link:String? = null,
-        @Column(columnDefinition = "text")
+//        @Column(columnDefinition = "text")
         var caption:String? = null
 )

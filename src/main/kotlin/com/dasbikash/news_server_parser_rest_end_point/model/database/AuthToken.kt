@@ -1,14 +1,15 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.google.firebase.database.Exclude
+import org.springframework.data.annotation.*
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
-import javax.persistence.Transient
+//import javax.persistence.Entity
+//import javax.persistence.Id
+//import javax.persistence.Table
+//import javax.persistence.Transient
 
-@Entity
-@Table(name = DatabaseTableNames.AUTH_TOKEN_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.AUTH_TOKEN_TABLE_NAME)
 class AuthToken(){
     @Id
     val token:String = UUID.randomUUID().toString()

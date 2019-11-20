@@ -15,32 +15,33 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import javax.persistence.*
+import org.springframework.data.annotation.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlTransient
 
-@Entity
-@Table(name = DatabaseTableNames.PAGE_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.PAGE_TABLE_NAME)
 @XmlRootElement
 data class Page(
         @Id
         var id: String="",
 
-        @ManyToOne(targetEntity = Newspaper::class,fetch = FetchType.EAGER)
-        @JoinColumn(name="newsPaperId")
+//        @ManyToOne(targetEntity = Newspaper::class,fetch = FetchType.EAGER)
+//        @JoinColumn(name="newsPaperId")
         private var newspaper: Newspaper?=null,
 
         var parentPageId: String?=null,
         var name: String?=null,
 
-        @Column(name="linkFormat", columnDefinition="text")
+//        @Column(name="linkFormat", columnDefinition="text")
         var linkFormat:String? = null,
 
         var active: Boolean = true,
         var weekly: Boolean = false,
 
-        @OneToMany(fetch = FetchType.LAZY,mappedBy = "page",targetEntity = Article::class)
+//        @OneToMany(fetch = FetchType.LAZY,mappedBy = "page",targetEntity = Article::class)
         private var articleList: List<Article>?=null,
 
         @Transient
@@ -58,7 +59,7 @@ data class Page(
 
         @JsonIgnore
         @XmlTransient
-        @OneToMany(fetch = FetchType.LAZY,mappedBy = "page",targetEntity = PageParsingHistory::class)
+//        @OneToMany(fetch = FetchType.LAZY,mappedBy = "page",targetEntity = PageParsingHistory::class)
         var pageParsingHistory: List<PageParsingHistory>?=null
 
 ): NsParserRestDbEntity {

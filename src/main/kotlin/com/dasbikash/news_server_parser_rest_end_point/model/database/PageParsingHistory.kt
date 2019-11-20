@@ -15,25 +15,26 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.springframework.data.annotation.*
 import java.util.*
-import javax.persistence.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlTransient
 
-@Entity
-@Table(name = DatabaseTableNames.PAGE_PARSING_HISTORY_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.PAGE_PARSING_HISTORY_TABLE_NAME)
 @XmlRootElement
 data class PageParsingHistory(
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+//        @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Int? = null,
-        @ManyToOne(targetEntity = Page::class, fetch = FetchType.LAZY)
-        @JoinColumn(name = "pageId")
+//        @ManyToOne(targetEntity = Page::class, fetch = FetchType.LAZY)
+//        @JoinColumn(name = "pageId")
         private var page: Page? = null,
         var pageNumber: Int = 0,
         var articleCount: Int = 0,
-        @Column(columnDefinition = "text")
+//        @Column(columnDefinition = "text")
         var parsingLogMessage: String = "",
         var created: Date? = Date()
 ):NsParserRestDbEntity {

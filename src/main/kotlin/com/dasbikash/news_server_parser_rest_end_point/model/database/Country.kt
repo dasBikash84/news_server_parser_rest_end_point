@@ -14,18 +14,19 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import javax.persistence.*
+import org.springframework.data.annotation.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlTransient
 
-@Entity
-@Table(name = DatabaseTableNames.COUNTRY_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.COUNTRY_TABLE_NAME)
 @XmlRootElement
 data class Country (
         @Id var name: String="",
         var countryCode: String?=null,
         var timeZone: String?=null,
-        @OneToMany(targetEntity = Newspaper::class,mappedBy = "country",fetch = FetchType.LAZY)
+//        @OneToMany(targetEntity = Newspaper::class,mappedBy = "country",fetch = FetchType.LAZY)
         private var newsPapers:List<Newspaper>? = null
 ): NsParserRestDbEntity {
         @JsonIgnore

@@ -14,23 +14,24 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.dasbikash.news_server_parser_rest_end_point.services.ArticleService
+import org.springframework.data.annotation.Id
 import java.util.*
-import javax.persistence.*
+//import javax.persistence.*
 
 
-@Entity
-@Table(name = DatabaseTableNames.PAGE_PARSING_INTERVAL_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.PAGE_PARSING_INTERVAL_TABLE_NAME)
 data class PageParsingInterval(
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+//        @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Int? = null,
 
-        @ManyToOne(targetEntity = Page::class, fetch = FetchType.EAGER)
-        @JoinColumn(name = "pageId")
+//        @ManyToOne(targetEntity = Page::class, fetch = FetchType.EAGER)
+//        @JoinColumn(name = "pageId")
         var page: Page? = null,
         var parsingIntervalMS: Int? = null,
-        @Temporal(TemporalType.TIMESTAMP)
-        @Column(name = "modified", nullable = false, updatable=false,insertable = false)
+//        @Temporal(TemporalType.TIMESTAMP)
+//        @Column(name = "modified", nullable = false, updatable=false,insertable = false)
         var modified: Date? = null
 ) {
     override fun toString(): String {

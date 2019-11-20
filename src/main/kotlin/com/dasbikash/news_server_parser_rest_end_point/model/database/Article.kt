@@ -17,50 +17,52 @@ import com.dasbikash.news_server_parser_rest_end_point.model.ArticleImage
 import com.dasbikash.news_server_parser_rest_end_point.utills.HashUtils
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.springframework.data.annotation.*
 import java.util.*
-import javax.persistence.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlTransient
 import kotlin.collections.ArrayList
 
-@Entity
-@Table(name = DatabaseTableNames.ARTICLE_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.ARTICLE_TABLE_NAME)
 @XmlRootElement
 data class Article(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private var serial:Int?=null,
+//        @GeneratedValue(strategy = GenerationType.IDENTITY)
+//        private var serial:Int?=null,
 
-        @Column(name = "id")
+//        @Column(name = "id")
+        @Id
         @JsonProperty(value = "id")
         var articleId: String? = null,
 
-        @ManyToOne(targetEntity = Page::class, fetch = FetchType.EAGER)
-        @JoinColumn(name = "pageId")
+//        @ManyToOne(targetEntity = Page::class, fetch = FetchType.EAGER)
+//        @JoinColumn(name = "pageId")
         private var page: Page? = null,
 
         var title: String? = null,
         private var modificationTS: Date? = null,
         private var publicationTS: Date? = null,
 
-        @Column(columnDefinition = "text")
+//        @Column(columnDefinition = "text")
         var articleText: String? = null,
 
-        @ElementCollection(targetClass = ArticleImage::class,fetch = FetchType.EAGER)
-        @CollectionTable(name = "image_links", joinColumns = [JoinColumn(name = "articleId")])
-        @Column(name = "imageLink", columnDefinition = "text")
+//        @ElementCollection(targetClass = ArticleImage::class,fetch = FetchType.EAGER)
+//        @CollectionTable(name = "image_links", joinColumns = [JoinColumn(name = "articleId")])
+//        @Column(name = "imageLink", columnDefinition = "text")
         var imageLinkList: List<ArticleImage> = ArrayList(),
 
-        @Column(columnDefinition = "text")
+//        @Column(columnDefinition = "text")
         var previewImageLink: String? = null,
 
-        @Column(columnDefinition = "text")
+//        @Column(columnDefinition = "text")
         var articleLink: String? = null,
 
-        @Temporal(TemporalType.TIMESTAMP)
-        @Column(name = "modified", nullable = false, updatable = false,insertable = false)
-        var modified: Date? = null
+//        @Temporal(TemporalType.TIMESTAMP)
+//        @Column(name = "modified", nullable = false, updatable = false,insertable = false)
+//        var modified: Date? = null
+        var modified: Long = System.nanoTime()
 ) : NsParserRestDbEntity {
 
     @JsonIgnore
@@ -81,14 +83,14 @@ data class Article(
         this.modificationTS = modificationTS
     }
 
-    @JsonIgnore
-    @XmlTransient
-    fun getSerial():Int?{
-        return serial
-    }
-    fun setSerial(serial: Int?){
-        this.serial=serial
-    }
+//    @JsonIgnore
+//    @XmlTransient
+//    fun getSerial():Int?{
+//        return serial
+//    }
+//    fun setSerial(serial: Int?){
+//        this.serial=serial
+//    }
 
     @JsonIgnore
     @XmlTransient
@@ -140,6 +142,8 @@ data class Article(
         this.modificationTS = calander.time
     }
     companion object{
+        const val MODIFIED_PROPERTY_NAME = "modified"
+
         fun getArticleIdFromArticleLink(articleLink: String,page: Page):String{
             val articleIdBuilder = StringBuilder(HashUtils.hash(articleLink)).append("_")
 

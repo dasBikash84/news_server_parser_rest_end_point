@@ -15,25 +15,26 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import javax.persistence.*
+import org.springframework.data.annotation.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlTransient
 
-@Entity
-@Table(name = DatabaseTableNames.PAGE_GROUP_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.PAGE_GROUP_TABLE_NAME)
 data class PageGroup(
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+//        @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Int?=null,
         var name: String?=null
 ): NsParserRestDbEntity
 {
-    @OneToMany(fetch = FetchType.EAGER,targetEntity = Page::class)
-    @JoinTable(
-            name="page_group_entries",
-            joinColumns = arrayOf(JoinColumn(name = "pageGroupId")),
-            inverseJoinColumns = arrayOf(JoinColumn(name = "pageId"))
-    )
+//    @OneToMany(fetch = FetchType.EAGER,targetEntity = Page::class)
+//    @JoinTable(
+//            name="page_group_entries",
+//            joinColumns = arrayOf(JoinColumn(name = "pageGroupId")),
+//            inverseJoinColumns = arrayOf(JoinColumn(name = "pageId"))
+//    )
     private var pageList: List<Page>?=null
 
     @JsonIgnore

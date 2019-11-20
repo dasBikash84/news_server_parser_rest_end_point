@@ -13,25 +13,26 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
+import org.springframework.data.annotation.*
 import java.util.*
-import javax.persistence.*
+//import javax.persistence.*
 import javax.xml.bind.annotation.XmlRootElement
 
-@Entity
-@Table(name = DatabaseTableNames.ERROR_LOG_TABLE_NAME)
+//@Entity
+//@Table(name = DatabaseTableNames.ERROR_LOG_TABLE_NAME)
 @XmlRootElement
 class ErrorLog(exception: Throwable?=null): NsParserRestDbEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int?=null
     var exceptionClassFullName: String? = null
-    @Enumerated(value = EnumType.STRING)
+//    @Enumerated(value = EnumType.STRING)
     var exceptionClassSimpleName: ExceptionClassNames? = null
-    @Column(columnDefinition = "text")
+//    @Column(columnDefinition = "text")
     var exceptionCause: String? = null
-    @Column(columnDefinition = "text")
+//    @Column(columnDefinition = "text")
     var exceptionMessage: String? = null
-    @Column(columnDefinition = "text")
+//    @Column(columnDefinition = "text")
     var stackTrace: String? = null
     var created: Date? = null
 
