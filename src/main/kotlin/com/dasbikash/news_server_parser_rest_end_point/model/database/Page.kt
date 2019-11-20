@@ -15,7 +15,6 @@ package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.google.gson.annotations.SerializedName
 import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -36,10 +35,10 @@ data class Page(
         var name: String?=null,
 
         @Column(name="linkFormat", columnDefinition="text")
-        private var linkFormat:String? = null,
+        var linkFormat:String? = null,
 
-        private var active: Boolean = true,
-        var weekly: Boolean = true,
+        var active: Boolean = true,
+        var weekly: Boolean = false,
 
         @OneToMany(fetch = FetchType.LAZY,mappedBy = "page",targetEntity = Article::class)
         private var articleList: List<Article>?=null,
@@ -47,14 +46,14 @@ data class Page(
         @Transient
         var hasChild:Boolean = false,
 
-        @JsonIgnore
-        @XmlTransient
+//        @JsonIgnore
+//        @XmlTransient
         var linkVariablePartFormat:String? = DEFAULT_LINK_TRAILING_FORMAT,
-        @JsonIgnore
-        @XmlTransient
+//        @JsonIgnore
+//        @XmlTransient
         var firstEditionDateString:String? = null,
-        @JsonIgnore
-        @XmlTransient
+//        @JsonIgnore
+//        @XmlTransient
         var weeklyPublicationDay:Int? = 0,
 
         @JsonIgnore
@@ -109,34 +108,12 @@ data class Page(
         this.articleList=articleList
     }
 
-//    @JsonIgnore
-//    @XmlTransient
-    fun getActive(): Boolean {
-        return active
-    }
-
-    fun setActive(active: Boolean) {
-        this.active = active
-    }
-
-    @JsonIgnore
-    @XmlTransient
-    fun getLinkFormat(): String? {
-        return linkFormat
-    }
-
-    fun setLinkFormat(linkFormat: String?) {
-        this.linkFormat = linkFormat
-    }
-
     @Transient
-    @SerializedName("newsPaperId")
-    @XmlTransient
-    var newsPaperIdData:String?=null
+    private var newsPaperId:String?=null
 
     fun setNewspaper(newspapers: List<Newspaper>) {
         newspapers.asSequence().forEach {
-            if (it.id == newsPaperIdData){
+            if (it.id == newsPaperId){
                 newspaper = it
                 return@forEach
             }

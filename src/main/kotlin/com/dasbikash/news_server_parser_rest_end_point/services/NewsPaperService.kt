@@ -23,20 +23,21 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
 
     fun getAllNewsPapers(): List<Newspaper> {
         return newspaperRepository!!.findAll().map {
-            val allOpModeEntries = newspaperOpModeEntryRepository!!.findAllByNewspaper(it)
-            if (allOpModeEntries.isEmpty()){
-                it.setActive(false)
-            }else {
-                allOpModeEntries.sortedBy { it.created }.last().apply {
-                    it.setActive((this.getOpMode() != ParserMode.OFF) && (this.getOpMode() != ParserMode.GET_SYNCED) )
-                }
-            }
+            it.active = getLatestOpModeEntryForNewspaper(it).getOpMode() != ParserMode.OFF
+//            val allOpModeEntries = newspaperOpModeEntryRepository!!.findAllByNewspaper(it)
+//            if (allOpModeEntries.isEmpty()){
+//                it.active =false
+//            }else {
+//                allOpModeEntries.sortedBy { it.created }.last().apply {
+//                    it.active = ((this.getOpMode() != ParserMode.OFF) && (this.getOpMode() != ParserMode.GET_SYNCED) )
+//                }
+//            }
             it
         }
     }
 
     fun getAllActiveNewsPapers(): List<Newspaper> {
-        return getAllNewsPapers().filter { it.getActive() }
+        return getAllNewsPapers().filter { it.active }
     }
 
     fun requestNewspaperStatusChange(newsPaperStatusChangeRequest: NewsPaperStatusChangeRequest?)
@@ -58,8 +59,8 @@ constructor(private var newspaperRepository: NewspaperRepository?=null,
         }
         val targetNewsPaper = targetNewsPaperOptional.get()
         when (newsPaperStatusChangeRequest.targetStatus) {
-            OffOnStatus.ON -> targetNewsPaper.setActive(true)
-            OffOnStatus.OFF -> targetNewsPaper.setActive(false)
+            OffOnStatus.ON -> targetNewsPaper.active=true
+            OffOnStatus.OFF -> targetNewsPaper.active=false
         }
         newspaperRepository!!.save(targetNewsPaper)
 

@@ -52,9 +52,9 @@ abstract class ArticleDataFetcherBase constructor(
 
         do {
             pageService.getAllPages()
-                    .filter { it.isTopLevelPage() && !it.getActive() }
+                    .filter { it.isTopLevelPage() && !it.active }
                     .forEach {
-                        it.setActive(true)
+                        it.active = true
                         pageService.save(it)
                     }
 
@@ -62,8 +62,10 @@ abstract class ArticleDataFetcherBase constructor(
             val newspapers = getReleventNewsPapers()
             newspapers
                     .flatMap {pageService.getAllPagesByNewspaperId(it.id).filter { it.isHasData() }}
-                    .forEach { pageListForParsing.add(it) }
-
+                    .forEach {
+                        loggerService.logOnConsole(it.toString())
+                        pageListForParsing.add(it)
+                    }
             while (pageListForParsing.isNotEmpty()){
                 val currentPage = pageListForParsing.shuffled().get(0)
                 if(!launchParserForPage(currentPage)){
@@ -113,10 +115,10 @@ abstract class ArticleDataFetcherBase constructor(
             doParsingForPage(page)
 
             //Mark pages with articles or if top-level, as active
-            if (!page.getActive()) {
+            if (!page.active) {
                 if (page.isTopLevelPage() ||
                         articleService.getArticleCountForPage(page) > 0) {
-                    page.setActive(true)
+                    page.active=true
                     pageService.save(page)
                 }
             }

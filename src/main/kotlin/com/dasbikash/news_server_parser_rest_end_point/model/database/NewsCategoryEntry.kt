@@ -13,9 +13,7 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
-import com.dasbikash.news_server_parser_rest_end_point.Init.Pages
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.google.gson.annotations.SerializedName
 import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -27,6 +25,8 @@ import javax.xml.bind.annotation.XmlTransient
 data class NewsCategoryEntry(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @JsonIgnore
+        @XmlTransient
         var id: Int? = null,
 
         @ManyToOne(targetEntity = NewsCategory::class, fetch = FetchType.EAGER)
@@ -68,21 +68,15 @@ data class NewsCategoryEntry(
         this.newsCategory=newsCategory
     }
 
-    @JsonIgnore
     @Transient
-    @SerializedName("newsCategoryId")
-    @XmlTransient
-    var newsCategoryIdData:String?=null
+    private var newsCategoryId:String?=null
 
-    @JsonIgnore
     @Transient
-    @SerializedName("pageId")
-    @XmlTransient
-    var pageIdData:String?=null
+    private var pageId:String?=null
 
     fun setNewsCategoryData(newscategories: List<NewsCategory>){
         newscategories.asSequence().forEach {
-            if (it.id == newsCategoryIdData){
+            if (it.id == newsCategoryId){
                 newsCategory = it
                 return@forEach
             }
@@ -91,7 +85,7 @@ data class NewsCategoryEntry(
 
     fun setPageData(pages: List<Page>){
         pages.asSequence().forEach {
-            if (it.id == pageIdData){
+            if (it.id == pageId){
                 page = it
                 return@forEach
             }

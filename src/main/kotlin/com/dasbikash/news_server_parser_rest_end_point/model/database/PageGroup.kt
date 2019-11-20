@@ -50,6 +50,6 @@ data class PageGroup(
     @JsonProperty
     @XmlElement
     fun getPageIdList():List<String>{
-        return pageList?.asSequence()?.filter { it.getActive() }?.map { it.id }?.toList() ?: emptyList()
+        return pageList?.asSequence()?.filter { it.active }?.map { it.id }?.toList() ?: emptyList()
     }
 }

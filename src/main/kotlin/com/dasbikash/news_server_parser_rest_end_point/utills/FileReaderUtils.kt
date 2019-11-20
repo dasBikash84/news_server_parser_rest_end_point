@@ -13,12 +13,12 @@
 
 package com.dasbikash.news_server_parser_rest_end_point.utills
 
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.InputStreamReader
 
 object FileReaderUtils{
     fun <T> jsonFileToEntityList(fileResouceLocation:String,type:Class<T>):T{
         val fileReader = InputStreamReader(javaClass.getResourceAsStream(fileResouceLocation))
-        return Gson().fromJson(fileReader, type)
+        return ObjectMapper().readValue(fileReader, type)
     }
 }

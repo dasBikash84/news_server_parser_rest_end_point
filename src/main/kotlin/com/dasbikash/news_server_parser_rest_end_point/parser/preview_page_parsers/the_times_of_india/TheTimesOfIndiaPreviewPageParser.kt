@@ -30,15 +30,15 @@ class TheTimesOfIndiaPreviewPageParser : PreviewPageParser() {
 
     override fun calculatePageLink(): String? {
 
-        if (mCurrentPage.getLinkFormat()!!.matches(REGEX_FOR_ENT_LIFESTYLE_LINK.toRegex())) {
+        if (mCurrentPage.linkFormat!!.matches(REGEX_FOR_ENT_LIFESTYLE_LINK.toRegex())) {
             mArticleParserIndex = ENT_LIFESTYLE_ARTICLE_PARSER_INDEX
-        } else if (mCurrentPage.getLinkFormat()!!.matches(REGEX_FOR_SPORTS_LINK.toRegex())) {
+        } else if (mCurrentPage.linkFormat!!.matches(REGEX_FOR_SPORTS_LINK.toRegex())) {
             mArticleParserIndex = SPORTS_ARTICLE_PARSER_INDEX
         }
 
         if ((mArticleParserIndex == GENERAL_ARTICLE_PARSER_INDEX || mArticleParserIndex == SPORTS_ARTICLE_PARSER_INDEX) && mCurrentPageNumber == 1) {
             if (mCurrentPage.linkVariablePartFormat != null) {
-                return mCurrentPage.getLinkFormat()!!.replace(mCurrentPage.linkVariablePartFormat!!, "")
+                return mCurrentPage.linkFormat!!.replace(mCurrentPage.linkVariablePartFormat!!, "")
             }
         }
         return super.calculatePageLink()

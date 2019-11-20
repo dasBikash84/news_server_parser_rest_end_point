@@ -1,11 +1,10 @@
 package com.dasbikash.news_server_parser_rest_end_point.utills
 
 
-import com.dasbikash.news_server_parser_rest_end_point.exceptions.EmailSendingException
 import com.dasbikash.news_server_parser_rest_end_point.model.EmailAuth
 import com.dasbikash.news_server_parser_rest_end_point.model.EmailTargets
 import com.dasbikash.news_server_parser_rest_end_point.model.database.AuthToken
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*
@@ -33,10 +32,10 @@ object EmailUtils {
 
     init {
         val authReader = InputStreamReader(javaClass.getResourceAsStream(EMAIL_AUTH_FILE_LOCATION))
-        emailAuth = Gson().fromJson(authReader, EmailAuth::class.java)
+        emailAuth = ObjectMapper().readValue(authReader, EmailAuth::class.java)
 
         val targetReader = InputStreamReader(javaClass.getResourceAsStream(EMAIL_TARGET_DETAILS_FILE_LOCATION))
-        emailTargets = Gson().fromJson(targetReader, EmailTargets::class.java)
+        emailTargets = ObjectMapper().readValue(targetReader, EmailTargets::class.java)
     }
 
     fun <T> emailAuthTokenToAdmin(authToken: AuthToken, requetingClass:Class<T>){

@@ -14,7 +14,6 @@
 package com.dasbikash.news_server_parser_rest_end_point.model.database
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.google.gson.annotations.SerializedName
 import javax.persistence.*
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -35,13 +34,18 @@ data class Newspaper(
         @JoinColumn(name="languageId")
         private var language: Language? = null,
 
-        private var active: Boolean=false,
+        var active: Boolean=false,
 
         @OneToMany(fetch = FetchType.LAZY,mappedBy = "newspaper",targetEntity = Page::class)
         private var pageList: List<Page>? = null
 
 
 ): NsParserRestDbEntity {
+
+        @Transient
+        private var countryName:String?=null
+        @Transient
+        private var languageId:String?=null
 
         @Transient
         @XmlElement
@@ -53,16 +57,6 @@ data class Newspaper(
         @XmlElement
         fun getLanguageId(): String? {
                 return language?.id
-        }
-
-//        @JsonIgnore
-//        @XmlTransient
-        fun getActive(): Boolean {
-                return active
-        }
-
-        fun setActive(active: Boolean) {
-                this.active = active
         }
 
         @JsonIgnore
@@ -95,21 +89,9 @@ data class Newspaper(
                 this.pageList = pageList
         }
 
-        @Transient
-        @SerializedName("countryName")
-        @XmlTransient
-        @JsonIgnore
-        var countryNameData:String?=null
-
-        @Transient
-        @SerializedName("languageId")
-        @XmlTransient
-        @JsonIgnore
-        var languageIdData:String?=null
-
         fun setCountryData(countries: List<Country>){
                 countries.asSequence().forEach {
-                        if (it.name == countryNameData){
+                        if (it.name == countryName){
                                 country = it
                                 return@forEach
                         }
@@ -118,7 +100,7 @@ data class Newspaper(
 
         fun setLanguageData(languages: List<Language>){
                 languages.asSequence().forEach {
-                        if (it.id == languageIdData){
+                        if (it.id == languageId){
                                 language = it
                                 return@forEach
                         }
