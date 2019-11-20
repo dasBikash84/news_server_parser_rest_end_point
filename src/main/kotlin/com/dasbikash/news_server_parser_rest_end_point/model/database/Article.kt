@@ -39,6 +39,7 @@ data class Article(
 
 //        @ManyToOne(targetEntity = Page::class, fetch = FetchType.EAGER)
 //        @JoinColumn(name = "pageId")
+        @Transient
         private var page: Page? = null,
 
         var title: String? = null,
@@ -62,7 +63,7 @@ data class Article(
 //        @Temporal(TemporalType.TIMESTAMP)
 //        @Column(name = "modified", nullable = false, updatable = false,insertable = false)
 //        var modified: Date? = null
-        var modified: Long = System.nanoTime()
+        var modified: Long = System.currentTimeMillis()
 ) : NsParserRestDbEntity {
 
     @JsonIgnore
@@ -103,7 +104,6 @@ data class Article(
 
     @JsonProperty
     @XmlElement
-    @Transient
     fun getPageId(): String? {
         return page?.id
     }
